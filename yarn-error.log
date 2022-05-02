@@ -1,0 +1,57 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn install --registry=https://registry.yarnpkg.com
+
+PATH: 
+  /Users/gt_codes/OpenSource/turborepo/node_modules/.bin:/Users/gt_codes/OpenSource/node_modules/.bin:/Users/gt_codes/node_modules/.bin:/Users/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/Users/gt_codes/.npm/_npx/e8c68b66aeb1424f/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  16.15.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: connect ENETUNREACH 104.16.25.35:443 - Local (0.0.0.0:56196)
+      at internalConnect (node:net:953:16)
+      at defaultTriggerAsyncIdScope (node:internal/async_hooks:465:18)
+      at emitLookup (node:net:1097:9)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:103580:28
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:103489:13
+      at RawTask.module.exports.RawTask.call (/usr/local/lib/node_modules/yarn/lib/cli.js:79577:19)
+      at flush (/usr/local/lib/node_modules/yarn/lib/cli.js:79659:29)
+      at processTicksAndRejections (node:internal/process/task_queues:78:11)
+
+npm manifest: 
+  {
+    "name": "turborepo-basic-shared",
+    "version": "0.0.0",
+    "private": true,
+    "workspaces": [
+      "apps/*",
+      "packages/*"
+    ],
+    "scripts": {
+      "build": "turbo run build",
+      "dev": "turbo run dev --parallel",
+      "lint": "turbo run lint",
+      "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    },
+    "devDependencies": {
+      "prettier": "latest",
+      "turbo": "latest"
+    },
+    "engines": {
+      "npm": ">=7.0.0",
+      "node": ">=14.0.0"
+    },
+    "packageManager": "yarn@1.22.18"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
