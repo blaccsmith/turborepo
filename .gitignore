@@ -1,3 +1,7 @@
 node_modules
 
 .DS_Store
+
+apps/blog/.turbo/
+
+apps/core/.turbo/
