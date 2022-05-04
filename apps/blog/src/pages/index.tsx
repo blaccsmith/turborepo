@@ -3,8 +3,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { Button } from 'ui';
 
-console.log('Home');
-
 const Home: NextPage = () => (
   <div className="flex min-h-screen flex-col items-center justify-center py-2">
     <Head>
