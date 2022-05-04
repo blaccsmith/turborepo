@@ -6,7 +6,8 @@
     "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src --fix"
+    "lint": "eslint src --fix",
+    "test": "echo \"Testing core project\""
   },
   "dependencies": {
     "next": "latest",
