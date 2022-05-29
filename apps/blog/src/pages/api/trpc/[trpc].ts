@@ -14,5 +14,5 @@ export default trpcNext.createNextApiHandler({
 	},
 });
 
-export type inferQueryResponse<TRouteKey extends keyof AppRouter['_def']['queries']> =
+export type TnferQueryResponse<TRouteKey extends keyof AppRouter['_def']['queries']> =
 	inferProcedureOutput<AppRouter['_def']['queries'][TRouteKey]>;
