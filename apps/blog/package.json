@@ -7,24 +7,33 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint src --fix",
-    "test": "echo \"Testing blog project\""
+    "test": "echo \"Testing core project\""
   },
   "dependencies": {
-    "next": "latest",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "@next-auth/prisma-adapter": "^1.0.3",
+    "@prisma/client": "^3.13.0",
+    "@trpc/client": "^9.23.2",
+    "@trpc/next": "^9.23.2",
+    "@trpc/react": "^9.23.2",
+    "@trpc/server": "^9.23.2",
+    "next": "12.1.5",
+    "next-auth": "^4.3.4",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-query": "^3.38.0",
+    "zod": "^3.14.4",
     "ui": "*"
   },
   "devDependencies": {
-    "@types/node": "17.0.4",
-    "@types/react": "17.0.38",
-    "autoprefixer": "^10.4.0",
-    "eslint": "^8.14.0",
-    "next-transpile-modules": "^9.0.0",
-    "postcss": "^8.4.5",
-    "prettier": "^2.5.1",
-    "prettier-plugin-tailwindcss": "^0.1.1",
-    "tailwindcss": "^3.0.7",
-    "typescript": "4.5.4"
+    "@types/node": "17.0.30",
+    "@types/react": "18.0.8",
+    "@types/react-dom": "18.0.3",
+    "autoprefixer": "^10.4.5",
+    "eslint": "8.14.0",
+    "eslint-config-next": "12.1.5",
+    "postcss": "^8.4.13",
+    "prisma": "^3.13.0",
+    "tailwindcss": "^3.0.24",
+    "typescript": "4.6.4"
   }
 }
