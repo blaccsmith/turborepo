@@ -1,7 +1,7 @@
-import { appRouter, AppRouter } from '@/backend/routers';
-import { createContext } from '@/backend/utils/context';
 import { inferProcedureOutput } from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
+import { appRouter, AppRouter } from '@/backend/routers';
+import { createContext } from '@/backend/utils/context';
 
 export default trpcNext.createNextApiHandler({
 	router: appRouter,

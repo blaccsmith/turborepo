@@ -1,6 +1,6 @@
-import { createRouter } from '@/backend/utils/createRouter';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { createRouter } from '@/backend/utils/createRouter';
 
 export const userRoute = createRouter()
 	.middleware(async ({ ctx, next }) => {

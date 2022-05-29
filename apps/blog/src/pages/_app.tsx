@@ -1,8 +1,8 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { AppRouter } from '@/backend/routers';
 import { withTRPC } from '@trpc/next';
 import { SessionProvider } from 'next-auth/react';
+import { AppRouter } from '@/backend/routers';
 
 function getBaseUrl() {
   if (process.browser) return ''; // Browser should use current path
@@ -11,13 +11,11 @@ function getBaseUrl() {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 }
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  return (
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
     <SessionProvider session={session}>
       <Component {...pageProps} />
     </SessionProvider>
-  );
-}
+  )
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
