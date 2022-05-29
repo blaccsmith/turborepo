@@ -6,7 +6,7 @@ import { Button } from 'ui';
 const Home: NextPage = () => (
   <div className="flex min-h-screen flex-col items-center justify-center py-2">
     <Head>
-      <title>Create Next App</title>
+      <title>Create Next App – with Linear</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
