@@ -15,10 +15,13 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@types/node": "^17.0.36",
+    "@types/react": "^18.0.9",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
     "prettier": "latest",
-    "turbo": "latest"
+    "turbo": "latest",
+    "typescript": "^4.7.2"
   },
   "lint-staged": {
     "apps/**/*.{js,jsx,ts,tsx}": [
