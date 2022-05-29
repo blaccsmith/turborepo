@@ -12,13 +12,13 @@ function getBaseUrl() {
 }
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
-  )
+  <SessionProvider session={session}>
+    <Component {...pageProps} />
+  </SessionProvider>
+);
 
 export default withTRPC<AppRouter>({
-  config({ ctx }) {
+  config() {
     /**
      * If you want to use SSR, you need to use the server's full URL
      * @link https://trpc.io/docs/ssr
