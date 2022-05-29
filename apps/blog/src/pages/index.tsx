@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { trpc } from '@/lib/trpc';
+import trpc from '@/lib/trpc';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
