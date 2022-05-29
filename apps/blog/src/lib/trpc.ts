@@ -1,4 +1,6 @@
 import { createReactQueryHooks } from '@trpc/react';
 import { AppRouter } from '@/backend/routers';
 
-export const trpc = createReactQueryHooks<AppRouter>();
+const trpc = createReactQueryHooks<AppRouter>();
+
+export default trpc;
