@@ -10,8 +10,6 @@ const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const { data } = trpc.useQuery(['user.getUserById', { id: (query.id as string) || '1' }]);
 
-  console.log({ session });
-
   if (status === 'loading') return <div>Loading...</div>;
 
   if (!session) {
@@ -22,6 +20,7 @@ const Home: NextPage = () => {
       </>
     );
   }
+
   return (
     <div className={styles.container}>
       <Head>

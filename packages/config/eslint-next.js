@@ -30,6 +30,7 @@ module.exports = {
     // react
     'react/jsx-props-no-spreading': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/button-has-type': 'off',
     'react/function-component-definition': [
       2,
       {
