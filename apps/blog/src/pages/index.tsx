@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Next.js TRPC Template</title>
         <meta name="description" content="TRPC Template for Next.js" />
