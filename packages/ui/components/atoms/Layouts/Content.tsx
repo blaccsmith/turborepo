@@ -1,10 +1,6 @@
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 
-interface Props {
-  children?: ReactNode | undefined;
-}
-
-const Content = ({ children }: Props) => {
+const Content = ({ children }: PropsWithChildren<{}>) => {
   return <div className="mx-auto w-full max-w-7xl grow">{children}</div>;
 };
 

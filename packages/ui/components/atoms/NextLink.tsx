@@ -1,12 +1,12 @@
 import Link from 'next/link';
+import { PropsWithChildren } from 'react';
 
-type Props = {
+type LinkProps = {
   href: string;
-  children: React.ReactNode;
   className?: string;
 };
 
-export default function NextLink({ href, children, className }: Props) {
+export default function NextLink({ href, children, className }: PropsWithChildren<LinkProps>) {
   return (
     <Link href={href} passHref>
       <a className={className}>{children}</a>
