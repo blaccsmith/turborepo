@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { withTRPC } from '@trpc/next';
 import { SessionProvider } from 'next-auth/react';
 import { AppRouter } from '@/backend/routers';
+import RootLayout from 'ui/components/atoms/Layouts/RootLayout';
 
 function getBaseUrl() {
   if (process.browser) return ''; // Browser should use current path
@@ -13,7 +14,9 @@ function getBaseUrl() {
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
-    <Component {...pageProps} />
+    <RootLayout>
+      <Component {...pageProps} />
+    </RootLayout>
   </SessionProvider>
 );
 

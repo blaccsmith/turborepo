@@ -15,8 +15,10 @@ const Home: NextPage = () => {
   if (!session) {
     return (
       <>
-        Not signed in <br />
-        <button onClick={() => signIn('github')}>Sign in</button>
+        <div className="text-white">
+          Not signed in <br />
+          <button onClick={() => signIn('github')}>Sign in</button>
+        </div>
       </>
     );
   }
@@ -28,8 +30,8 @@ const Home: NextPage = () => {
         <meta name="description" content="TRPC Template for Next.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        <h1 className="text-3xl font-bold">{data?.user?.name}</h1>
+      <div className="h-[400px] bg-green-500">
+        <h1 className="text-3xl font-bold text-white">{data?.user?.name}</h1>
         <p>{data?.user?.email}</p>
         <button onClick={() => signOut()}>Signout</button>
       </div>
