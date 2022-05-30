@@ -2,25 +2,22 @@ import type { NextPage } from 'next';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import trpc from '@/lib/trpc';
-import styles from '../styles/Home.module.css';
 import { classNames } from 'utils';
+import trpc from '@/lib/trpc';
 
 const Home: NextPage = () => {
   const { query } = useRouter();
   const { data: session, status } = useSession();
   const { data } = trpc.useQuery(['user.getUserById', { id: (query.id as string) || '1' }]);
-  let test = false;
+  const test = false;
   if (status === 'loading') return <div>Loading...</div>;
 
   if (!session) {
     return (
-      <>
-        <div className={classNames(test ? 'text-red-500' : 'text-white')}>
-          Not signed in <br />
-          <button onClick={() => signIn('github')}>Sign in</button>
-        </div>
-      </>
+      <div className={classNames(test ? 'text-red-500' : 'text-white')}>
+        Not signed in <br />
+        <button onClick={() => signIn('github')}>Sign in</button>
+      </div>
     );
   }
 
