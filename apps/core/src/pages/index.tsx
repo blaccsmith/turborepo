@@ -1,12 +1,12 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import homePageImages from '../constants';
+import { homePageImages, experienceTitles } from '../constants';
 
 const Home: NextPage = () => (
-  <div className="h-full w-auto bg-black p-6">
+  <div className="h-full w-auto bg-[#212121] p-6">
     {/* /Center */}
-    <div className="flex h-screen  items-center justify-center">
+    <div className="flex h-screen items-center justify-center">
       {/* Stack */}
       <div className="flex h-1/2 w-1/2 flex-col justify-center">
         <h1 className="leading-3.25 mb-10 text-5xl font-bold text-white">
@@ -41,6 +41,22 @@ const Home: NextPage = () => (
             </div>
           ),
         )}
+      </div>
+    </div>
+    {/* /Center */}
+    <div className="flex w-full items-center">
+      <h2 className="text-7xl font-bold text-white">600+</h2>
+      {/* Stack */}
+      <div className="flex flex-col">
+        <h2 className="text-xl text-white">People like you: </h2>
+        {/* HStack */}
+        <div className="flex">
+          {experienceTitles.map(title => (
+            <div className="ml-3 bg-[#333333]" key={title}>
+              <p className="text-xl text-base text-white">{title}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </div>
