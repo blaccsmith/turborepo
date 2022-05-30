@@ -18,4 +18,25 @@ const experienceTitles: string[] = [
   'Data Engineers',
 ];
 
-export { homePageImages, experienceTitles };
+const pillars: { label: string; heading: string; description: string }[] = [
+  {
+    label: 'EQUITY',
+    heading: 'Do you see teletubbies',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae sollicitudin libero. Sed placerat mollis tortor, sit amet ullamcorper ex fermentum a. Sed mauris lacus, euismod nec tincidunt id, scelerisque eget justo.',
+  },
+  {
+    label: 'EDUCATION',
+    heading: 'Do you see teletubbies',
+    description:
+      'Mauris dapibus tellus faucibus, ultricies tellus et, aliquet libero. Suspendisse a eleifend purus. Maecenas rutrum rhoncus risus, ut tempus odio.',
+  },
+  {
+    label: 'COLLABORATION',
+    heading: 'Do you see teletubbies',
+    description:
+      'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer sodales libero ipsum, et pharetra ante tincidunt ut.',
+  },
+];
+
+export { homePageImages, experienceTitles, pillars };
