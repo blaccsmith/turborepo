@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react';
+import { LayoutProps } from 'types';
 
-const Content = ({ children }: PropsWithChildren<{}>) => {
+const Content = ({ children }: LayoutProps) => {
   return <div className="mx-auto w-full max-w-7xl grow px-6 md:px-8">{children}</div>;
 };
 

@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { PropsWithChildren } from 'react';
+import { LayoutProps } from 'types';
 
-type LinkProps = {
+interface LinkProps extends LayoutProps {
   href: string;
   className?: string;
-};
+}
 
-export default function NextLink({ href, children, className }: PropsWithChildren<LinkProps>) {
+export default function NextLink({ href, children, className }: LinkProps) {
   return (
     <Link href={href} passHref>
       <a className={className}>{children}</a>
