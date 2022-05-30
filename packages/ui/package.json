@@ -5,6 +5,7 @@
   "types": "./index.tsx",
   "license": "MIT",
   "dependencies": {
+    "next-auth": "^4.3.4",
     "utils": "*",
     "types": "*"
   },
