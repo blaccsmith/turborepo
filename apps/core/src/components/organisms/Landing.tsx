@@ -1,8 +1,9 @@
+import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { homePageImages, experienceTitles } from '../../src/constants';
+import { homePageImages, experienceTitles } from '@constants';
 
-const Landing = () => (
+const Landing = (): JSX.Element => (
   <div className="flex h-screen flex-col items-center justify-center">
     {/* /HStack */}
     <div className="flex h-full items-center justify-center">
@@ -43,16 +44,16 @@ const Landing = () => (
       </div>
     </div>
     {/* HStack */}
-    <div className="flex w-full pl-4">
+    <div className="flex w-full justify-start">
       <h2 className="text-7xl font-bold text-white">600+</h2>
       {/* Stack */}
       <div className="flex flex-col">
-        <h2 className="text-xl text-white">People like you: </h2>
+        <h2 className="ml-3 text-xl text-white">People like you: </h2>
         {/* HStack */}
         <div className="flex">
           {experienceTitles.map(title => (
-            <div className="ml-3 bg-[#333333]" key={title}>
-              <p className="text-xl text-base text-white">{title}</p>
+            <div className="ml-3 flex h-9 items-center justify-center bg-[#333333]" key={title}>
+              <p className="text-base text-white">{title}</p>
             </div>
           ))}
         </div>
