@@ -16,7 +16,7 @@ const Pillars = () => {
     <div className="min-w-screen flex min-h-screen items-center justify-center">
       <div className="flex flex-col items-center">
         <h1 className="mb-40 text-4xl font-medium text-white">What we&apos;re about</h1>
-        <div className="h-4/5 w-4/5 items-center justify-end">
+        <div className="h-4/5 w-4/5">
           {/* HStack */}
           <div className="flex h-full w-full">
             {/* Stack */}
