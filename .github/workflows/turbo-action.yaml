@@ -8,14 +8,14 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 14
-          cache: "pnpm"
+          cache: "yarn"
       - name: Install dependencies
-        run: pnpm i
+        run: yarn
       - name: Setup husky
-        run: pnpm prepare
+        run: yarn prepare
       - name: Lint code
-        run: pnpm lint
+        run: yarn lint
       - name: Format code
-        run: pnpm format
+        run: yarn format
       - name: Build check
-        run: pnpm build
+        run: yarn build
