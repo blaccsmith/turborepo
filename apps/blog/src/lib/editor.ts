@@ -8,37 +8,20 @@ export function markdownToHtml(markdown: string) {
   return DOMPurify.sanitize(marked.parse(markdown, { breaks: true }));
 }
 
-function replacePlaceholder(cursor: Cursor, placeholder: string, replaceWith: string) {
-  cursor.setValue(cursor.value.replace(placeholder, replaceWith));
-}
-
 export function handleUploadImages(textareaEl: HTMLTextAreaElement, files: File[]) {
   const cursor = new Cursor(textareaEl);
-  const currentLineNumber = cursor.position.line.lineNumber;
 
   files.forEach(async (file, idx) => {
-    const placeholder = `![Uploading ${file.name}...]()`;
-
-    // cursor.spliceContent(Cursor.raw`${placeholder}${Cursor.$}`, {
-    //   startLineNumber: currentLineNumber + idx,
-    // });
-    cursor.replaceLine(currentLineNumber + idx, placeholder);
-
     try {
       const uploadedImage = await uploadImage(file);
 
-      console.log({ uploadedImage });
-
-      replacePlaceholder(
-        cursor,
-        placeholder,
+      cursor.insert(
         `<img width="${
           uploadedImage.dpi >= 144 ? Math.round(uploadedImage.width / 2) : uploadedImage.width
         }" alt="${uploadedImage.originalFilename}" src="${uploadedImage.url}">`,
       );
     } catch (error: any) {
       console.log(error);
-      replacePlaceholder(cursor, placeholder, '');
       toast.error(`Error uploading image: ${error.message}`);
     }
   });
