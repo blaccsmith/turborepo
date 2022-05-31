@@ -1,6 +1,7 @@
-import { buttonClasses, ButtonVariant } from './Button';
+/* eslint-disable jsx-a11y/anchor-has-content */
 import Link, { LinkProps } from 'next/link';
 import * as React from 'react';
+import { buttonClasses, ButtonVariant } from './Button';
 
 type ButtonLinkProps = {
   variant?: ButtonVariant;
@@ -8,7 +9,7 @@ type ButtonLinkProps = {
 } & Omit<React.ComponentPropsWithoutRef<'a'>, 'href'> &
   LinkProps;
 
-export const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
+const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
   (
     {
       href,
@@ -25,26 +26,26 @@ export const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       ...rest
     },
     forwardedRef,
-  ) => {
-    return (
-      <Link
-        href={href}
-        as={as}
-        replace={replace}
-        scroll={scroll}
-        shallow={shallow}
-        passHref={passHref}
-        prefetch={prefetch}
-        locale={locale}
-      >
-        <a
-          {...rest}
-          ref={forwardedRef}
-          className={buttonClasses({ className, variant, responsive })}
-        />
-      </Link>
-    );
-  },
+  ) => (
+    <Link
+      href={href}
+      as={as}
+      replace={replace}
+      scroll={scroll}
+      shallow={shallow}
+      passHref={passHref}
+      prefetch={prefetch}
+      locale={locale}
+    >
+      <a
+        {...rest}
+        ref={forwardedRef}
+        className={buttonClasses({ className, variant, responsive })}
+      />
+    </Link>
+  ),
 );
 
 ButtonLink.displayName = 'ButtonLink';
+
+export default ButtonLink;

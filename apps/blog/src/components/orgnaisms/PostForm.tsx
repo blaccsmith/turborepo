@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useLeaveConfirm } from '@/lib/form';
+import useLeaveConfirm from '@/lib/form';
 import { TextField } from '../atoms/TextField';
-import { MarkdownEditor } from './MarkdownEditor';
+import MarkdownEditor from './MarkdownEditor';
 import { Button } from '../atoms/Button';
-import { ButtonLink } from '../atoms/ButtonLink';
+import ButtonLink from '../atoms/ButtonLink';
 import { MarkdownIcon } from '../atoms/Icons';
 
 type FormData = {
@@ -19,7 +19,7 @@ type PostFormProps = {
   onSubmit: SubmitHandler<FormData>;
 };
 
-export default function PostForm({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormProps) {
+const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormProps) => {
   const { control, register, formState, getValues, reset, handleSubmit } = useForm<FormData>({
     defaultValues,
   });
@@ -86,4 +86,6 @@ export default function PostForm({ defaultValues, isSubmitting, backTo, onSubmit
       </div>
     </form>
   );
-}
+};
+
+export default PostForm;

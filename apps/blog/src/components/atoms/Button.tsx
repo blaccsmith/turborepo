@@ -1,6 +1,6 @@
-import { SpinnerIcon } from '@/components/atoms/Icons';
 import { classNames } from 'utils';
 import * as React from 'react';
+import { SpinnerIcon } from '@/components/atoms/Icons';
 
 export type ButtonVariant = 'primary' | 'secondary';
 
@@ -46,8 +46,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...rest
     },
     forwardedRef,
-  ) => {
-    return (
+  ) => (
       <button
         {...rest}
         ref={forwardedRef}
@@ -64,8 +63,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading && <SpinnerIcon className="mr-2 -ml-1 h-4 w-4 animate-spin" />}
         {isLoading && loadingChildren ? loadingChildren : children}
       </button>
-    );
-  },
+    ),
 );
 
 Button.displayName = 'Button';

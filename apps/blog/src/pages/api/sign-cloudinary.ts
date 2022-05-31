@@ -1,9 +1,9 @@
 /* eslint-disable consistent-return */
-import { serverEnv } from '@/env/server';
-import { authOptions } from '@/lib/auth';
 import { v2 as cloudinary } from 'cloudinary';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
+import authOptions from '@/lib/auth';
+import serverEnv from '@/env/server';
 
 type Data = {
   timestamp: number;

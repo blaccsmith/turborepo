@@ -10,17 +10,19 @@ type Props<T> = {
 
 const defaultMessage = 'Are you sure to leave without saving?';
 
-export function useLeaveConfirm<T>({ formState, message = defaultMessage }: Props<T>) {
+function useLeaveConfirm<T>({ formState, message = defaultMessage }: Props<T>) {
   const Router = useRouter();
 
   const { isDirty } = formState;
 
+  // eslint-disable-next-line consistent-return
   const onRouteChangeStart = React.useCallback(() => {
     if (isDirty) {
+      // eslint-disable-next-line no-alert
       if (window.confirm(message)) {
         return true;
       }
-      throw "Abort route change by user's confirmation.";
+      throw new Error("Abort route change by user's confirmation.");
     }
   }, [isDirty, message]);
 
@@ -37,6 +39,6 @@ export function useLeaveConfirm<T>({ formState, message = defaultMessage }: Prop
       event.preventDefault();
     }
   });
-
-  return;
 }
+
+export default useLeaveConfirm;

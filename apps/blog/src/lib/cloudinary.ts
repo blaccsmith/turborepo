@@ -1,4 +1,5 @@
-export async function uploadImage(file: File) {
+/* eslint-disable consistent-return */
+async function uploadImage(file: File) {
   const signResponse = await fetch('/api/sign-cloudinary', { method: 'POST' });
   const signData = await signResponse.json();
 
@@ -31,3 +32,5 @@ export async function uploadImage(file: File) {
     dpi: Number(data.image_metadata.DPI),
   };
 }
+
+export default uploadImage;

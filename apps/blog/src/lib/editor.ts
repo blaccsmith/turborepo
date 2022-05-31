@@ -1,8 +1,8 @@
-import { uploadImage } from '@/lib/cloudinary';
 import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 import toast from 'react-hot-toast';
 import { Cursor } from 'textarea-markdown-editor';
+import uploadImage from '@/lib/cloudinary';
 
 export function markdownToHtml(markdown: string) {
   return DOMPurify.sanitize(marked.parse(markdown, { breaks: true }));
@@ -11,7 +11,7 @@ export function markdownToHtml(markdown: string) {
 export function handleUploadImages(textareaEl: HTMLTextAreaElement, files: File[]) {
   const cursor = new Cursor(textareaEl);
 
-  files.forEach(async (file, idx) => {
+  files.forEach(async file => {
     try {
       const uploadedImage = await uploadImage(file);
 
@@ -21,7 +21,6 @@ export function handleUploadImages(textareaEl: HTMLTextAreaElement, files: File[
         }" alt="${uploadedImage.originalFilename}" src="${uploadedImage.url}">`,
       );
     } catch (error: any) {
-      console.log(error);
       toast.error(`Error uploading image: ${error.message}`);
     }
   });

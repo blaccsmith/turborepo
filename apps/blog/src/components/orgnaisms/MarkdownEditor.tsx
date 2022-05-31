@@ -1,8 +1,6 @@
-import { HtmlView } from '@/components/atoms/HtmlView';
-import { BoldIcon, ItalicIcon, LinkIcon, ListIcon } from '@/components/atoms/Icons';
-import { browserEnv } from '@/env/browser';
-import { getSuggestionData, handleUploadImages, markdownToHtml } from '@/lib/editor';
-import trpc from '@/lib/trpc';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/jsx-no-bind */
 // import { trpc } from '@/lib/trpc';
 import { Switch } from '@headlessui/react';
 import { matchSorter } from 'match-sorter';
@@ -14,6 +12,10 @@ import getCaretCoordinates from 'textarea-caret';
 import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor';
 import { ItemOptions, useItemList } from 'use-item-list';
 import { classNames } from 'utils';
+import { getSuggestionData, handleUploadImages, markdownToHtml } from '@/lib/editor';
+import browserEnv from '@/env/browser';
+import { BoldIcon, ItalicIcon, LinkIcon, ListIcon } from '@/components/atoms/Icons';
+import HtmlView from '@/components/atoms/HtmlView';
 
 type MarkdownEditorProps = {
   label?: string;
@@ -25,7 +27,7 @@ type MarkdownEditorProps = {
   'value' | 'onChange' | 'onKeyDown' | 'onInput' | 'onPaste' | 'onDrop'
 >;
 
-type SuggestionResult = {
+type SuggestionResultType = {
   label: string;
   value: string;
 };
@@ -106,22 +108,194 @@ const TOOLBAR_ITEMS = [
   },
 ];
 
-function MarkdownPreview({ markdown }: { markdown: string }) {
+const MarkdownPreview = ({ markdown }: { markdown: string }) => (
+  <div className="mt-8 border-b pb-6">
+    {markdown ? <HtmlView html={markdownToHtml(markdown)} /> : <p>Nothing to preview</p>}
+  </div>
+);
+
+const SuggestionResult = ({
+  useItem,
+  suggestionResult,
+}: {
+  useItem: ({ ref, text, value, disabled }: ItemOptions) => {
+    id: string;
+    index: number;
+    highlight: () => void;
+    select: () => void;
+    selected: any;
+    useHighlighted: () => Boolean;
+  };
+  suggestionResult: SuggestionResultType;
+}) => {
+  const ref = React.useRef<HTMLLIElement>(null);
+  const { id, highlight, select, useHighlighted } = useItem({
+    ref,
+    value: suggestionResult,
+  });
+  const highlighted = useHighlighted();
+
   return (
-    <div className="mt-8 border-b pb-6">
-      {markdown ? <HtmlView html={markdownToHtml(markdown)} /> : <p>Nothing to preview</p>}
+    <li
+      ref={ref}
+      id={id}
+      onMouseEnter={highlight}
+      onClick={select}
+      role="option"
+      aria-selected={highlighted ? 'true' : 'false'}
+      className={classNames(
+        'cursor-pointer px-4 py-2 text-left text-sm transition-colors ',
+        highlighted ? 'bg-blue-600 text-white' : 'text-primary',
+      )}
+    >
+      {suggestionResult.label}
+    </li>
+  );
+};
+
+const SuggestionList = ({
+  suggestionList,
+  position,
+  onSelect,
+  onClose,
+}: {
+  suggestionList: SuggestionResultType[];
+  position: SuggestionPosition;
+  onSelect: (suggestionResult: SuggestionResultType) => void;
+  onClose: () => void;
+}) => {
+  const ref = useDetectClickOutside({ onTriggered: onClose });
+
+  const { moveHighlightedItem, selectHighlightedItem, useItem } = useItemList({
+    onSelect: item => {
+      onSelect(item.value);
+    },
+  });
+
+  React.useEffect(() => {
+    function handleKeydownEvent(event: KeyboardEvent) {
+      const { code } = event;
+
+      const preventDefaultCodes = ['ArrowUp', 'ArrowDown', 'Enter', 'Tab'];
+
+      if (preventDefaultCodes.includes(code)) {
+        event.preventDefault();
+      }
+
+      if (code === 'ArrowUp') {
+        moveHighlightedItem(-1);
+      }
+
+      if (code === 'ArrowDown') {
+        moveHighlightedItem(1);
+      }
+
+      if (code === 'Enter' || code === 'Tab') {
+        selectHighlightedItem();
+      }
+    }
+
+    document.addEventListener('keydown', handleKeydownEvent);
+    return () => {
+      document.removeEventListener('keydown', handleKeydownEvent);
+    };
+  }, [moveHighlightedItem, selectHighlightedItem]);
+
+  return (
+    <div
+      ref={ref}
+      className="bg-primary absolute max-h-[286px] w-56 overflow-y-auto rounded border shadow-lg"
+      style={{
+        top: position.top,
+        left: position.left,
+      }}
+    >
+      <ul role="listbox" className="divide-primary divide-y">
+        {suggestionList.map(suggestionResult => (
+          <SuggestionResult
+            key={suggestionResult.value}
+            useItem={useItem}
+            suggestionResult={suggestionResult}
+          />
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
-export function MarkdownEditor({
+const Suggestion = ({
+  state,
+  onSelect,
+  onClose,
+}: {
+  state: SuggestionState;
+  onSelect: (suggestionResult: SuggestionResultType) => void;
+  onClose: () => void;
+}) => {
+  // const isMentionType = state.type === 'mention';
+  const isEmojiType = state.type === 'emoji';
+
+  const emojiListQuery = useQuery(
+    'emojiList',
+    async () => {
+      const { gemoji } = await import('gemoji');
+      return gemoji;
+    },
+    {
+      enabled: state.isOpen && isEmojiType,
+      staleTime: Infinity,
+    },
+  );
+
+  //   const mentionListQuery = trpc.useQuery(['user.mentionList'], {
+  //     enabled: state.isOpen && isMentionType,
+  //     staleTime: 5 * 60 * 1000,
+  //   });
+
+  let suggestionList: SuggestionResultType[] = [];
+
+  //   if (isMentionType && mentionListQuery.data) {
+  //     suggestionList = matchSorter(mentionListQuery.data, state.query, {
+  //       keys: ['name'],
+  //     })
+  //       .slice(0, 5)
+  //       .map(item => ({ label: item.name!, value: item.id }));
+  //   }
+
+  if (isEmojiType && emojiListQuery.data) {
+    suggestionList = matchSorter(emojiListQuery.data, state.query, {
+      keys: ['names', 'tags'],
+      threshold: matchSorter.rankings.STARTS_WITH,
+    })
+      .slice(0, 5)
+      .map(item => ({
+        label: `${item.emoji} ${item.names[0]}`,
+        value: item.emoji,
+      }));
+  }
+
+  if (!state.isOpen || !state.position || suggestionList.length === 0) {
+    return null;
+  }
+
+  return (
+    <SuggestionList
+      suggestionList={suggestionList}
+      position={state.position}
+      onSelect={onSelect}
+      onClose={onClose}
+    />
+  );
+};
+
+const MarkdownEditor = ({
   label,
   value,
   minRows = 15,
   onChange,
   onTriggerSubmit,
   ...rest
-}: MarkdownEditorProps) {
+}: MarkdownEditorProps) => {
   const textareaMarkdownRef = React.useRef<TextareaMarkdownRef>(null);
   const [showPreview, setShowPreview] = React.useState(false);
   const [suggestionState, suggestionDispatch] = React.useReducer(suggestionReducer, {
@@ -164,11 +338,11 @@ export function MarkdownEditor({
           <Switch.Group as="div" className="flex items-center">
             <Switch
               checked={showPreview}
-              onChange={(value: boolean) => {
-                if (value === false) {
+              onChange={(_value: boolean) => {
+                if (_value === false) {
                   textareaMarkdownRef.current?.focus();
                 }
-                setShowPreview(value);
+                setShowPreview(_value);
               }}
               className={classNames(
                 showPreview ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-700',
@@ -204,7 +378,7 @@ export function MarkdownEditor({
                   const end = line === line2 ? column2 : editor.lineText(line).length;
                   const text = editor.lineText(line).slice(start, end);
                   const indent = text.match(/^\s*/)[0];
-                  const newIndent = indent + '\t';
+                  const newIndent = `${indent}\t`;
                   editor.replaceRange(newIndent, { line, column: start }, { line, column: end });
                   event.preventDefault();
                 },
@@ -297,7 +471,7 @@ export function MarkdownEditor({
 
           <Suggestion
             state={suggestionState}
-            onSelect={(suggestionResult: SuggestionResult) => {
+            onSelect={(suggestionResult: SuggestionResultType) => {
               const preSuggestion = value.slice(0, suggestionState.triggerIdx!);
               const postSuggestion = value.slice(textareaMarkdownRef.current?.selectionStart);
 
@@ -331,177 +505,6 @@ export function MarkdownEditor({
       </div>
     </div>
   );
-}
+};
 
-function Suggestion({
-  state,
-  onSelect,
-  onClose,
-}: {
-  state: SuggestionState;
-  onSelect: (suggestionResult: SuggestionResult) => void;
-  onClose: () => void;
-}) {
-  const isMentionType = state.type === 'mention';
-  const isEmojiType = state.type === 'emoji';
-
-  const emojiListQuery = useQuery(
-    'emojiList',
-    async () => {
-      const gemoji = (await import('gemoji')).gemoji;
-      return gemoji;
-    },
-    {
-      enabled: state.isOpen && isEmojiType,
-      staleTime: Infinity,
-    },
-  );
-
-  //   const mentionListQuery = trpc.useQuery(['user.mentionList'], {
-  //     enabled: state.isOpen && isMentionType,
-  //     staleTime: 5 * 60 * 1000,
-  //   });
-
-  let suggestionList: SuggestionResult[] = [];
-
-  //   if (isMentionType && mentionListQuery.data) {
-  //     suggestionList = matchSorter(mentionListQuery.data, state.query, {
-  //       keys: ['name'],
-  //     })
-  //       .slice(0, 5)
-  //       .map(item => ({ label: item.name!, value: item.id }));
-  //   }
-
-  if (isEmojiType && emojiListQuery.data) {
-    suggestionList = matchSorter(emojiListQuery.data, state.query, {
-      keys: ['names', 'tags'],
-      threshold: matchSorter.rankings.STARTS_WITH,
-    })
-      .slice(0, 5)
-      .map(item => ({
-        label: `${item.emoji} ${item.names[0]}`,
-        value: item.emoji,
-      }));
-  }
-
-  if (!state.isOpen || !state.position || suggestionList.length === 0) {
-    return null;
-  }
-
-  return (
-    <SuggestionList
-      suggestionList={suggestionList}
-      position={state.position}
-      onSelect={onSelect}
-      onClose={onClose}
-    />
-  );
-}
-
-function SuggestionList({
-  suggestionList,
-  position,
-  onSelect,
-  onClose,
-}: {
-  suggestionList: SuggestionResult[];
-  position: SuggestionPosition;
-  onSelect: (suggestionResult: SuggestionResult) => void;
-  onClose: () => void;
-}) {
-  const ref = useDetectClickOutside({ onTriggered: onClose });
-
-  const { moveHighlightedItem, selectHighlightedItem, useItem } = useItemList({
-    onSelect: item => {
-      onSelect(item.value);
-    },
-  });
-
-  React.useEffect(() => {
-    function handleKeydownEvent(event: KeyboardEvent) {
-      const { code } = event;
-
-      const preventDefaultCodes = ['ArrowUp', 'ArrowDown', 'Enter', 'Tab'];
-
-      if (preventDefaultCodes.includes(code)) {
-        event.preventDefault();
-      }
-
-      if (code === 'ArrowUp') {
-        moveHighlightedItem(-1);
-      }
-
-      if (code === 'ArrowDown') {
-        moveHighlightedItem(1);
-      }
-
-      if (code === 'Enter' || code === 'Tab') {
-        selectHighlightedItem();
-      }
-    }
-
-    document.addEventListener('keydown', handleKeydownEvent);
-    return () => {
-      document.removeEventListener('keydown', handleKeydownEvent);
-    };
-  }, [moveHighlightedItem, selectHighlightedItem]);
-
-  return (
-    <div
-      ref={ref}
-      className="bg-primary absolute max-h-[286px] w-56 overflow-y-auto rounded border shadow-lg"
-      style={{
-        top: position.top,
-        left: position.left,
-      }}
-    >
-      <ul role="listbox" className="divide-primary divide-y">
-        {suggestionList.map(suggestionResult => (
-          <SuggestionResult
-            key={suggestionResult.value}
-            useItem={useItem}
-            suggestionResult={suggestionResult}
-          />
-        ))}
-      </ul>
-    </div>
-  );
-}
-function SuggestionResult({
-  useItem,
-  suggestionResult,
-}: {
-  useItem: ({ ref, text, value, disabled }: ItemOptions) => {
-    id: string;
-    index: number;
-    highlight: () => void;
-    select: () => void;
-    selected: any;
-    useHighlighted: () => Boolean;
-  };
-  suggestionResult: SuggestionResult;
-}) {
-  const ref = React.useRef<HTMLLIElement>(null);
-  const { id, index, highlight, select, useHighlighted } = useItem({
-    ref,
-    value: suggestionResult,
-  });
-  const highlighted = useHighlighted();
-
-  return (
-    <li
-      ref={ref}
-      id={id}
-      onMouseEnter={highlight}
-      onClick={select}
-      role="option"
-      aria-selected={highlighted ? 'true' : 'false'}
-      className={classNames(
-        'cursor-pointer px-4 py-2 text-left text-sm transition-colors ',
-        highlighted ? 'bg-blue-600 text-white' : 'text-primary',
-      )}
-    >
-      {suggestionResult.label}
-    </li>
-  );
-}
+export default MarkdownEditor;
