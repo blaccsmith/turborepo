@@ -1,11 +1,10 @@
 import PostForm from '@/components/orgnaisms/PostForm';
 import Head from 'next/head';
 
-export default function New() {
-  return (
+const New = () => (
     <>
       <Head>
-        <title>New Post</title>
+        <title>New Post - BLACC</title>
       </Head>
 
       <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">New post</h1>
@@ -33,4 +32,5 @@ export default function New() {
       </div>
     </>
   );
-}
+
+export default New;
