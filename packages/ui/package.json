@@ -4,6 +4,11 @@
   "main": "./index.tsx",
   "types": "./index.tsx",
   "license": "MIT",
+  "dependencies": {
+    "next-auth": "^4.3.4",
+    "utils": "*",
+    "types": "*"
+  },
   "devDependencies": {
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
