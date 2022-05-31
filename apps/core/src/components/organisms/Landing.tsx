@@ -15,7 +15,7 @@ const Landing = (): JSX.Element => (
         <h2 className="mb-5 text-xl text-white">
           Now that we know who you are, I know who I am. I&apos;m not a mistake! It all makes sense!
         </h2>
-        <Link href="https://discord.gg/yafQvrZ8bQ">
+        <Link href="https://discord.gg/yafQvrZ8bQ" passHref>
           <div className="flex h-9 w-32 items-center justify-center rounded-[90px] bg-purple-500 hover:cursor-pointer hover:bg-purple-400">
             <p className="text-xs text-black">Join the community</p>
           </div>
