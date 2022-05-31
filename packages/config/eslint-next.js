@@ -30,13 +30,18 @@ module.exports = {
     // react
     'react/jsx-props-no-spreading': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/require-default-props': 'off',
     'react/button-has-type': 'off',
+    'react/prop-types': 'off',
     'react/function-component-definition': [
       2,
       {
         namedComponents: 'arrow-function',
       },
     ],
+
+    // misc
+    'consitent-return': 'off',
 
     // next
     '@next/next/no-html-link-for-pages': 'off',

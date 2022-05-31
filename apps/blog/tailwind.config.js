@@ -3,6 +3,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        accent: '#7B61FF',
+        secondary: '#313131',
         brand: {
           black: '#212121',
         },
