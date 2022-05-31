@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { serverEnv } from '@/env/server';
 import { authOptions } from '@/lib/auth';
 import { v2 as cloudinary } from 'cloudinary';
@@ -26,7 +27,7 @@ cloudinary.config({
 const cloudName = cloudinary.config().cloud_name!;
 const apiSecret = cloudinary.config().api_secret!;
 const apiKey = cloudinary.config().api_key!;
-const folder = 'beam';
+const folder = 'blog-images';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data | Error>) {
   if (req.method !== 'POST') {
