@@ -47,23 +47,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     forwardedRef,
   ) => (
-      <button
-        {...rest}
-        ref={forwardedRef}
-        type={type}
-        disabled={disabled || isLoading}
-        className={buttonClasses({
-          className,
-          disabled,
-          variant,
-          responsive,
-          isLoading,
-        })}
-      >
-        {isLoading && <SpinnerIcon className="mr-2 -ml-1 h-4 w-4 animate-spin" />}
-        {isLoading && loadingChildren ? loadingChildren : children}
-      </button>
-    ),
+    <button
+      {...rest}
+      ref={forwardedRef}
+      type={type}
+      disabled={disabled || isLoading}
+      className={buttonClasses({
+        className,
+        disabled,
+        variant,
+        responsive,
+        isLoading,
+      })}
+    >
+      {isLoading && <SpinnerIcon className="mr-2 -ml-1 h-4 w-4 animate-spin" />}
+      {isLoading && loadingChildren ? loadingChildren : children}
+    </button>
+  ),
 );
 
 Button.displayName = 'Button';

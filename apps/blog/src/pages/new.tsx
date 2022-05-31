@@ -18,8 +18,8 @@ const New = () => (
           content: '',
         }}
         backTo="/"
-        onSubmit={(values: { title: string; content: string }) => 
-           values
+        onSubmit={
+          (values: { title: string; content: string }) => values
           // console.log({ values });
           // addPostMutation.mutate(
           //   { title: values.title, content: values.content },
