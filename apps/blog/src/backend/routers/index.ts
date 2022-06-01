@@ -1,5 +1,5 @@
 import createRouter from '@/backend/utils/createRouter';
-import userRoute from './userRoute';
+import postRoute from './postRoute';
 
-export const appRouter = createRouter().merge('user.', userRoute);
+export const appRouter = createRouter().merge('post.', postRoute);
 export type AppRouter = typeof appRouter;

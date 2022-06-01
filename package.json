@@ -21,12 +21,6 @@
     "turbo": "latest"
   },
   "lint-staged": {
-    "apps/**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
-    ],
-    "packages/**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
-    ],
     ".json": [
       "prettier --write"
     ]

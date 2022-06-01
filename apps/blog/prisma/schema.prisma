@@ -6,7 +6,7 @@ datasource db {
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["referentialIntegrity"]
+    previewFeatures = ["referentialIntegrity", "fullTextSearch", "fullTextIndex"]
 }
 
 model Account {
@@ -37,14 +37,23 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum Role {
+    USER
+    ADMIN
+}
+
 model User {
-    id            String    @id @default(cuid())
+    id            String       @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?      @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
+    posts         Post[]
+    likedPosts    LikedPosts[]
+    comments      Comment[]
+    role          Role         @default(USER)
 }
 
 model VerificationToken {
@@ -53,4 +62,57 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Post {
+    id          Int          @id @default(autoincrement())
+    title       String       @db.VarChar(255)
+    content     String       @db.Text
+    contentHtml String       @db.Text
+    hidden      Boolean      @default(false)
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId    String
+    likedBy     LikedPosts[]
+    comments    Comment[]
+    tag         Tag?         @relation(fields: [tagId], references: [id])
+    tagId       String?
+
+    @@index([authorId])
+    @@fulltext([title, content])
+}
+
+model Tag {
+    id        String   @id @default(cuid())
+    name      String   @unique
+    posts     Post[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model LikedPosts {
+    post      Post     @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    postId    Int
+    user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    userId    String
+    createdAt DateTime @default(now())
+
+    @@id([postId, userId])
+    @@index([postId])
+    @@index([userId])
+}
+
+model Comment {
+    id          Int      @id @default(autoincrement())
+    content     String   @db.Text
+    contentHtml String   @db.Text
+    createdAt   DateTime @default(now())
+    post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId      Int
+    author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId    String
+
+    @@index([authorId])
+    @@index([postId])
 }

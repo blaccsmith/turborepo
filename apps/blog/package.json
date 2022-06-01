@@ -33,6 +33,7 @@
     "react-hot-toast": "^2.2.0",
     "react-query": "^3.38.0",
     "react-textarea-autosize": "^8.3.4",
+    "superjson": "^1.9.1",
     "textarea-caret": "^3.1.0",
     "textarea-markdown-editor": "^1.0.1",
     "ui": "*",
