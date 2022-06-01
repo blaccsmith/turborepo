@@ -15,7 +15,7 @@ export function getQueryPaginationInput(itemsPerPage: number, currentPageNumber:
   };
 }
 
-export function Pagination({ itemCount, itemsPerPage, currentPageNumber }: PaginationProps) {
+export const Pagination = ({ itemCount, itemsPerPage, currentPageNumber }: PaginationProps) => {
   const router = useRouter();
 
   const totalPages = Math.ceil(itemCount / itemsPerPage);
@@ -54,4 +54,4 @@ export function Pagination({ itemCount, itemsPerPage, currentPageNumber }: Pagin
       </ButtonLink>
     </div>
   );
-}
+};

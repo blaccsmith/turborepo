@@ -1,15 +1,19 @@
-import { Banner } from '@/components/atoms/Layout/Banner';
-import { MAX_LIKED_BY_SHOWN } from '@/components/atoms/LikeButton';
-import { InferQueryOutput } from '@/lib/trpc';
+/* eslint-disable consistent-return */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react/no-unused-prop-types */
 import * as Tooltip from '@radix-ui/react-tooltip';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import * as React from 'react';
 import { classNames } from 'utils';
+import { InferQueryOutput } from '@/lib/trpc';
+import { MAX_LIKED_BY_SHOWN } from '@/components/atoms/LikeButton';
+import Banner from '@/components/atoms/Layout/Banner';
 import HtmlView from '../atoms/HtmlView';
 import { ChevronRightIcon, HeartFilledIcon, HeartIcon, MessageIcon } from '../atoms/Icons';
-import { AuthorWithDate } from '../atoms/AuthorWithDate';
+import AuthorWithDate from '../atoms/AuthorWithDate';
 
 export type PostSummaryProps = {
   post: InferQueryOutput<'post.feed'>['posts'][number];
@@ -18,7 +22,7 @@ export type PostSummaryProps = {
   onUnlike: () => void;
 };
 
-export function PostSummary({ post, hideAuthor = false, onLike, onUnlike }: PostSummaryProps) {
+export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
   const contentDocument = React.useMemo(
     () => new DOMParser().parseFromString(post.contentHtml, 'text/html'),
     [post.contentHtml],
@@ -28,12 +32,12 @@ export function PostSummary({ post, hideAuthor = false, onLike, onUnlike }: Post
   const summary = React.useMemo(() => {
     const allowedTags = ['p', 'ul', 'ol', 'h3', 'pre', 'img'];
 
-    for (const tag of allowedTags) {
+    allowedTags.forEach(tag => {
       const element = contentDocument.body.querySelector(tag);
       if (element) {
         return element.outerHTML;
       }
-    }
+    });
 
     return "<p>Summary couldn't be generated</p>";
   }, [contentDocument]);
@@ -134,4 +138,4 @@ export function PostSummary({ post, hideAuthor = false, onLike, onUnlike }: Post
       </div>
     </div>
   );
-}
+};

@@ -22,7 +22,7 @@ const initialSize: Record<AvatarSize, string> = {
   lg: 'w-16 h-16',
 };
 
-export function BlogAvatar({ size = 'md', name, src }: AvatarProps) {
+const BlogAvatar = ({ size = 'md', name, src }: AvatarProps) => {
   const initial = name.charAt(0).toLocaleLowerCase();
 
   return (
@@ -61,3 +61,5 @@ export function BlogAvatar({ size = 'md', name, src }: AvatarProps) {
     </div>
   );
 }
+
+export default BlogAvatar;

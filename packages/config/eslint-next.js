@@ -32,6 +32,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/require-default-props': 'off',
     'react/button-has-type': 'off',
+    'react/jsx-no-bind': 'off',
     'react/prop-types': 'off',
     'react/function-component-definition': [
       2,

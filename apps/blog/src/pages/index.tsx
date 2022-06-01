@@ -1,12 +1,13 @@
-import { PostSummarySkeleton } from '@/components/atoms/Skeletons/PostSummarySkeleton';
-import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
-import { PostSummaryProps } from '@/components/molecules/PostSummary';
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc';
+/* eslint-disable react/no-array-index-key */
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { InferQueryPathAndInput, trpc } from '@/lib/trpc';
+import { PostSummaryProps } from '@/components/molecules/PostSummary';
+import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
+import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
 
 const POSTS_PER_PAGE = 20;
 

@@ -1,17 +1,15 @@
-import { BlogAvatar } from '@/components/atoms/BlogAvatar';
-import type { Author } from '@/lib/types';
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import Link from 'next/link';
+import BlogAvatar from '@/components/atoms/BlogAvatar';
+import type { Author } from '@/lib/types';
 
 type AuthorWithDateProps = {
   author: Author;
   date: Date;
 };
 
-export function AuthorWithDate({ author, date }: AuthorWithDateProps) {
-  console.log({ author, date });
-
-  return (
+const AuthorWithDate = ({ author, date }: AuthorWithDateProps) => (
     <div className="flex items-center gap-2 sm:gap-4">
       <Link href={`/profile/${author.id}`}>
         <a className="relative inline-flex">
@@ -38,4 +36,5 @@ export function AuthorWithDate({ author, date }: AuthorWithDateProps) {
       </div>
     </div>
   );
-}
+
+export default AuthorWithDate;

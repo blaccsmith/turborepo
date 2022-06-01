@@ -20,8 +20,12 @@ type LikeButtonProps = {
   onUnlike: () => void;
 };
 
-export function LikeButton({ likedBy, responsive, onLike, onUnlike }: LikeButtonProps) {
+const LikeButton = ({ likedBy, responsive, onLike, onUnlike }: LikeButtonProps) => {
   const [isLikingAnimation, setIsLikingAnimation] = useState(false);
+  const { data: session } = useSession();
+
+  const isLikedByCurrentUser = Boolean(likedBy.find(item => item.user.id === session!.user.id));
+  const likeCount = likedBy.length;
 
   function handleClick() {
     if (isLikingAnimation) {
@@ -38,11 +42,6 @@ export function LikeButton({ likedBy, responsive, onLike, onUnlike }: LikeButton
       }, 1000);
     }
   }
-
-  const { data: session } = useSession();
-
-  const isLikedByCurrentUser = Boolean(likedBy.find(item => item.user.id === session!.user.id));
-  const likeCount = likedBy.length;
 
   return (
     <Tooltip.Root delayDuration={300}>
@@ -83,7 +82,7 @@ export function LikeButton({ likedBy, responsive, onLike, onUnlike }: LikeButton
                     'ring-6 absolute top-0 left-[-.5px] z-10 h-4 w-4 transform-gpu rounded-full ring-inset ring-gray-50 transition-all duration-300',
                     isLikingAnimation ? 'scale-150 !ring-0' : 'scale-0',
                   )}
-                ></span>
+                />
                 <HeartFilledIcon
                   className={classNames(
                     'ease-spring absolute inset-0 z-10 transform-gpu text-gray-50 transition-transform delay-200 duration-300',
@@ -123,4 +122,6 @@ export function LikeButton({ likedBy, responsive, onLike, onUnlike }: LikeButton
       </Tooltip.Content>
     </Tooltip.Root>
   );
-}
+};
+
+export default LikeButton;
