@@ -39,4 +39,23 @@ const pillars: { label: string; heading: string; description: string }[] = [
   },
 ];
 
-export { homePageImages, experienceTitles, pillars };
+const whyUsContent: { heading: string; subHeading: string }[] = [
+  {
+    heading: '800+',
+    subHeading: 'Members',
+  },
+  {
+    heading: '24 / 7',
+    subHeading: 'relaxed space',
+  },
+  {
+    heading: '13+',
+    subHeading: 'Shared Projects',
+  },
+  {
+    heading: '$0',
+    subHeading: 'to join',
+  },
+];
+
+export { homePageImages, experienceTitles, pillars, whyUsContent };

@@ -1,21 +1,5 @@
-const whyUsContent: { heading: string; subHeading: string }[] = [
-  {
-    heading: '500+',
-    subHeading: 'Members',
-  },
-  {
-    heading: '24 / 7',
-    subHeading: 'relaxed space',
-  },
-  {
-    heading: '13+',
-    subHeading: 'Shared Projects',
-  },
-  {
-    heading: '$0',
-    subHeading: 'to join',
-  },
-];
+import { whyUsContent } from '@constants';
+
 const WhyUs = () => (
   <div className="min-w-screen flex min-h-screen items-center justify-center">
     <div className="flex flex-col items-center">
