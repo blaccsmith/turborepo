@@ -1,7 +1,7 @@
 name: Turbo Action
 on: [push]
 jobs:
-  setup:
+  verify-and-clean:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -9,29 +9,13 @@ jobs:
         with:
           node-version: 14
           cache: "yarn"
-  Install:
-    runs-on: ubuntu-latest
-    steps:
       - name: Install dependencies
         run: yarn
-
-  Setup-Husky:
-    runs-on: ubuntu-latest
-    steps:
       - name: Setup husky
         run: yarn prepare
-  Lint:
-    runs-on: ubuntu-latest
-    steps:
       - name: Lint code
         run: yarn lint
-  Format:
-    runs-on: ubuntu-latest
-    steps:
       - name: Format code
         run: yarn format
-  Build-Check:
-    runs-on: ubuntu-latest
-    steps:
       - name: Build check
         run: yarn build
