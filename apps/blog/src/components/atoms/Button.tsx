@@ -1,4 +1,4 @@
-import classNames from 'utils/helpers';
+import { classNames } from 'utils/helpers';
 import * as React from 'react';
 import { SpinnerIcon } from '@/components/atoms/Icons';
 
