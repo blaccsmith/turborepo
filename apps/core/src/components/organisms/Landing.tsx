@@ -6,9 +6,9 @@ import { homePageImages, experienceTitles } from '@constants';
 const Landing = (): JSX.Element => (
   <div className="flex h-screen flex-col items-center justify-center">
     {/* /HStack */}
-    <div className="flex h-full items-center justify-center">
+    <div className="flex md:h-full items-center justify-center">
       {/* Stack */}
-      <div className="flex h-1/2 w-1/2 flex-col justify-center">
+      <div className="flex h-full text-center md:text-left md:h-1/2 md:w-1/2 flex-col justify-center items-center md:items-start">
         <h1 className="leading-3.25 mb-10 text-5xl font-bold text-white">
           A global community for you, built by people like you.
         </h1>
@@ -22,7 +22,7 @@ const Landing = (): JSX.Element => (
         </Link>
       </div>
       {/* Grid */}
-      <div className="grid h-1/2 grid-cols-3 grid-rows-3 gap-3">
+      <div className="hidden md:grid h-1/2 grid-cols-3 grid-rows-3 gap-3">
         {homePageImages.map((src: string, idx: number) =>
           idx === 4 || idx === 5 ? (
             <div key={src} className="h-40 w-40" />
@@ -44,7 +44,7 @@ const Landing = (): JSX.Element => (
       </div>
     </div>
     {/* HStack */}
-    <div className="flex w-full justify-start">
+    <div className="flex-col text-center md:text-left md:flex overflow-hidden md:flex-row w-full mt-36 md:mt-0 md:justify-start">
       <h2 className="text-7xl font-bold text-white">600+</h2>
       {/* Stack */}
       <div className="flex flex-col">
@@ -52,7 +52,7 @@ const Landing = (): JSX.Element => (
         {/* HStack */}
         <div className="flex">
           {experienceTitles.map(title => (
-            <div className="ml-3 flex h-9 items-center justify-center bg-[#333333]" key={title}>
+            <div className="h-auto w-auto ml-3 flex md:h-9 items-center justify-center bg-[#333333]" key={title}>
               <p className="text-base text-white">{title}</p>
             </div>
           ))}
