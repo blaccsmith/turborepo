@@ -33,7 +33,7 @@ const New = () => {
             addPostMutation.mutate(
               { title: values.title, content: values.content },
               {
-                onSuccess: data => router.push(`/post/${data.id}`),
+                onSuccess: data => router.push(`/p/${data.slug}`),
               },
             );
           }}

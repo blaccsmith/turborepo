@@ -11,7 +11,7 @@ import TextareaAutosize, { TextareaAutosizeProps } from 'react-textarea-autosize
 import getCaretCoordinates from 'textarea-caret';
 import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor';
 import { ItemOptions, useItemList } from 'use-item-list';
-import classNames from 'utils/helpers';
+import { classNames } from 'utils/helpers';
 import { getSuggestionData, handleUploadImages, markdownToHtml } from '@/lib/editor';
 import browserEnv from '@/env/browser';
 import { BoldIcon, ItalicIcon, LinkIcon, ListIcon } from '@/components/atoms/Icons';

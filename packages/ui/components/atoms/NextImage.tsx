@@ -1,6 +1,6 @@
 import Image, { ImageProps } from 'next/image';
 import { useState } from 'react';
-import classNames from 'utils/helpers';
+import { classNames } from 'utils/helpers';
 
 export default function NextImage(props: ImageProps) {
   const [loading, setLoading] = useState(true);

@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { hyphenate } from 'utils';
 import createRouter from '@/backend/utils/createRouter';
 import { markdownToHtml } from '@/lib/editor';
 
@@ -18,6 +19,7 @@ const userRoute = createRouter()
         data: {
           title: input.title,
           content: input.content,
+          slug: hyphenate(input.title),
           contentHtml: markdownToHtml(input.content),
           author: {
             connect: {
