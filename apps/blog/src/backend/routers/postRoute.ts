@@ -1,8 +1,8 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { hyphenate } from 'utils';
 import createRouter from '@/backend/utils/createRouter';
 import { markdownToHtml } from '@/lib/editor';
-import { hyphenate } from 'utils';
 
 const userRoute = createRouter()
   .middleware(async ({ ctx, next }) => {
