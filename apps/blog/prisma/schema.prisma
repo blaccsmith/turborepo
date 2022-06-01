@@ -69,6 +69,7 @@ model Post {
     title       String       @db.VarChar(255)
     content     String       @db.Text
     contentHtml String       @db.Text
+    slug        String       @unique
     hidden      Boolean      @default(false)
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt

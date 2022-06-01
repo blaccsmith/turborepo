@@ -1,5 +1,7 @@
-function classNames(...classes: string[]) {
+export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default classNames;
+export function hyphenate(str: string) {
+  return str.toLowerCase().replace(/\s+/g, '-');
+}
