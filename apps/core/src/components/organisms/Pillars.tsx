@@ -1,31 +1,23 @@
 import { pillars } from '@constants';
+import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 
 const Pillars = () => {
   const scrollingContainer = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState(0);
-  const scrollBarMobileConfig = [
-    {
-      left: 'left-0',
-    },
-    {
-      left: 'left-[39%]',
-    },
-    {
-      left: 'left-[75%]',
-    },
-  ];
-  const scrollBarDesktopConfig = [
-    {
-      top: 'md:top-0 md:left-auto',
-    },
-    {
-      top: 'md:top-[39%] md:left-auto',
-    },
-    {
-      top: 'md:top-[75%] md:left-auto',
-    },
-  ];
+  const scrollBar:string = "absolute h-0.5 md:h-1/4 md:w-0.5 w-1/4 bg-purple-400 transition-all duration-500";
+  
+  const scrollMobile:string = classNames(scrollBar, {
+    'left-0': pos === 0,
+    'left-[39%]': pos === 1,
+    'left-[75%]': pos === 2,
+  });
+
+  const scrollDesktop:string = classNames(scrollBar, {
+    'md:top-0 md:left-auto': pos === 0,
+    'md:top-[39%] md:left-auto': pos === 1,
+    'md:top-[75%] md:left-auto': pos === 2,
+  });
 
   useEffect(() => {
     scrollingContainer.current?.scrollTo({
@@ -58,7 +50,7 @@ const Pillars = () => {
                 </div>
               ))}
               <div
-                className={`absolute ${scrollBarMobileConfig[pos].left}  ${scrollBarDesktopConfig[pos].top} h-0.5 md:h-1/4 md:w-0.5 w-1/4 bg-purple-400 transition-all duration-500`}
+                className={`${scrollMobile} md:${scrollDesktop}`}
               />
             </div>
             {/* Stack */}
@@ -68,7 +60,7 @@ const Pillars = () => {
                   <div className="text-center mb-3 md:mb-0">
                     <h2 className="text-3xl md:text-4xl  text-white">{pillar.heading}</h2>
                   </div>
-                  <p className="text-lg md:text-xl text-white">{pillar.description}</p>
+                  <p className="text-base md:text-xl text-white">{pillar.description}</p>
                 </div>
               ))}
             </div>
