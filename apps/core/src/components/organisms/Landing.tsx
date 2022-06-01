@@ -28,7 +28,7 @@ const Landing = (): JSX.Element => (
             <div key={src} className="h-40 w-40" />
           ) : (
             <div
-              className="relative w-40 overflow-hidden rounded grayscale hover:grayscale-0"
+              className="relative w-40 overflow-hidden rounded grayscale"
               key={src}
             >
               <Image
