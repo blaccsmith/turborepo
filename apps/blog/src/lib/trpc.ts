@@ -1,7 +1,7 @@
 import { createReactQueryHooks } from '@trpc/react';
-import { AppRouter } from '@/backend/routers';
 import { inferProcedureOutput, inferProcedureInput } from '@trpc/server';
 import superjson from 'superjson';
+import { AppRouter } from '@/backend/routers';
 
 export const trpc = createReactQueryHooks<AppRouter>();
 

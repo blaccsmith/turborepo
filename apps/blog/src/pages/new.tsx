@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import PostForm from '@/components/orgnaisms/PostForm';
-import { trpc } from '@/lib/trpc';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import PostForm from '@/components/orgnaisms/PostForm';
+import { trpc } from '@/lib/trpc';
 
 const New = () => {
   const router = useRouter();
