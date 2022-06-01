@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { classNames } from 'utils';
+import classNames from 'utils/helpers';
 
 export type TextFieldOwnProps = {
   label?: string;

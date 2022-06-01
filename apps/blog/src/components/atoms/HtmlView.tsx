@@ -1,5 +1,5 @@
 /* eslint-disable react/no-danger */
-import { classNames } from 'utils';
+import classNames from 'utils/helpers';
 
 type HtmlViewProps = {
   html: string;
