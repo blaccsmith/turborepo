@@ -53,7 +53,7 @@ const Pillars = () => {
                   <div className="absolute bottom-0 left-0 h-0.5 w-full bg-[#909090] md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-0.5" />
                 </div>
               ))}
-              <div className={`${scrollMobile} md:${scrollDesktop}`} />
+              <div className={`${scrollMobile} ${scrollDesktop}`} />
             </div>
             {/* Stack */}
             <div className="h-[207px] overflow-y-hidden" ref={scrollingContainer}>
