@@ -4,6 +4,7 @@ import { withTRPC } from '@trpc/next';
 import { SessionProvider } from 'next-auth/react';
 import RootLayout from 'ui/components/atoms/Layouts/RootLayout';
 import { AppRouter } from '@/backend/routers';
+import { transformer } from '@/lib/trpc';
 
 function getBaseUrl() {
   if (process.browser) return ''; // Browser should use current path
@@ -30,6 +31,7 @@ export default withTRPC<AppRouter>({
 
     return {
       url,
+      transformer,
       /**
        * @link https://react-query.tanstack.com/reference/QueryClient
        */

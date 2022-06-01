@@ -30,6 +30,110 @@ const userRoute = createRouter()
       });
       return post;
     },
+  })
+  .mutation('like', {
+    input: z.number(),
+    async resolve({ input: id, ctx }) {
+      await ctx.prisma.likedPosts.create({
+        data: {
+          post: {
+            connect: {
+              id,
+            },
+          },
+          user: {
+            connect: {
+              id: ctx.session!.user.id,
+            },
+          },
+        },
+      });
+
+      return id;
+    },
+  })
+  .mutation('unlike', {
+    input: z.number(),
+    async resolve({ input: id, ctx }) {
+      await ctx.prisma.likedPosts.delete({
+        where: {
+          postId_userId: {
+            postId: id,
+            userId: ctx.session!.user.id,
+          },
+        },
+      });
+
+      return id;
+    },
+  })
+  .query('feed', {
+    input: z
+      .object({
+        take: z.number().min(1).max(50).optional(),
+        skip: z.number().min(1).optional(),
+        authorId: z.string().optional(),
+      })
+      .optional(),
+    async resolve({ input, ctx }) {
+      const take = input?.take ?? 50;
+      const skip = input?.skip;
+      const where = {
+        hidden: undefined,
+        // hidden: ctx.isUserAdmin ? undefined : false,
+        authorId: input?.authorId,
+      };
+
+      const posts = await ctx.prisma.post.findMany({
+        take,
+        skip,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        where,
+        select: {
+          id: true,
+          title: true,
+          contentHtml: true,
+          createdAt: true,
+          hidden: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+          likedBy: {
+            orderBy: {
+              createdAt: 'asc',
+            },
+            select: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
+        },
+      });
+
+      const postCount = await ctx.prisma.post.count({
+        where,
+      });
+
+      return {
+        posts,
+        postCount,
+      };
+    },
   });
 
 export default userRoute;
