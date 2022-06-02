@@ -60,6 +60,6 @@ const BlogAvatar = ({ size = 'md', name, src }: AvatarProps) => {
       )}
     </div>
   );
-}
+};
 
 export default BlogAvatar;

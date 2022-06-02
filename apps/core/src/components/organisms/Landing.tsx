@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { homePageImages, experienceTitles } from '@constants';
 
 const Landing = (): JSX.Element => (
-  <div className="flex h-screen flex-col items-center justify-center">
+  <div className="flex h-screen snap-center flex-col items-center justify-center">
     {/* /HStack */}
     <div className="flex items-center justify-center md:h-full">
       {/* Stack */}
