@@ -72,10 +72,10 @@ const postRouter = createRouter()
     },
   })
   .mutation('delete', {
-    input: z.number(),
-    async resolve({ input: id, ctx }) {
+    input: z.string(),
+    async resolve({ input: slug, ctx }) {
       const post = await ctx.prisma.post.findUnique({
-        where: { id },
+        where: { slug },
         select: {
           author: {
             select: {
@@ -91,8 +91,8 @@ const postRouter = createRouter()
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
-      await ctx.prisma.post.delete({ where: { id } });
-      return id;
+      await ctx.prisma.post.delete({ where: { slug } });
+      return slug;
     },
   })
   .mutation('like', {
@@ -131,6 +131,45 @@ const postRouter = createRouter()
       return id;
     },
   })
+  .mutation('hide', {
+    input: z.string(),
+    async resolve({ input: slug, ctx }) {
+      // if (!ctx.isUserAdmin) {
+      //   throw new TRPCError({ code: 'FORBIDDEN' });
+      // }
+
+      const post = await ctx.prisma.post.update({
+        where: { slug },
+        data: {
+          hidden: true,
+        },
+        select: {
+          id: true,
+          slug: true,
+        },
+      });
+      return post;
+    },
+  })
+  .mutation('unhide', {
+    input: z.string(),
+    async resolve({ input: slug, ctx }) {
+      // if (!ctx.isUserAdmin) {
+      //   throw new TRPCError({ code: 'FORBIDDEN' });
+      // }
+
+      const post = await ctx.prisma.post.update({
+        where: { slug },
+        data: {
+          hidden: false,
+        },
+        select: {
+          id: true,
+        },
+      });
+      return post;
+    },
+  })
   .query('feed', {
     input: z
       .object({
@@ -158,6 +197,7 @@ const postRouter = createRouter()
         select: {
           id: true,
           title: true,
+          slug: true,
           contentHtml: true,
           createdAt: true,
           hidden: true,
@@ -201,15 +241,16 @@ const postRouter = createRouter()
   })
   .query('detail', {
     input: z.object({
-      id: z.number(),
+      slug: z.string(),
     }),
     async resolve({ ctx, input }) {
-      const { id } = input;
+      const { slug } = input;
       const post = await ctx.prisma.post.findUnique({
-        where: { id },
+        where: { slug },
         select: {
           id: true,
           title: true,
+          slug: true,
           content: true,
           contentHtml: true,
           createdAt: true,
@@ -258,7 +299,7 @@ const postRouter = createRouter()
       if (!post) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `No post with id '${id}'`,
+          message: `No post with slug '${slug}'`,
         });
       }
 

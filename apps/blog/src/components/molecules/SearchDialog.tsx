@@ -69,7 +69,7 @@ function SearchField({ onSelect }: { onSelect: () => void }) {
 
   const { moveHighlightedItem, selectHighlightedItem, useItem } = useItemList({
     onSelect: item => {
-      router.push(`/post/${item.value.id}`);
+      router.push(`/p/${item.value.slug}`);
       onSelect();
     },
   });

@@ -40,11 +40,11 @@ import toast from 'react-hot-toast';
 import { IconButton } from '@/components/atoms/IconButton';
 import LikeButton from '@/components/atoms/LikeButton';
 
-function getPostQueryPathAndInput(id: number): InferQueryPathAndInput<'post.detail'> {
+function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
     'post.detail',
     {
-      id,
+      slug,
     },
   ];
 }
@@ -53,7 +53,7 @@ const PostPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const utils = trpc.useContext();
-  const postQueryPathAndInput = getPostQueryPathAndInput(Number(router.query.id));
+  const postQueryPathAndInput = getPostQueryPathAndInput(router.query.slug as string);
   const postQuery = trpc.useQuery(postQueryPathAndInput);
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
@@ -221,7 +221,7 @@ const PostPage = () => {
               <ul className="space-y-12">
                 {postQuery.data.comments.map(comment => (
                   <li key={comment.id}>
-                    <Comment postId={postQuery.data.id} comment={comment} />
+                    <Comment postSlug={postQuery.data.slug} comment={comment} />
                   </li>
                 ))}
               </ul>
@@ -233,13 +233,13 @@ const PostPage = () => {
               <span className="inline-block sm:hidden">
                 <BlogAvatar name={session!.user.name} src={session!.user.image} size="sm" />
               </span>
-              <AddCommentForm postId={postQuery.data.id} />
+              <AddCommentForm postSlug={postQuery.data.slug} />
             </div>
           </div>
         </div>
 
         <ConfirmDeleteDialog
-          postId={postQuery.data.id}
+          postSlug={postQuery.data.slug}
           isOpen={isConfirmDeleteDialogOpen}
           onClose={() => {
             setIsConfirmDeleteDialogOpen(false);
@@ -247,7 +247,7 @@ const PostPage = () => {
         />
 
         <ConfirmHideDialog
-          postId={postQuery.data.id}
+          postSlug={postQuery.data.slug}
           isOpen={isConfirmHideDialogOpen}
           onClose={() => {
             setIsConfirmHideDialogOpen(false);
@@ -255,7 +255,7 @@ const PostPage = () => {
         />
 
         <ConfirmUnhideDialog
-          postId={postQuery.data.id}
+          postSlug={postQuery.data.slug}
           isOpen={isConfirmUnhideDialogOpen}
           onClose={() => {
             setIsConfirmUnhideDialogOpen(false);
@@ -310,10 +310,10 @@ PostPage.getLayout = function getLayout(page: React.ReactElement) {
 };
 
 function Comment({
-  postId,
+  postSlug,
   comment,
 }: {
-  postId: number;
+  postSlug: string;
   comment: InferQueryOutput<'post.detail'>['comments'][number];
 }) {
   const { data: session } = useSession();
@@ -327,7 +327,7 @@ function Comment({
       <div className="flex items-start gap-4">
         <BlogAvatar name={comment.author.name!} src={comment.author.image} />
         <EditCommentForm
-          postId={postId}
+          postSlug={postSlug}
           comment={comment}
           onDone={() => {
             setIsEditing(false);
@@ -375,7 +375,7 @@ function Comment({
       </div>
 
       <ConfirmDeleteCommentDialog
-        postId={postId}
+        postSlug={postSlug}
         commentId={comment.id}
         isOpen={isConfirmDeleteDialogOpen}
         onClose={() => {
@@ -390,12 +390,12 @@ type CommentFormData = {
   content: string;
 };
 
-function AddCommentForm({ postId }: { postId: number }) {
+function AddCommentForm({ postSlug }: { postSlug: string }) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0);
   const utils = trpc.useContext();
   const addCommentMutation = trpc.useMutation('comment.add', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId));
+      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
     },
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
@@ -406,7 +406,7 @@ function AddCommentForm({ postId }: { postId: number }) {
   const onSubmit: SubmitHandler<CommentFormData> = data => {
     addCommentMutation.mutate(
       {
-        postId,
+        postSlug,
         content: data.content,
       },
       {
@@ -450,18 +450,18 @@ function AddCommentForm({ postId }: { postId: number }) {
 }
 
 function EditCommentForm({
-  postId,
+  postSlug,
   comment,
   onDone,
 }: {
-  postId: number;
+  postSlug: string;
   comment: InferQueryOutput<'post.detail'>['comments'][number];
   onDone: () => void;
 }) {
   const utils = trpc.useContext();
   const editCommentMutation = trpc.useMutation('comment.edit', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId));
+      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
     },
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
@@ -522,12 +522,12 @@ function EditCommentForm({
 }
 
 function ConfirmDeleteCommentDialog({
-  postId,
+  postSlug,
   commentId,
   isOpen,
   onClose,
 }: {
-  postId: number;
+  postSlug: string;
   commentId: number;
   isOpen: boolean;
   onClose: () => void;
@@ -536,7 +536,7 @@ function ConfirmDeleteCommentDialog({
   const utils = trpc.useContext();
   const deleteCommentMutation = trpc.useMutation('comment.delete', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId));
+      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
     },
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
@@ -575,11 +575,11 @@ function ConfirmDeleteCommentDialog({
 }
 
 function ConfirmDeleteDialog({
-  postId,
+  postSlug,
   isOpen,
   onClose,
 }: {
-  postId: number;
+  postSlug: string;
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -607,7 +607,7 @@ function ConfirmDeleteDialog({
           isLoading={deletePostMutation.isLoading}
           loadingChildren="Deleting post"
           onClick={() => {
-            deletePostMutation.mutate(postId, {
+            deletePostMutation.mutate(postSlug, {
               onSuccess: () => router.push('/'),
             });
           }}
@@ -623,11 +623,11 @@ function ConfirmDeleteDialog({
 }
 
 function ConfirmHideDialog({
-  postId,
+  postSlug,
   isOpen,
   onClose,
 }: {
-  postId: number;
+  postSlug: string;
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -635,7 +635,7 @@ function ConfirmHideDialog({
   const utils = trpc.useContext();
   const hidePostMutation = trpc.useMutation('post.hide', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId));
+      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
     },
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
@@ -657,7 +657,7 @@ function ConfirmHideDialog({
           isLoading={hidePostMutation.isLoading}
           loadingChildren="Hiding post"
           onClick={() => {
-            hidePostMutation.mutate(postId, {
+            hidePostMutation.mutate(postSlug, {
               onSuccess: () => {
                 toast.success('Post hidden');
                 onClose();
@@ -676,11 +676,11 @@ function ConfirmHideDialog({
 }
 
 function ConfirmUnhideDialog({
-  postId,
+  postSlug,
   isOpen,
   onClose,
 }: {
-  postId: number;
+  postSlug: string;
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -688,7 +688,7 @@ function ConfirmUnhideDialog({
   const utils = trpc.useContext();
   const unhidePostMutation = trpc.useMutation('post.unhide', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId));
+      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
     },
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
@@ -710,7 +710,7 @@ function ConfirmUnhideDialog({
           isLoading={unhidePostMutation.isLoading}
           loadingChildren="Unhiding post"
           onClick={() => {
-            unhidePostMutation.mutate(postId, {
+            unhidePostMutation.mutate(postSlug, {
               onSuccess: () => {
                 toast.success('Post unhidden');
                 onClose();

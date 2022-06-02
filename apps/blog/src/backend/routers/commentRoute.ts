@@ -6,7 +6,7 @@ import { createProtectedRouter } from '../utils/createProtectedRouter';
 const commentRouter = createProtectedRouter()
   .mutation('add', {
     input: z.object({
-      postId: z.number(),
+      postSlug: z.string(),
       content: z.string().min(1),
     }),
     async resolve({ ctx, input }) {
@@ -21,7 +21,7 @@ const commentRouter = createProtectedRouter()
           },
           post: {
             connect: {
-              id: input.postId,
+              slug: input.postSlug,
             },
           },
         },
