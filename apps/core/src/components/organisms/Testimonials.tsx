@@ -35,15 +35,15 @@ const testimonals: { text: string; avatar: string; handle: string }[] = [
 
 const Testimonials = () => (
   <div className="min-w-screen flex min-h-screen items-center justify-center">
-    <div className="flex flex-col items-center">
-      <h1 className="mb-40 text-4xl font-medium text-white">What people are saying about us</h1>
-      <div className="h-4/5 w-11/12">
-        <div className="grid grid-cols-3 grid-rows-2 gap-10">
+    <div className="flex flex-col items-center w-full">
+      <h1 className="mb-20 md:mb-40 text-center text-4xl font-medium text-white">What people are saying about us</h1>
+      <div className="h-4/5 md:w-11/12 flex justify-center md:block">
+        <div className="grid grid-rows-3 gap-5 overflow-x-scroll md:grid-cols-3 md:grid-rows-2 md:gap-10">
           {testimonals.map(({ text, avatar, handle }, idx) => (
             <div
-              className={`relative h-[154px] w-11/12 rounded-lg ${
+              className={`relative h-[154px] md:ml-0 md:w-11/12 rounded-lg ${
                 idx % 2 === 0 ? 'bg-[rgba(123,97,255,0.2)]' : ''
-              } border-2 border-purple-400 p-9 shadow-[-9px_0px_#7B61FF]`}
+              } border-2 border-purple-400 p-9 md:shadow-[-9px_0px_#7B61FF]`}
               key={handle}
             >
               <div className="absolute top-5 left-2">
