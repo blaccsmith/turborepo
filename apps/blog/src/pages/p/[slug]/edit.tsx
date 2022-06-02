@@ -1,10 +1,10 @@
-import Layout from '@/components/molecules/SearchLayout';
-import PostForm from '@/components/orgnaisms/PostForm';
-import { trpc } from '@/lib/trpc';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { trpc } from '@/lib/trpc';
+import PostForm from '@/components/orgnaisms/PostForm';
+import Layout from '@/components/molecules/SearchLayout';
 
 const EditPostPage = () => {
   const { data: session } = useSession();

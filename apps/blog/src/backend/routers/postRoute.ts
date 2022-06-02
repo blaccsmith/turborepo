@@ -1,8 +1,8 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import slugify from 'slugify';
 import createRouter from '@/backend/utils/createRouter';
 import { markdownToHtml } from '@/lib/editor';
-import slugify from 'slugify';
 
 const postRouter = createRouter()
   .middleware(async ({ ctx, next }) => {
