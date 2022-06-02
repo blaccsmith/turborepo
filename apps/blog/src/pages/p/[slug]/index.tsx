@@ -26,7 +26,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/molecules/Dialog';
-import { Layout } from '@/components/molecules/SearchLayout';
+import Layout from '@/components/molecules/SearchLayout';
 import {
   Menu,
   MenuButton,
@@ -48,6 +48,410 @@ function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.de
     },
   ];
 }
+const AddCommentForm = ({ postSlug }: { postSlug: string }) => {
+  const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0);
+  const utils = trpc.useContext();
+  const addCommentMutation = trpc.useMutation('comment.add', {
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
+    onError: error => {
+      toast.error(`Something went wrong: ${error.message}`);
+    },
+  });
+  const { control, handleSubmit, reset } = useForm<CommentFormData>();
+
+  const onSubmit: SubmitHandler<CommentFormData> = data => {
+    addCommentMutation.mutate(
+      {
+        postSlug,
+        content: data.content,
+      },
+      {
+        onSuccess: () => {
+          reset({ content: '' });
+          setMarkdownEditorKey(prevKey => prevKey + 1);
+        },
+      },
+    );
+  };
+
+  return (
+    <form className="flex-1" onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        name="content"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <MarkdownEditor
+            key={markdownEditorKey}
+            value={field.value}
+            onChange={field.onChange}
+            onTriggerSubmit={handleSubmit(onSubmit)}
+            required
+            placeholder="Comment"
+            minRows={4}
+          />
+        )}
+      />
+      <div className="mt-4">
+        <Button
+          type="submit"
+          isLoading={addCommentMutation.isLoading}
+          loadingChildren="Adding comment"
+        >
+          Add comment
+        </Button>
+      </div>
+    </form>
+  );
+};
+
+const EditCommentForm = ({
+  postSlug,
+  comment,
+  onDone,
+}: {
+  postSlug: string;
+  comment: InferQueryOutput<'post.detail'>['comments'][number];
+  onDone: () => void;
+}) => {
+  const utils = trpc.useContext();
+  const editCommentMutation = trpc.useMutation('comment.edit', {
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
+    onError: error => {
+      toast.error(`Something went wrong: ${error.message}`);
+    },
+  });
+  const { control, handleSubmit } = useForm<CommentFormData>({
+    defaultValues: {
+      content: comment.content,
+    },
+  });
+
+  const onSubmit: SubmitHandler<CommentFormData> = data => {
+    editCommentMutation.mutate(
+      {
+        id: comment.id,
+        data: {
+          content: data.content,
+        },
+      },
+      {
+        onSuccess: () => onDone(),
+      },
+    );
+  };
+
+  return (
+    <form className="flex-1" onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        name="content"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <MarkdownEditor
+            value={field.value}
+            onChange={field.onChange}
+            onTriggerSubmit={handleSubmit(onSubmit)}
+            required
+            placeholder="Comment"
+            minRows={4}
+            autoFocus
+          />
+        )}
+      />
+      <div className="mt-4 flex gap-4">
+        <Button
+          type="submit"
+          isLoading={editCommentMutation.isLoading}
+          loadingChildren="Updating comment"
+        >
+          Update comment
+        </Button>
+        <Button variant="secondary" onClick={onDone}>
+          Cancel
+        </Button>
+      </div>
+    </form>
+  );
+};
+
+const ConfirmDeleteCommentDialog = ({
+  postSlug,
+  commentId,
+  isOpen,
+  onClose,
+}: {
+  postSlug: string;
+  commentId: number;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const utils = trpc.useContext();
+  const deleteCommentMutation = trpc.useMutation('comment.delete', {
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
+    onError: error => {
+      toast.error(`Something went wrong: ${error.message}`);
+    },
+  });
+
+  return (
+    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
+      <DialogContent>
+        <DialogTitle>Delete comment</DialogTitle>
+        <DialogDescription className="mt-6">
+          Are you sure you want to delete this comment?
+        </DialogDescription>
+        <DialogCloseButton onClick={onClose} />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="secondary"
+          className="!text-red"
+          isLoading={deleteCommentMutation.isLoading}
+          loadingChildren="Deleting comment"
+          onClick={() => {
+            deleteCommentMutation.mutate(commentId, {
+              onSuccess: () => onClose(),
+            });
+          }}
+        >
+          Delete comment
+        </Button>
+        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const ConfirmDeleteDialog = ({
+  postSlug,
+  isOpen,
+  onClose,
+}: {
+  postSlug: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+  const deletePostMutation = trpc.useMutation('post.delete', {
+    onError: error => {
+      toast.error(`Something went wrong: ${error.message}`);
+    },
+  });
+
+  return (
+    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
+      <DialogContent>
+        <DialogTitle>Delete post</DialogTitle>
+        <DialogDescription className="mt-6">
+          Are you sure you want to delete this post?
+        </DialogDescription>
+        <DialogCloseButton onClick={onClose} />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="secondary"
+          className="!text-red"
+          isLoading={deletePostMutation.isLoading}
+          loadingChildren="Deleting post"
+          onClick={() => {
+            deletePostMutation.mutate(postSlug, {
+              onSuccess: () => router.push('/'),
+            });
+          }}
+        >
+          Delete post
+        </Button>
+        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const ConfirmHideDialog = ({
+  postSlug,
+  isOpen,
+  onClose,
+}: {
+  postSlug: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const utils = trpc.useContext();
+  const hidePostMutation = trpc.useMutation('post.hide', {
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
+    onError: error => {
+      toast.error(`Something went wrong: ${error.message}`);
+    },
+  });
+
+  return (
+    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
+      <DialogContent>
+        <DialogTitle>Hide post</DialogTitle>
+        <DialogDescription className="mt-6">
+          Are you sure you want to hide this post?
+        </DialogDescription>
+        <DialogCloseButton onClick={onClose} />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="secondary"
+          isLoading={hidePostMutation.isLoading}
+          loadingChildren="Hiding post"
+          onClick={() => {
+            hidePostMutation.mutate(postSlug, {
+              onSuccess: () => {
+                toast.success('Post hidden');
+                onClose();
+              },
+            });
+          }}
+        >
+          Hide post
+        </Button>
+        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const ConfirmUnhideDialog = ({
+  postSlug,
+  isOpen,
+  onClose,
+}: {
+  postSlug: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const utils = trpc.useContext();
+  const unhidePostMutation = trpc.useMutation('post.unhide', {
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
+    onError: error => {
+      toast.error(`Something went wrong: ${error.message}`);
+    },
+  });
+
+  return (
+    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
+      <DialogContent>
+        <DialogTitle>Unhide post</DialogTitle>
+        <DialogDescription className="mt-6">
+          Are you sure you want to unhide this post?
+        </DialogDescription>
+        <DialogCloseButton onClick={onClose} />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="secondary"
+          isLoading={unhidePostMutation.isLoading}
+          loadingChildren="Unhiding post"
+          onClick={() => {
+            unhidePostMutation.mutate(postSlug, {
+              onSuccess: () => {
+                toast.success('Post unhidden');
+                onClose();
+              },
+            });
+          }}
+        >
+          Unhide post
+        </Button>
+        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const Comment = ({
+  postSlug,
+  comment,
+}: {
+  postSlug: string;
+  comment: InferQueryOutput<'post.detail'>['comments'][number];
+}) => {
+  const { data: session } = useSession();
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] = React.useState(false);
+
+  const commentBelongsToUser = comment.author.id === session!.user.id;
+
+  if (isEditing) {
+    return (
+      <div className="flex items-start gap-4">
+        <BlogAvatar name={comment.author.name!} src={comment.author.image} />
+        <EditCommentForm
+          postSlug={postSlug}
+          comment={comment}
+          onDone={() => {
+            setIsEditing(false);
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-4">
+        <AuthorWithDate author={comment.author} date={comment.createdAt} />
+        {commentBelongsToUser && (
+          <Menu>
+            <MenuButton as={IconButton} variant="secondary" title="More">
+              <DotsIcon className="h-4 w-4" />
+            </MenuButton>
+
+            <MenuItems className="w-28">
+              <MenuItemsContent>
+                <MenuItemButton
+                  onClick={() => {
+                    setIsEditing(true);
+                  }}
+                >
+                  Edit
+                </MenuItemButton>
+                <MenuItemButton
+                  className="!text-red"
+                  onClick={() => {
+                    setIsConfirmDeleteDialogOpen(true);
+                  }}
+                >
+                  Delete
+                </MenuItemButton>
+              </MenuItemsContent>
+            </MenuItems>
+          </Menu>
+        )}
+      </div>
+
+      <div className="mt-4 pl-11 sm:pl-16">
+        <HtmlView html={comment.contentHtml} />
+      </div>
+
+      <ConfirmDeleteCommentDialog
+        postSlug={postSlug}
+        commentId={comment.id}
+        isOpen={isConfirmDeleteDialogOpen}
+        onClose={() => {
+          setIsConfirmDeleteDialogOpen(false);
+        }}
+      />
+    </div>
+  );
+};
 
 const PostPage = () => {
   const { data: session } = useSession();
@@ -309,413 +713,8 @@ PostPage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-var Comment = ({
-  postSlug,
-  comment,
-}: {
-  postSlug: string;
-  comment: InferQueryOutput<'post.detail'>['comments'][number];
-}) => {
-  const { data: session } = useSession();
-  const [isEditing, setIsEditing] = React.useState(false);
-  const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] = React.useState(false);
-
-  const commentBelongsToUser = comment.author.id === session!.user.id;
-
-  if (isEditing) {
-    return (
-      <div className="flex items-start gap-4">
-        <BlogAvatar name={comment.author.name!} src={comment.author.image} />
-        <EditCommentForm
-          postSlug={postSlug}
-          comment={comment}
-          onDone={() => {
-            setIsEditing(false);
-          }}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <div className="flex items-center justify-between gap-4">
-        <AuthorWithDate author={comment.author} date={comment.createdAt} />
-        {commentBelongsToUser && (
-          <Menu>
-            <MenuButton as={IconButton} variant="secondary" title="More">
-              <DotsIcon className="h-4 w-4" />
-            </MenuButton>
-
-            <MenuItems className="w-28">
-              <MenuItemsContent>
-                <MenuItemButton
-                  onClick={() => {
-                    setIsEditing(true);
-                  }}
-                >
-                  Edit
-                </MenuItemButton>
-                <MenuItemButton
-                  className="!text-red"
-                  onClick={() => {
-                    setIsConfirmDeleteDialogOpen(true);
-                  }}
-                >
-                  Delete
-                </MenuItemButton>
-              </MenuItemsContent>
-            </MenuItems>
-          </Menu>
-        )}
-      </div>
-
-      <div className="mt-4 pl-11 sm:pl-16">
-        <HtmlView html={comment.contentHtml} />
-      </div>
-
-      <ConfirmDeleteCommentDialog
-        postSlug={postSlug}
-        commentId={comment.id}
-        isOpen={isConfirmDeleteDialogOpen}
-        onClose={() => {
-          setIsConfirmDeleteDialogOpen(false);
-        }}
-      />
-    </div>
-  );
-};
-
 type CommentFormData = {
   content: string;
-};
-
-var AddCommentForm = ({ postSlug }: { postSlug: string }) => {
-  const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0);
-  const utils = trpc.useContext();
-  const addCommentMutation = trpc.useMutation('comment.add', {
-    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
-    onError: error => {
-      toast.error(`Something went wrong: ${error.message}`);
-    },
-  });
-  const { control, handleSubmit, reset } = useForm<CommentFormData>();
-
-  const onSubmit: SubmitHandler<CommentFormData> = data => {
-    addCommentMutation.mutate(
-      {
-        postSlug,
-        content: data.content,
-      },
-      {
-        onSuccess: () => {
-          reset({ content: '' });
-          setMarkdownEditorKey(markdownEditorKey => markdownEditorKey + 1);
-        },
-      },
-    );
-  };
-
-  return (
-    <form className="flex-1" onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        name="content"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <MarkdownEditor
-            key={markdownEditorKey}
-            value={field.value}
-            onChange={field.onChange}
-            onTriggerSubmit={handleSubmit(onSubmit)}
-            required
-            placeholder="Comment"
-            minRows={4}
-          />
-        )}
-      />
-      <div className="mt-4">
-        <Button
-          type="submit"
-          isLoading={addCommentMutation.isLoading}
-          loadingChildren="Adding comment"
-        >
-          Add comment
-        </Button>
-      </div>
-    </form>
-  );
-};
-
-var EditCommentForm = ({
-  postSlug,
-  comment,
-  onDone,
-}: {
-  postSlug: string;
-  comment: InferQueryOutput<'post.detail'>['comments'][number];
-  onDone: () => void;
-}) => {
-  const utils = trpc.useContext();
-  const editCommentMutation = trpc.useMutation('comment.edit', {
-    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
-    onError: error => {
-      toast.error(`Something went wrong: ${error.message}`);
-    },
-  });
-  const { control, handleSubmit } = useForm<CommentFormData>({
-    defaultValues: {
-      content: comment.content,
-    },
-  });
-
-  const onSubmit: SubmitHandler<CommentFormData> = data => {
-    editCommentMutation.mutate(
-      {
-        id: comment.id,
-        data: {
-          content: data.content,
-        },
-      },
-      {
-        onSuccess: () => onDone(),
-      },
-    );
-  };
-
-  return (
-    <form className="flex-1" onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        name="content"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <MarkdownEditor
-            value={field.value}
-            onChange={field.onChange}
-            onTriggerSubmit={handleSubmit(onSubmit)}
-            required
-            placeholder="Comment"
-            minRows={4}
-            autoFocus
-          />
-        )}
-      />
-      <div className="mt-4 flex gap-4">
-        <Button
-          type="submit"
-          isLoading={editCommentMutation.isLoading}
-          loadingChildren="Updating comment"
-        >
-          Update comment
-        </Button>
-        <Button variant="secondary" onClick={onDone}>
-          Cancel
-        </Button>
-      </div>
-    </form>
-  );
-};
-
-var ConfirmDeleteCommentDialog = ({
-  postSlug,
-  commentId,
-  isOpen,
-  onClose,
-}: {
-  postSlug: string;
-  commentId: number;
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const utils = trpc.useContext();
-  const deleteCommentMutation = trpc.useMutation('comment.delete', {
-    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
-    onError: error => {
-      toast.error(`Something went wrong: ${error.message}`);
-    },
-  });
-
-  return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Delete comment</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to delete this comment?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          className="!text-red"
-          isLoading={deleteCommentMutation.isLoading}
-          loadingChildren="Deleting comment"
-          onClick={() => {
-            deleteCommentMutation.mutate(commentId, {
-              onSuccess: () => onClose(),
-            });
-          }}
-        >
-          Delete comment
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-var ConfirmDeleteDialog = ({
-  postSlug,
-  isOpen,
-  onClose,
-}: {
-  postSlug: string;
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const router = useRouter();
-  const deletePostMutation = trpc.useMutation('post.delete', {
-    onError: error => {
-      toast.error(`Something went wrong: ${error.message}`);
-    },
-  });
-
-  return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Delete post</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to delete this post?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          className="!text-red"
-          isLoading={deletePostMutation.isLoading}
-          loadingChildren="Deleting post"
-          onClick={() => {
-            deletePostMutation.mutate(postSlug, {
-              onSuccess: () => router.push('/'),
-            });
-          }}
-        >
-          Delete post
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-var ConfirmHideDialog = ({
-  postSlug,
-  isOpen,
-  onClose,
-}: {
-  postSlug: string;
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const utils = trpc.useContext();
-  const hidePostMutation = trpc.useMutation('post.hide', {
-    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
-    onError: error => {
-      toast.error(`Something went wrong: ${error.message}`);
-    },
-  });
-
-  return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Hide post</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to hide this post?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          isLoading={hidePostMutation.isLoading}
-          loadingChildren="Hiding post"
-          onClick={() => {
-            hidePostMutation.mutate(postSlug, {
-              onSuccess: () => {
-                toast.success('Post hidden');
-                onClose();
-              },
-            });
-          }}
-        >
-          Hide post
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-var ConfirmUnhideDialog = ({
-  postSlug,
-  isOpen,
-  onClose,
-}: {
-  postSlug: string;
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const utils = trpc.useContext();
-  const unhidePostMutation = trpc.useMutation('post.unhide', {
-    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
-    onError: error => {
-      toast.error(`Something went wrong: ${error.message}`);
-    },
-  });
-
-  return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Unhide post</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to unhide this post?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          isLoading={unhidePostMutation.isLoading}
-          loadingChildren="Unhiding post"
-          onClick={() => {
-            unhidePostMutation.mutate(postSlug, {
-              onSuccess: () => {
-                toast.success('Post unhidden');
-                onClose();
-              },
-            });
-          }}
-        >
-          Unhide post
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
 };
 
 export default PostPage;

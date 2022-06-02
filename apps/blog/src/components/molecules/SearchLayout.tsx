@@ -15,13 +15,13 @@ import {
   MenuItems,
   MenuItemsContent,
 } from '@/components/molecules/Menu';
-import { SearchDialog } from '@/components/molecules/SearchDialog';
+import SearchDialog from '@/components/molecules/SearchDialog';
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
-export var Layout = ({ children }: LayoutProps) => {
+const SearchLayout = ({ children }: LayoutProps) => {
   const { data: session } = useSession();
   const { theme, themes, setTheme } = useTheme();
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false);
@@ -67,9 +67,9 @@ export var Layout = ({ children }: LayoutProps) => {
                   }}
                   className="bg-primary border-secondary block w-full rounded border py-1.5 text-xs shadow-sm"
                 >
-                  {themes.map(theme => (
-                    <option key={theme} value={theme}>
-                      {capitalize(theme)}
+                  {themes.map(el => (
+                    <option key={el} value={el}>
+                      {capitalize(el)}
                     </option>
                   ))}
                 </select>
@@ -94,4 +94,6 @@ export var Layout = ({ children }: LayoutProps) => {
       />
     </div>
   );
-}
+};
+
+export default SearchLayout;

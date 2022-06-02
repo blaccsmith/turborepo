@@ -1,7 +1,7 @@
 import * as trpc from '@trpc/server';
 import { Context } from './context';
 
-export function createProtectedRouter() {
+function createProtectedRouter() {
   return trpc.router<Context>().middleware(({ ctx, next }) => {
     if (!ctx.session) {
       throw new trpc.TRPCError({ code: 'UNAUTHORIZED' });
@@ -18,3 +18,5 @@ export function createProtectedRouter() {
     });
   });
 }
+
+export default createProtectedRouter;

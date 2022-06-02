@@ -28,7 +28,7 @@ const SearchResult = ({
   result: InferQueryOutput<'post.search'>[number];
 }) => {
   const ref = React.useRef<HTMLLIElement>(null);
-  const { id, index, highlight, select, useHighlighted } = useItem({
+  const { id, highlight, select, useHighlighted } = useItem({
     ref,
     value: result,
   });
@@ -48,7 +48,7 @@ const SearchResult = ({
       </Link>
     </li>
   );
-}
+};
 
 const SearchField = ({ onSelect }: { onSelect: () => void }) => {
   const [value, setValue] = React.useState('');
@@ -156,38 +156,40 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
       )}
     </div>
   );
-}
+};
 
-export var SearchDialog = ({ isOpen, onClose }: SearchDialogProps) => (
-    <Transition.Root show={isOpen} as={React.Fragment}>
-      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
-        <div className="min-h-screen px-4 text-center">
-          <Transition.Child
-            as={React.Fragment}
-            enter="ease-out duration-100"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-50"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-700 opacity-90 transition-opacity dark:bg-gray-900" />
-          </Transition.Child>
+const SearchDialog = ({ isOpen, onClose }: SearchDialogProps) => (
+  <Transition.Root show={isOpen} as={React.Fragment}>
+    <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
+      <div className="min-h-screen px-4 text-center">
+        <Transition.Child
+          as={React.Fragment}
+          enter="ease-out duration-100"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-50"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <Dialog.Overlay className="fixed inset-0 bg-gray-700 opacity-90 transition-opacity dark:bg-gray-900" />
+        </Transition.Child>
 
-          <Transition.Child
-            as={React.Fragment}
-            enter="ease-out duration-100"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-50"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div className="bg-primary mt-[10vh] mb-8 inline-block w-full max-w-md transform overflow-hidden rounded-lg text-left align-middle shadow-xl transition-all dark:border">
-              {isOpen ? <SearchField onSelect={onClose} /> : <div className="h-12" />}
-            </div>
-          </Transition.Child>
-        </div>
-      </Dialog>
-    </Transition.Root>
-  )
+        <Transition.Child
+          as={React.Fragment}
+          enter="ease-out duration-100"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="ease-in duration-50"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div className="bg-primary mt-[10vh] mb-8 inline-block w-full max-w-md transform overflow-hidden rounded-lg text-left align-middle shadow-xl transition-all dark:border">
+            {isOpen ? <SearchField onSelect={onClose} /> : <div className="h-12" />}
+          </div>
+        </Transition.Child>
+      </div>
+    </Dialog>
+  </Transition.Root>
+);
+
+export default SearchDialog;

@@ -32,6 +32,8 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/require-default-props': 'off',
     'react/button-has-type': 'off',
+    'react/no-unused-prop-types': 'off',
+    'react/no-array-index-key': 'off',
     'react/jsx-no-bind': 'off',
     'react/prop-types': 'off',
     'react/function-component-definition': [
@@ -43,6 +45,11 @@ module.exports = {
 
     // misc
     'consitent-return': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/label-has-associated-control': 'off',
+    'jsx-a11y/anchor-is-valid': 'off',
 
     // next
     '@next/next/no-html-link-for-pages': 'off',
