@@ -9,8 +9,7 @@ type DialogProps = {
   initialFocus?: React.MutableRefObject<HTMLElement | null>;
 };
 
-export function Dialog({ isOpen, onClose, children, initialFocus }: DialogProps) {
-  return (
+export var Dialog = ({ isOpen, onClose, children, initialFocus }: DialogProps) => (
     <Transition.Root show={isOpen} as={React.Fragment}>
       <HeadlessDialog
         as="div"
@@ -47,37 +46,27 @@ export function Dialog({ isOpen, onClose, children, initialFocus }: DialogProps)
         </div>
       </HeadlessDialog>
     </Transition.Root>
-  );
-}
+  )
 
-export function DialogContent({ children }: { children: React.ReactNode }) {
-  return <div className="px-6 pt-6 pb-12">{children}</div>;
-}
+export var DialogContent = ({ children }: { children: React.ReactNode }) => <div className="px-6 pt-6 pb-12">{children}</div>
 
-export function DialogActions({ children }: { children: React.ReactNode }) {
-  return <div className="flex gap-4 border-t px-6 py-4">{children}</div>;
-}
+export var DialogActions = ({ children }: { children: React.ReactNode }) => <div className="flex gap-4 border-t px-6 py-4">{children}</div>
 
-export function DialogTitle({ children }: { children: React.ReactNode }) {
-  return (
+export var DialogTitle = ({ children }: { children: React.ReactNode }) => (
     <HeadlessDialog.Title as="h3" className="text-lg font-semibold">
       {children}
     </HeadlessDialog.Title>
-  );
-}
+  )
 
-export function DialogDescription({
+export var DialogDescription = ({
   children,
   className,
 }: {
   children: React.ReactNode;
   className?: string;
-}) {
-  return <HeadlessDialog.Description className={className}>{children}</HeadlessDialog.Description>;
-}
+}) => <HeadlessDialog.Description className={className}>{children}</HeadlessDialog.Description>
 
-export function DialogCloseButton({ onClick }: { onClick: () => void }) {
-  return (
+export var DialogCloseButton = ({ onClick }: { onClick: () => void }) => (
     <div className="absolute top-0 right-0 pt-6 pr-6">
       <button
         type="button"
@@ -88,5 +77,4 @@ export function DialogCloseButton({ onClick }: { onClick: () => void }) {
         <XIcon className="h-6 w-6" aria-hidden="true" />
       </button>
     </div>
-  );
-}
+  )

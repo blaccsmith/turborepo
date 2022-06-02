@@ -3,24 +3,21 @@ import { Menu as HeadlessMenu, Transition } from '@headlessui/react';
 import Link, { LinkProps } from 'next/link';
 import * as React from 'react';
 
-export function Menu({ children }: { children: React.ReactNode }) {
-  return (
+export var Menu = ({ children }: { children: React.ReactNode }) => (
     <HeadlessMenu as="div" className="relative inline-flex">
       {children}
     </HeadlessMenu>
-  );
-}
+  )
 
 export const MenuButton = HeadlessMenu.Button;
 
-export function MenuItems({
+export var MenuItems = ({
   children,
   className,
 }: {
   children: React.ReactNode;
   className?: string;
-}) {
-  return (
+}) => (
     <Transition
       as={React.Fragment}
       enter="transition ease-out duration-100"
@@ -39,24 +36,19 @@ export function MenuItems({
         {children}
       </HeadlessMenu.Items>
     </Transition>
-  );
-}
+  )
 
-export function MenuItemsContent({ children }: { children: React.ReactNode }) {
-  return <div className="py-2">{children}</div>;
-}
+export var MenuItemsContent = ({ children }: { children: React.ReactNode }) => <div className="py-2">{children}</div>
 
-function NextLink({
+const NextLink = ({
   href,
   children,
   ...rest
-}: Omit<React.ComponentPropsWithoutRef<'a'>, 'href'> & LinkProps) {
-  return (
+}: Omit<React.ComponentPropsWithoutRef<'a'>, 'href'> & LinkProps) => (
     <Link href={href}>
       <a {...rest}>{children}</a>
     </Link>
-  );
-}
+  )
 
 function menuItemClasses({ active, className }: { active: boolean; className?: string }) {
   return classNames(
@@ -66,7 +58,7 @@ function menuItemClasses({ active, className }: { active: boolean; className?: s
   );
 }
 
-export function MenuItemLink({
+export var MenuItemLink = ({
   className,
   href,
   children,
@@ -74,8 +66,7 @@ export function MenuItemLink({
   className?: string;
   href: string;
   children: React.ReactNode;
-}) {
-  return (
+}) => (
     <HeadlessMenu.Item>
       {({ active }: { active: boolean }) => (
         <NextLink href={href} className={menuItemClasses({ active, className })}>
@@ -83,10 +74,9 @@ export function MenuItemLink({
         </NextLink>
       )}
     </HeadlessMenu.Item>
-  );
-}
+  )
 
-export function MenuItemButton({
+export var MenuItemButton = ({
   className,
   children,
   onClick,
@@ -94,8 +84,7 @@ export function MenuItemButton({
   className?: string;
   children: React.ReactNode;
   onClick: () => void;
-}) {
-  return (
+}) => (
     <HeadlessMenu.Item>
       {({ active }: { active: boolean }) => (
         <button type="button" className={menuItemClasses({ active, className })} onClick={onClick}>
@@ -103,5 +92,4 @@ export function MenuItemButton({
         </button>
       )}
     </HeadlessMenu.Item>
-  );
-}
+  )

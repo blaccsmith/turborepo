@@ -1,3 +1,9 @@
+import { useSession } from 'next-auth/react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import AuthorWithDate from '@/components/atoms/AuthorWithDate';
 import ButtonLink from '@/components/atoms/ButtonLink';
 import HtmlView from '@/components/atoms/HtmlView';
@@ -30,12 +36,6 @@ import {
 } from '@/components/molecules/Menu';
 import MarkdownEditor from '@/components/orgnaisms/MarkdownEditor';
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
-import { useSession } from 'next-auth/react';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import * as React from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
 import { IconButton } from '@/components/atoms/IconButton';
 import LikeButton from '@/components/atoms/LikeButton';
@@ -309,13 +309,13 @@ PostPage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-function Comment({
+var Comment = ({
   postSlug,
   comment,
 }: {
   postSlug: string;
   comment: InferQueryOutput<'post.detail'>['comments'][number];
-}) {
+}) => {
   const { data: session } = useSession();
   const [isEditing, setIsEditing] = React.useState(false);
   const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] = React.useState(false);
@@ -384,19 +384,17 @@ function Comment({
       />
     </div>
   );
-}
+};
 
 type CommentFormData = {
   content: string;
 };
 
-function AddCommentForm({ postSlug }: { postSlug: string }) {
+var AddCommentForm = ({ postSlug }: { postSlug: string }) => {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0);
   const utils = trpc.useContext();
   const addCommentMutation = trpc.useMutation('comment.add', {
-    onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
-    },
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },
@@ -447,9 +445,9 @@ function AddCommentForm({ postSlug }: { postSlug: string }) {
       </div>
     </form>
   );
-}
+};
 
-function EditCommentForm({
+var EditCommentForm = ({
   postSlug,
   comment,
   onDone,
@@ -457,12 +455,10 @@ function EditCommentForm({
   postSlug: string;
   comment: InferQueryOutput<'post.detail'>['comments'][number];
   onDone: () => void;
-}) {
+}) => {
   const utils = trpc.useContext();
   const editCommentMutation = trpc.useMutation('comment.edit', {
-    onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
-    },
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },
@@ -519,9 +515,9 @@ function EditCommentForm({
       </div>
     </form>
   );
-}
+};
 
-function ConfirmDeleteCommentDialog({
+var ConfirmDeleteCommentDialog = ({
   postSlug,
   commentId,
   isOpen,
@@ -531,13 +527,11 @@ function ConfirmDeleteCommentDialog({
   commentId: number;
   isOpen: boolean;
   onClose: () => void;
-}) {
+}) => {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const utils = trpc.useContext();
   const deleteCommentMutation = trpc.useMutation('comment.delete', {
-    onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
-    },
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },
@@ -572,9 +566,9 @@ function ConfirmDeleteCommentDialog({
       </DialogActions>
     </Dialog>
   );
-}
+};
 
-function ConfirmDeleteDialog({
+var ConfirmDeleteDialog = ({
   postSlug,
   isOpen,
   onClose,
@@ -582,7 +576,7 @@ function ConfirmDeleteDialog({
   postSlug: string;
   isOpen: boolean;
   onClose: () => void;
-}) {
+}) => {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const deletePostMutation = trpc.useMutation('post.delete', {
@@ -620,9 +614,9 @@ function ConfirmDeleteDialog({
       </DialogActions>
     </Dialog>
   );
-}
+};
 
-function ConfirmHideDialog({
+var ConfirmHideDialog = ({
   postSlug,
   isOpen,
   onClose,
@@ -630,13 +624,11 @@ function ConfirmHideDialog({
   postSlug: string;
   isOpen: boolean;
   onClose: () => void;
-}) {
+}) => {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const utils = trpc.useContext();
   const hidePostMutation = trpc.useMutation('post.hide', {
-    onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
-    },
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },
@@ -673,9 +665,9 @@ function ConfirmHideDialog({
       </DialogActions>
     </Dialog>
   );
-}
+};
 
-function ConfirmUnhideDialog({
+var ConfirmUnhideDialog = ({
   postSlug,
   isOpen,
   onClose,
@@ -683,13 +675,11 @@ function ConfirmUnhideDialog({
   postSlug: string;
   isOpen: boolean;
   onClose: () => void;
-}) {
+}) => {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const utils = trpc.useContext();
   const unhidePostMutation = trpc.useMutation('post.unhide', {
-    onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postSlug));
-    },
+    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },
@@ -726,6 +716,6 @@ function ConfirmUnhideDialog({
       </DialogActions>
     </Dialog>
   );
-}
+};
 
 export default PostPage;

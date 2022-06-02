@@ -1,6 +1,6 @@
-import { markdownToHtml } from '@/lib/editor';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { markdownToHtml } from '@/lib/editor';
 import { createProtectedRouter } from '../utils/createProtectedRouter';
 
 const commentRouter = createProtectedRouter()

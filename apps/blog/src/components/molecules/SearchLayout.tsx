@@ -1,3 +1,8 @@
+import { capitalize } from 'utils';
+import { signOut, useSession } from 'next-auth/react';
+import { useTheme } from 'next-themes';
+import Link from 'next/link';
+import * as React from 'react';
 import Avatar from '@/components/atoms/BlogAvatar';
 import ButtonLink from '@/components/atoms/ButtonLink';
 import { IconButton } from '@/components/atoms/IconButton';
@@ -11,17 +16,12 @@ import {
   MenuItemsContent,
 } from '@/components/molecules/Menu';
 import { SearchDialog } from '@/components/molecules/SearchDialog';
-import { capitalize } from 'utils';
-import { signOut, useSession } from 'next-auth/react';
-import { useTheme } from 'next-themes';
-import Link from 'next/link';
-import * as React from 'react';
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
-export function Layout({ children }: LayoutProps) {
+export var Layout = ({ children }: LayoutProps) => {
   const { data: session } = useSession();
   const { theme, themes, setTheme } = useTheme();
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false);

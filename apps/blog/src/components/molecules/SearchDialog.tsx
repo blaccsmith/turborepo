@@ -1,19 +1,19 @@
-import { SearchIcon, SpinnerIcon } from '@/components/atoms/Icons';
 import { classNames } from 'utils';
-import { InferQueryOutput, trpc } from '@/lib/trpc';
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
 import { ItemOptions, useItemList } from 'use-item-list';
+import { InferQueryOutput, trpc } from '@/lib/trpc';
+import { SearchIcon, SpinnerIcon } from '@/components/atoms/Icons';
 
 type SearchDialogProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-function SearchResult({
+const SearchResult = ({
   useItem,
   result,
 }: {
@@ -26,7 +26,7 @@ function SearchResult({
     useHighlighted: () => Boolean;
   };
   result: InferQueryOutput<'post.search'>[number];
-}) {
+}) => {
   const ref = React.useRef<HTMLLIElement>(null);
   const { id, index, highlight, select, useHighlighted } = useItem({
     ref,
@@ -50,7 +50,7 @@ function SearchResult({
   );
 }
 
-function SearchField({ onSelect }: { onSelect: () => void }) {
+const SearchField = ({ onSelect }: { onSelect: () => void }) => {
   const [value, setValue] = React.useState('');
   const [debouncedValue] = useDebounce(value, 1000);
   const router = useRouter();
@@ -130,7 +130,7 @@ function SearchField({ onSelect }: { onSelect: () => void }) {
           className="block w-full border-0 bg-transparent py-3 pl-10 focus:ring-0"
           role="combobox"
           aria-controls="search-results"
-          aria-expanded={true}
+          aria-expanded
           value={value}
           onChange={event => {
             setValue(event.target.value);
@@ -158,8 +158,7 @@ function SearchField({ onSelect }: { onSelect: () => void }) {
   );
 }
 
-export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
-  return (
+export var SearchDialog = ({ isOpen, onClose }: SearchDialogProps) => (
     <Transition.Root show={isOpen} as={React.Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
         <div className="min-h-screen px-4 text-center">
@@ -191,5 +190,4 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
         </div>
       </Dialog>
     </Transition.Root>
-  );
-}
+  )
