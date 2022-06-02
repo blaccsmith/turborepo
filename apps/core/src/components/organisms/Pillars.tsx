@@ -28,7 +28,7 @@ const Pillars = () => {
   }, [pos]);
 
   return (
-    <div className="min-w-screen flex min-h-screen items-center justify-center">
+    <div className="min-w-screen flex min-h-screen items-center justify-center snap-center">
       <div className="flex flex-col items-center">
         <h1 className="mb-10 text-4xl font-medium text-white md:mb-40">What we&apos;re about</h1>
         <div className="h-4/5 w-full md:w-4/5">

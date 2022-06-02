@@ -34,11 +34,11 @@ const testimonals: { text: string; avatar: string; handle: string }[] = [
 ];
 
 const Testimonials = () => (
-  <div className="min-w-screen flex min-h-screen items-center justify-center">
+  <div className="min-w-screen flex min-h-screen items-center justify-center snap-start">
     <div className="flex flex-col items-center w-full">
       <h1 className="mb-20 md:mb-40 text-center text-4xl font-medium text-white">What people are saying about us</h1>
       <div className="h-4/5 md:w-11/12 flex justify-center md:block">
-        <div className="grid grid-rows-3 gap-5 overflow-x-scroll md:grid-cols-3 md:grid-rows-2 md:gap-10">
+        <div className="grid grid-rows-3 gap-5 md:grid-cols-3 md:grid-rows-2 md:gap-10">
           {testimonals.map(({ text, avatar, handle }, idx) => (
             <div
               className={`relative h-[154px] md:ml-0 md:w-11/12 rounded-lg ${

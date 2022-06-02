@@ -5,7 +5,7 @@ import WhyUs from '@components/organisms/WhyUs';
 import Testimonials from '@components/organisms/Testimonials';
 
 const Home: NextPage = () => (
-  <div className="h-full w-auto bg-[#212121]">
+  <div className="relative h-auto w-auto bg-[#212121]">
     <Landing />
     <Pillars />
     <WhyUs />
