@@ -61,7 +61,7 @@ export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
         </Banner>
       )}
       <div className={classNames(post.hidden ? 'opacity-50' : '')}>
-        <Link href={`/post/${post.id}`}>
+        <Link href={`/p/${post.slug}`}>
           <a>
             <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{post.title}</h2>
           </a>
@@ -84,7 +84,7 @@ export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
 
         <div className="clear-both mt-4 flex items-center gap-4">
           {hasMoreContent && (
-            <Link href={`/post/${post.id}`}>
+            <Link href={`/p/${post.slug}`}>
               <a className="text-blue inline-flex items-center font-medium transition-colors">
                 Continue reading <ChevronRightIcon className="ml-1 h-4 w-4" />
               </a>
