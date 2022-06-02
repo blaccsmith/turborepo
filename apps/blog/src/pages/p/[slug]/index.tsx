@@ -517,7 +517,7 @@ const PostPage = () => {
   }
 
   function handleEdit() {
-    router.push(`/post/${postQuery.data?.id}/edit`);
+    router.push(`/p/${postQuery.data?.slug}/edit`);
   }
 
   function handleDelete() {
@@ -613,7 +613,7 @@ const PostPage = () => {
                   unlikeMutation.mutate(postQuery.data.id);
                 }}
               />
-              <ButtonLink href={`/post/${postQuery.data.id}#comments`} variant="secondary">
+              <ButtonLink href={`/p/${postQuery.data.slug}#comments`} variant="secondary">
                 <MessageIcon className="text-secondary h-4 w-4" />
                 <span className="ml-1.5">{postQuery.data.comments.length}</span>
               </ButtonLink>
