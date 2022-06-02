@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { hyphenate } from 'utils';
+import slugify from 'slugify';
 import createRouter from '@/backend/utils/createRouter';
 import { markdownToHtml } from '@/lib/editor';
 
@@ -19,7 +19,7 @@ const postRouter = createRouter()
         data: {
           title: input.title,
           content: input.content,
-          slug: hyphenate(input.title),
+          slug: slugify(input.title),
           contentHtml: markdownToHtml(input.content),
           author: {
             connect: {
@@ -63,6 +63,7 @@ const postRouter = createRouter()
         where: { id },
         data: {
           title: data.title,
+          slug: slugify(data.title),
           content: data.content,
           contentHtml: markdownToHtml(data.content),
         },
@@ -320,6 +321,7 @@ const postRouter = createRouter()
         },
         select: {
           id: true,
+          slug: true,
           title: true,
         },
       });
