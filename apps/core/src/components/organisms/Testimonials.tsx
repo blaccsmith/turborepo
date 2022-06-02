@@ -34,14 +34,16 @@ const testimonals: { text: string; avatar: string; handle: string }[] = [
 ];
 
 const Testimonials = () => (
-  <div className="min-w-screen flex min-h-screen items-center justify-center snap-start">
-    <div className="flex flex-col items-center w-full">
-      <h1 className="mb-20 md:mb-40 text-center text-4xl font-medium text-white">What people are saying about us</h1>
-      <div className="h-4/5 md:w-11/12 flex justify-center md:block">
+  <div className="min-w-screen flex min-h-screen snap-start items-center justify-center">
+    <div className="flex w-full flex-col items-center">
+      <h1 className="mb-20 text-center text-4xl font-medium text-white md:mb-40">
+        What people are saying about us
+      </h1>
+      <div className="flex h-4/5 justify-center md:block md:w-11/12">
         <div className="grid grid-rows-3 gap-5 md:grid-cols-3 md:grid-rows-2 md:gap-10">
           {testimonals.map(({ text, avatar, handle }, idx) => (
             <div
-              className={`relative h-[154px] md:ml-0 md:w-11/12 rounded-lg ${
+              className={`relative h-[154px] rounded-lg md:ml-0 md:w-11/12 ${
                 idx % 2 === 0 ? 'bg-[rgba(123,97,255,0.2)]' : ''
               } border-2 border-purple-400 p-9 md:shadow-[-9px_0px_#7B61FF]`}
               key={handle}

@@ -1,7 +1,7 @@
 import { whyUsContent } from '@constants';
 
 const WhyUs = () => (
-  <div className="min-w-screen flex min-h-screen items-center justify-center snap-center">
+  <div className="min-w-screen flex min-h-screen snap-center items-center justify-center">
     <div className="flex flex-col items-center">
       <h1 className="mb-40 text-4xl font-medium text-white">Why us?</h1>
       <div className="grid w-full grid-cols-2 grid-rows-2 gap-20">
