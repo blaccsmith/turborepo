@@ -20,7 +20,7 @@ const postRouter = createRouter()
         data: {
           title: input.title,
           content: input.content,
-          slug: slugify(input.title),
+          slug: slugify(input.title.toLowerCase()),
           contentHtml: markdownToHtml(input.content),
           author: {
             connect: {
@@ -64,7 +64,7 @@ const postRouter = createRouter()
         where: { id },
         data: {
           title: data.title,
-          slug: slugify(data.title),
+          slug: slugify(data.title.toLowerCase()),
           content: data.content,
           contentHtml: markdownToHtml(data.content),
         },

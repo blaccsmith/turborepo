@@ -5,6 +5,7 @@ import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import React from 'react';
 import Avatar from 'ui/components/atoms/Avatar';
+import NextLink from 'ui/components/atoms/NextLink';
 import { InferQueryOutput } from '@/lib/trpc';
 import { HeartFilledIcon, HeartIcon, MessageIcon } from '../atoms/Icons';
 
@@ -47,9 +48,11 @@ export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
   const likeCount = post.likedBy.length;
 
   return (
-    <div className="relative flex items-center justify-between rounded-lg">
-      <div>
-        <p className="mb-1 font-bold text-white">{post.title}</p>
+    <div className="relative flex flex-col items-center justify-start space-y-4 text-left md:flex-row md:justify-between md:space-y-0">
+      <div className="w-full">
+        <NextLink href={`/p/${post.slug}`} className="mb-1 text-left font-bold text-white">
+          {post.title}
+        </NextLink>
         <div className="flex items-center">
           <p className="text-sm font-light tracking-tight text-[#bdbdbd]">
             Published{' '}
@@ -63,7 +66,7 @@ export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-4 flex items-center space-x-6 text-white">
+      <div className="flex w-full items-center space-x-6 text-white md:w-min">
         <div className="inline-flex items-center gap-1.5">
           {isLikedByCurrentUser ? (
             <HeartFilledIcon className="h-4 w-4 text-red-500" />

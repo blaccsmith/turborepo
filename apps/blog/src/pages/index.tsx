@@ -95,6 +95,7 @@ const Home: NextPage = () => {
           <title>The BLACC Blog</title>
         </Head>
 
+        <h1 className="mt-6 mb-12 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
         {feedQuery.data.postCount === 0 ? (
           <div className="text-secondary rounded border py-20 px-10 text-center">
             There are no published posts to show yet.
