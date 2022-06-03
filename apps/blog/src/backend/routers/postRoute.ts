@@ -207,6 +207,8 @@ const postRouter = createRouter()
               id: true,
               name: true,
               image: true,
+              role: true,
+              email: true,
             },
           },
           likedBy: {
