@@ -5,9 +5,9 @@ import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import React from 'react';
 import Avatar from 'ui/components/atoms/Avatar';
+import NextLink from 'ui/components/atoms/NextLink';
 import { InferQueryOutput } from '@/lib/trpc';
 import { HeartFilledIcon, HeartIcon, MessageIcon } from '../atoms/Icons';
-import NextLink from 'ui/components/atoms/NextLink';
 
 export type PostSummaryProps = {
   post: InferQueryOutput<'post.feed'>['posts'][number];
