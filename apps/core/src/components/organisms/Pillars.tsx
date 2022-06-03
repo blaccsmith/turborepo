@@ -28,7 +28,7 @@ const Pillars = () => {
       });
       return;
     }
-    
+
     scrollingContainer.current?.scrollTo({
       left: scrollingContainer.current.clientWidth * pos,
       behavior: 'smooth',
@@ -37,7 +37,7 @@ const Pillars = () => {
 
   return (
     <div className="min-w-screen flex min-h-screen snap-center items-center justify-center">
-      <div className="flex flex-col items-center md:w-auto w-[calc(100vw-3rem)">
+      <div className="w-[calc(100vw-3rem) flex flex-col items-center md:w-auto">
         <h1 className="mb-10 text-4xl font-medium text-white md:mb-40">What we&apos;re about</h1>
         <div className="h-4/5 w-full md:w-4/5">
           {/* HStack */}
@@ -64,10 +64,16 @@ const Pillars = () => {
               <div className={`${scrollMobile} ${scrollDesktop}`} />
             </div>
             {/* Stack */}
-            <div className="flex md:block w-[342px] overflow-x-hidden h-auto md:w-full md:h-[207px] md:overflow-y-hidden" ref={scrollingContainer}>
+            <div
+              className="flex h-auto w-[342px] overflow-x-hidden md:block md:h-[207px] md:w-full md:overflow-y-hidden"
+              ref={scrollingContainer}
+            >
               {pillars.map(pillar => (
-                <div key={pillar.description} className="min-w-[calc(100vw-3rem)] md:min-w-full h-full md:w-full md:h-[207px] px-4">
-                  <div className="mb-3 w-full text-center md:mb-0"> 
+                <div
+                  key={pillar.description}
+                  className="h-full min-w-[calc(100vw-3rem)] px-4 md:h-[207px] md:w-full md:min-w-full"
+                >
+                  <div className="mb-3 w-full text-center md:mb-0">
                     <h2 className="text-3xl text-white  md:text-4xl">{pillar.heading}</h2>
                   </div>
                   <p className="text-base text-white md:text-xl">{pillar.description}</p>
