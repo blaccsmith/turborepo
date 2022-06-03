@@ -42,7 +42,7 @@ export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
   const { data: session } = useSession();
 
   const isLikedByCurrentUser = Boolean(
-    post.likedBy.find(item => item.user.id === session!.user.id),
+    post.likedBy.find(item => item.user.id === session?.user.id),
   );
   const likeCount = post.likedBy.length;
 
