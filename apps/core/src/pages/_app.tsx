@@ -7,28 +7,39 @@ import { DefaultSeo } from 'next-seo';
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
     <RootLayout>
-    <DefaultSeo
-					title="The Black Coder Community"
-					openGraph={{
-						type: 'website',
-						url: 'https://www.blacc.xyz/',
-						title: 'BLACC',
-						site_name: 'The Black Coder Community',
-						images: [
-							{
-								url: 'https://www.blacc.xyz/banner.png',
-								width: 800,
-								height: 450,
-								alt: 'BLACC Banner',
-								type: 'image/png',
-							},
-						],
-					}}
-					twitter={{
-						handle: '@blaccxyz_',
-						cardType: 'summary_large_image',
-					}}
-				/>
+      <DefaultSeo
+        title="The Black Coder Community"
+        additionalLinkTags={[
+          {
+            rel: 'icon',
+            href: `https://www.blacc.xyz/favicon.ico`,
+          },
+          {
+            rel: 'apple-touch-icon',
+            href: `https://www.blacc.xyz/logo.png`,
+            sizes: '76x76',
+          },
+        ]}
+        openGraph={{
+          type: 'website',
+          url: 'https://www.blacc.xyz/',
+          title: 'BLACC',
+          site_name: 'The Black Coder Community',
+          images: [
+            {
+              url: 'https://www.blacc.xyz/banner.png',
+              width: 800,
+              height: 450,
+              alt: 'BLACC Banner',
+              type: 'image/png',
+            },
+          ],
+        }}
+        twitter={{
+          handle: '@blaccxyz_',
+          cardType: 'summary_large_image',
+        }}
+      />
       <Component {...pageProps} />
     </RootLayout>
   </SessionProvider>
