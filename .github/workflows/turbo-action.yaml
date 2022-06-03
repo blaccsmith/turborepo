@@ -15,7 +15,5 @@ jobs:
         run: yarn prepare
       - name: Lint code
         run: yarn lint
-      - name: Format code
-        run: yarn format
       - name: Build check
         run: yarn build
