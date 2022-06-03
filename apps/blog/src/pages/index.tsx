@@ -101,9 +101,9 @@ const Home: NextPage = () => {
           </div>
         ) : (
           <div className="flow-root">
-            <ul className="divide-primary -my-12 divide-y">
+            <ul className="divide-primary divide-y divide-[#424242]">
               {feedQuery.data.posts?.map(post => (
-                <li key={post.id} className="py-10">
+                <li key={post.id} className="py-9">
                   <PostSummary
                     post={post}
                     onLike={() => {
