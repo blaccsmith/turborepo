@@ -88,61 +88,59 @@ const Home: NextPage = () => {
     },
   });
 
-  if (feedQuery.data) {
-    return (
-      <>
-        <Head>
-          <title>The BLACC Blog</title>
-        </Head>
-
-        <h1 className="mt-6 mb-12 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
-        {feedQuery.data.postCount === 0 ? (
-          <div className="text-secondary rounded border py-20 px-10 text-center">
-            There are no published posts to show yet.
-          </div>
-        ) : (
-          <div className="flow-root">
-            <ul className="divide-primary divide-y divide-[#424242]">
-              {feedQuery.data.posts?.map(post => (
-                <li key={post.id} className="py-9">
-                  <PostSummary
-                    post={post}
-                    onLike={() => {
-                      likeMutation.mutate(post.id);
-                    }}
-                    onUnlike={() => {
-                      unlikeMutation.mutate(post.id);
-                    }}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <Pagination
-          itemCount={feedQuery.data.postCount}
-          itemsPerPage={POSTS_PER_PAGE}
-          currentPageNumber={currentPageNumber}
-        />
-      </>
-    );
-  }
-
   if (feedQuery.isError) {
     return <div>Error: {feedQuery.error.message}</div>;
   }
 
   return (
-    <div className="flow-root">
-      <ul className="divide-primary -my-12 divide-y">
-        {[...Array(3)].map((_, idx) => (
-          <li key={idx} className="py-10">
-            <PostSummarySkeleton />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Head>
+        <title>The BLACC Blog</title>
+      </Head>
+
+      <div className="flow-root">
+        <h1 className="mt-6 mb-12 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
+        <ul className="divide-primary divide-y divide-[#424242]">
+          {feedQuery.isLoading ? (
+            [...Array(3)].map((_, idx) => (
+              <li key={idx} className="py-9">
+                <PostSummarySkeleton />
+              </li>
+            ))
+          ) : feedQuery.data!.postCount === 0 ? (
+            <div className="text-secondary rounded border py-20 px-10 text-center">
+              There are no published posts to show yet.
+            </div>
+          ) : (
+            <div className="flow-root">
+              <ul className="divide-primary divide-y divide-[#424242]">
+                {feedQuery.data!.posts?.map(post => (
+                  <li key={post.id} className="py-9">
+                    <PostSummary
+                      post={post}
+                      onLike={() => {
+                        likeMutation.mutate(post.id);
+                      }}
+                      onUnlike={() => {
+                        unlikeMutation.mutate(post.id);
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {feedQuery.data && (
+            <Pagination
+              itemCount={feedQuery.data.postCount}
+              itemsPerPage={POSTS_PER_PAGE}
+              currentPageNumber={currentPageNumber}
+            />
+          )}
+        </ul>
+      </div>
+    </>
   );
 };
 
