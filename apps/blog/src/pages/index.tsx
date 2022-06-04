@@ -9,8 +9,11 @@ import { InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
+import PostTag from '@/components/atoms/PostTag';
 
 const POSTS_PER_PAGE = 20;
+
+const tags = ['react', 'typescript', 'javascript', 'nodejs', 'graphql', 'nextjs'];
 
 const PostSummary = dynamic<PostSummaryProps>(
   () => import('@/components/molecules/PostSummary').then(mod => mod.PostSummary),
@@ -93,6 +96,11 @@ const Home: NextPage = () => {
     return <div>Error: {feedQuery.error.message}</div>;
   }
 
+  const handleTagClick = (tag: string) => {
+    if (router.query.sort === tag) router.push('/', undefined, { shallow: true });
+    else router.push(`/?sort=${tag}`, undefined, { shallow: true });
+  };
+
   return (
     <>
       <Head>
@@ -100,7 +108,19 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="flow-root">
-        <h1 className="mt-6 mb-12 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
+        <div className="mt-6 mb-12">
+          <h1 className=" text-4x4 mb-6 font-black text-white md:text-5xl">The BLACC Blog</h1>
+          <div className="flex items-center justify-start space-x-2">
+            {tags.map(tag => (
+              <PostTag
+                key={tag}
+                label={tag}
+                isSelected={router.query.sort === tag}
+                onClick={handleTagClick}
+              />
+            ))}
+          </div>
+        </div>
         <ul className="divide-primary divide-y divide-[#424242]">
           {feedQuery.isLoading ? (
             [...Array(3)].map((_, idx) => (
