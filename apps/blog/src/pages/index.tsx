@@ -12,7 +12,8 @@ import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleto
 import PostTag from '@/components/atoms/PostTag';
 import { SearchIcon, PlusIcon } from '@heroicons/react/outline';
 import NextLink from 'ui/components/atoms/NextLink';
-import CONSTANTS from 'utils/constants';
+import { Tag } from '@prisma/client';
+import { sluggy } from 'utils';
 
 const POSTS_PER_PAGE = 20;
 
@@ -31,6 +32,8 @@ const Home: NextPage = () => {
     getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
   ];
   const feedQuery = trpc.useQuery(feedQueryPathAndInput);
+  const { data: tags } = trpc.useQuery(['tag.list']);
+
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
       await utils.cancelQuery(feedQueryPathAndInput);
@@ -97,9 +100,9 @@ const Home: NextPage = () => {
     return <div>Error: {feedQuery.error.message}</div>;
   }
 
-  const handleTagClick = (tag: string) => {
-    if (router.query.sort === tag) router.push('/', undefined, { shallow: true });
-    else router.push(`/?sort=${tag}`, undefined, { shallow: true });
+  const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
+    if (router.query.sort === sluggy(tag.name)) router.push('/', undefined, { shallow: true });
+    else router.push(`/?sort=${tag.name}`, undefined, { shallow: true });
   };
 
   return (
@@ -112,12 +115,12 @@ const Home: NextPage = () => {
         <div className="mt-6 mb-12">
           <h1 className=" mb-6 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
           <div className="flex items-center justify-between space-x-4">
-            <div className="scrollbar-hide flex items-center justify-start space-x-2 overflow-x-auto">
-              {CONSTANTS.BLOG_TAGS.map(tag => (
+            <div className="scrollbar-hide flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
+              {tags?.map(tag => (
                 <PostTag
-                  key={tag}
-                  label={tag}
-                  isSelected={router.query.sort === tag}
+                  key={tag.id}
+                  tag={tag}
+                  isSelected={router.query.sort === sluggy(tag.name)}
                   onClick={handleTagClick}
                 />
               ))}

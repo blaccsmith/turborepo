@@ -1,8 +1,8 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import slugify from 'slugify';
 import createRouter from '@/backend/utils/createRouter';
 import { markdownToHtml } from '@/lib/editor';
+import { sluggy } from 'utils';
 
 const postRouter = createRouter()
   .middleware(async ({ ctx, next, path }) => {
@@ -15,13 +15,14 @@ const postRouter = createRouter()
     input: z.object({
       title: z.string().min(1),
       content: z.string().min(1),
+      tags: z.array(z.string()).min(1),
     }),
     async resolve({ ctx, input }) {
       const post = await ctx.prisma.post.create({
         data: {
           title: input.title,
           content: input.content,
-          slug: slugify(input.title.toLowerCase()),
+          slug: sluggy(input.title),
           contentHtml: markdownToHtml(input.content),
           author: {
             connect: {
@@ -65,7 +66,7 @@ const postRouter = createRouter()
         where: { id },
         data: {
           title: data.title,
-          slug: slugify(data.title.toLowerCase()),
+          slug: sluggy(data.title),
           content: data.content,
           contentHtml: markdownToHtml(data.content),
         },

@@ -1,17 +1,19 @@
+import { Tag } from '@prisma/client';
 import React from 'react';
 import { classNames } from 'utils';
 
 interface Props {
-  label: string;
+  tag: Omit<Tag, 'createdAt' | 'updatedAt'>;
   isActive?: boolean;
   isSelected?: boolean;
-  onClick?: (tag: string) => void;
+  onClick?: (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => void;
 }
 
-export default function PostTag({ label, isSelected, isActive, onClick }: Props) {
+export default function PostTag({ tag, isSelected, isActive, onClick }: Props) {
   return (
     <button
-      onClick={() => onClick?.(label)}
+      type="button"
+      onClick={() => onClick?.(tag)}
       className={classNames(
         isSelected
           ? 'bg-brand-purple-400 border-transparent text-white'
@@ -21,14 +23,17 @@ export default function PostTag({ label, isSelected, isActive, onClick }: Props)
     >
       {isActive && (
         <svg
-          className="text-brand-purple-400 -ml-0.5 mr-1.5 h-2 w-2"
+          className={classNames(
+            isSelected ? 'text-white' : 'text-brand-purple-400',
+            '-ml-0.5 mr-1.5 h-2 w-2',
+          )}
           fill="currentColor"
           viewBox="0 0 8 8"
         >
           <circle cx={4} cy={4} r={3} />
         </svg>
       )}
-      {label}
+      {tag.name}
     </button>
   );
 }
