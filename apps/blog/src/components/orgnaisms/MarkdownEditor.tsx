@@ -464,7 +464,7 @@ const MarkdownEditor = ({
                   handleUploadImages(event.currentTarget, imageFiles);
                 }
               }}
-              className="bg-secondary border-secondary focus-ring block w-full rounded shadow-sm"
+              className="bg-secondary border-secondary focus-ring block w-full rounded p-3 shadow-sm"
               minRows={minRows}
             />
           </TextareaMarkdown.Wrapper>

@@ -22,7 +22,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         name={name}
         type={type}
         className={classNames(
-          'bg-secondary border-secondary focus-ring block w-full rounded py-1 px-3 shadow-sm',
+          'bg-secondary border-secondary focus-ring block w-full rounded py-1 px-3 font-light shadow-sm',
           className ?? '',
         )}
       />
