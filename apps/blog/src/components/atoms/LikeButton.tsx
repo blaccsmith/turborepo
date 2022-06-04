@@ -24,7 +24,7 @@ const LikeButton = ({ likedBy, responsive, onLike, onUnlike }: LikeButtonProps) 
   const [isLikingAnimation, setIsLikingAnimation] = useState(false);
   const { data: session } = useSession();
 
-  const isLikedByCurrentUser = Boolean(likedBy.find(item => item.user.id === session!.user.id));
+  const isLikedByCurrentUser = Boolean(likedBy.find(item => item.user.id === session?.user.id));
   const likeCount = likedBy.length;
 
   function handleClick() {
@@ -114,7 +114,7 @@ const LikeButton = ({ likedBy, responsive, onLike, onUnlike }: LikeButtonProps) 
         <p className="text-sm">
           {likedBy
             .slice(0, MAX_LIKED_BY_SHOWN)
-            .map(item => (item.user.id === session!.user.id ? 'You' : item.user.name))
+            .map(item => (item.user.id === session?.user.id ? 'You' : item.user.name))
             .join(', ')}
           {likeCount > MAX_LIKED_BY_SHOWN && ` and ${likeCount - MAX_LIKED_BY_SHOWN} more`}
         </p>

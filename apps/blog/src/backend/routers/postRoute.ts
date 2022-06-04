@@ -6,7 +6,8 @@ import { markdownToHtml } from '@/lib/editor';
 
 const postRouter = createRouter()
   .middleware(async ({ ctx, next, path }) => {
-    if (path === 'post.feed') return next();
+    const anonPaths = ['post.feed', 'post.detail'];
+    if (anonPaths.includes(path)) return next();
     if (!ctx.session) throw new TRPCError({ code: 'UNAUTHORIZED' });
     return next();
   })
