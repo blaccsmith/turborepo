@@ -10,10 +10,11 @@ import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
 import PostTag from '@/components/atoms/PostTag';
+import { SearchIcon, PlusIcon } from '@heroicons/react/outline';
+import NextLink from 'ui/components/atoms/NextLink';
+import CONSTANTS from 'utils/constants';
 
 const POSTS_PER_PAGE = 20;
-
-const tags = ['react', 'typescript', 'javascript', 'nodejs', 'graphql', 'nextjs'];
 
 const PostSummary = dynamic<PostSummaryProps>(
   () => import('@/components/molecules/PostSummary').then(mod => mod.PostSummary),
@@ -110,15 +111,28 @@ const Home: NextPage = () => {
       <div className="flow-root">
         <div className="mt-6 mb-12">
           <h1 className=" text-4x4 mb-6 font-black text-white md:text-5xl">The BLACC Blog</h1>
-          <div className="flex items-center justify-start space-x-2">
-            {tags.map(tag => (
-              <PostTag
-                key={tag}
-                label={tag}
-                isSelected={router.query.sort === tag}
-                onClick={handleTagClick}
-              />
-            ))}
+          <div className="flex items-center justify-between space-x-2">
+            <div className="flex items-center justify-start space-x-2">
+              {CONSTANTS.BLOG_TAGS.map(tag => (
+                <PostTag
+                  key={tag}
+                  label={tag}
+                  isSelected={router.query.sort === tag}
+                  onClick={handleTagClick}
+                />
+              ))}
+            </div>
+            <div className="flex items-center justify-start space-x-2">
+              <button className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white">
+                <SearchIcon className="h-3 w-3" />
+              </button>
+              <NextLink
+                href="/new"
+                className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+              >
+                <PlusIcon className="h-3 w-3" />
+              </NextLink>
+            </div>
           </div>
         </div>
         <ul className="divide-primary divide-y divide-[#424242]">

@@ -1,4 +1,5 @@
 const CONSTANTS = {
+  BLOG_TAGS: ['react', 'typescript', 'javascript', 'nodejs', 'graphql', 'nextjs'],
   TAILWIND_THEME: {
     theme: {
       extend: {
