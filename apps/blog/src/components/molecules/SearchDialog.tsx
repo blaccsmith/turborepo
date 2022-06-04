@@ -40,7 +40,7 @@ const SearchResult = ({
         <a
           className={classNames(
             'block py-3.5 pl-10 pr-3 leading-tight transition-colors',
-            highlighted && 'bg-blue-600 text-white',
+            highlighted && 'bg-brand-purple-600 text-white',
           )}
         >
           {result.title}
