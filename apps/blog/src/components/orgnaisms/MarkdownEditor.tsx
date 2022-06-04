@@ -145,7 +145,7 @@ const SuggestionResult = ({
       aria-selected={highlighted ? 'true' : 'false'}
       className={classNames(
         'cursor-pointer px-4 py-2 text-left text-sm transition-colors ',
-        highlighted ? 'bg-blue-600 text-white' : 'text-primary',
+        highlighted ? 'bg-brand-purple-600 text-white' : 'text-primary',
       )}
     >
       {suggestionResult.label}
@@ -314,7 +314,7 @@ const MarkdownEditor = ({
     <div>
       {label && <label className="mb-2 block font-semibold">{label}</label>}
       <div>
-        <div className="bg-primary flex items-center justify-between gap-4 rounded border px-4 py-px">
+        <div className="bg-primary flex items-center justify-between gap-4 rounded  px-2 py-px">
           <div className="-ml-2 flex gap-2">
             {TOOLBAR_ITEMS.map(toolbarItem => (
               <button
@@ -325,7 +325,7 @@ const MarkdownEditor = ({
                 }}
                 className={classNames(
                   'focus-ring inline-flex h-8 w-8 items-center justify-center rounded focus:border disabled:cursor-default disabled:opacity-50',
-                  !showPreview ? 'hover:text-blue transition-colors' : '',
+                  !showPreview ? 'hover:text-brand-purple transition-colors' : '',
                 )}
                 disabled={showPreview}
                 title={toolbarItem.name}
@@ -345,7 +345,7 @@ const MarkdownEditor = ({
                 setShowPreview(_value);
               }}
               className={classNames(
-                showPreview ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-700',
+                showPreview ? 'bg-brand-purple-500' : 'bg-gray-300 dark:bg-gray-700',
                 'focus-ring relative inline-flex h-[18px] w-8 flex-shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out',
               )}
             >

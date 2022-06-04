@@ -50,7 +50,7 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
           rules={{ required: true }}
           render={({ field }) => (
             <MarkdownEditor
-              label="Post"
+              label="Content"
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}

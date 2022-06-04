@@ -6,3 +6,15 @@ html,
 body {
   background-color: #212121;
 }
+
+@layer utilities {
+  .focus-ring {
+    @apply focus:ring-2;
+    @apply focus:outline-none;
+    @apply focus:ring-offset-0;
+    @apply focus:ring-brand-purple-200;
+    @apply dark:focus:ring-brand-purple-600;
+    @apply focus:border-brand-purple-500;
+    @apply focus:shadow-none;
+  }
+}
