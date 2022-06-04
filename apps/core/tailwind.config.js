@@ -15,10 +15,10 @@ module.exports = {
         },
       },
       animation: {
-        slide: 'slideLeft 6s linear infinite;',
+        slide: 'keyFrameSlide 10s linear infinite alternate;',
       },
       keyframes: {
-        slideLeft: {
+        keyFrameSlide: {
           '0%': {
             transform: 'translate3d(0, 0, 0)',
           },
