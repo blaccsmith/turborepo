@@ -110,9 +110,9 @@ const Home: NextPage = () => {
 
       <div className="flow-root">
         <div className="mt-6 mb-12">
-          <h1 className=" text-4x4 mb-6 font-black text-white md:text-5xl">The BLACC Blog</h1>
-          <div className="flex items-center justify-between space-x-2">
-            <div className="flex items-center justify-start space-x-2">
+          <h1 className=" mb-6 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
+          <div className="flex items-center justify-between space-x-4">
+            <div className="scrollbar-hide flex items-center justify-start space-x-2 overflow-x-auto">
               {CONSTANTS.BLOG_TAGS.map(tag => (
                 <PostTag
                   key={tag}
