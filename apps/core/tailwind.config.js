@@ -14,6 +14,19 @@ module.exports = {
           },
         },
       },
+      animation: {
+        slide: 'slideLeft 6s linear infinite;',
+      },
+      keyframes: {
+        slideLeft: {
+          '0%': {
+            transform: 'translate3d(0, 0, 0)',
+          },
+          '100%': {
+            transform: 'translate3d(-130px, 0, 0)',
+          },
+        },
+      },
     },
   },
   plugins: [],
