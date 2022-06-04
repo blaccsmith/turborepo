@@ -17,9 +17,10 @@
     "incremental": true,
     "paths": {
       "@components/*": ["src/components/*"],
-      "@constants": ["src/constants"]
+      "@constants": ["src/constants"],
+      "contentlayer/generated": ["./.contentlayer/generated"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx",".contentlayer/generated"],
   "exclude": ["node_modules"]
 }
