@@ -50,7 +50,7 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
           rules={{ required: true }}
           render={({ field }) => (
             <MarkdownEditor
-              label="Post"
+              label="Content"
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}
@@ -77,7 +77,7 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
             href="https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
             target="_blank"
             rel="noreferrer"
-            className="text-secondary hover:text-blue flex items-center gap-2 transition-colors"
+            className="text-secondary hover:text-brand-purple-300 flex items-center gap-2 transition-colors"
           >
             <MarkdownIcon />
             <span className="h-full text-xs">Markdown supported</span>

@@ -24,7 +24,7 @@ const AuthorWithDate = ({ author, date }: AuthorWithDateProps) => (
     <div className="flex-1 text-sm sm:text-base">
       <div>
         <Link href={`/profile/${author.id}`}>
-          <a className="hover:text-blue font-medium tracking-tight transition-colors">
+          <a className="hover:text-brand-purple-600 font-medium tracking-tight transition-colors">
             {author.name}
           </a>
         </Link>

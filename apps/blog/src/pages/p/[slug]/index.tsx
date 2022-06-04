@@ -387,7 +387,7 @@ const Comment = ({
   const [isEditing, setIsEditing] = React.useState(false);
   const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] = React.useState(false);
 
-  const commentBelongsToUser = comment.author.id === session!.user.id;
+  const commentBelongsToUser = comment.author.id === session?.user.id;
 
   if (isEditing) {
     return (
@@ -525,8 +525,8 @@ const PostPage = () => {
   }
 
   if (postQuery.data) {
-    const isUserAdmin = session!.user.role === 'ADMIN';
-    const postBelongsToUser = postQuery.data.author.id === session!.user.id;
+    const isUserAdmin = session?.user.role === 'ADMIN';
+    const postBelongsToUser = postQuery.data.author.id === session?.user.id;
 
     return (
       <>
@@ -631,12 +631,23 @@ const PostPage = () => {
               </ul>
             )}
             <div className="flex items-start gap-2 sm:gap-4">
-              <span className="hidden sm:inline-block">
-                <BlogAvatar name={session!.user.name} src={session!.user.image} />
-              </span>
-              <span className="inline-block sm:hidden">
-                <BlogAvatar name={session!.user.name} src={session!.user.image} size="sm" />
-              </span>
+              {session && (
+                <>
+                  <span className="hidden sm:inline-block">
+                    <BlogAvatar
+                      name={session!.user.name as string}
+                      src={session!.user.image as string}
+                    />
+                  </span>
+                  <span className="inline-block sm:hidden">
+                    <BlogAvatar
+                      name={session!.user.name as string}
+                      src={session!.user.image as string}
+                      size="sm"
+                    />
+                  </span>
+                </>
+              )}
               <AddCommentForm postSlug={postQuery.data.slug} />
             </div>
           </div>

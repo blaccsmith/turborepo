@@ -10,8 +10,6 @@ const Header = () => {
   const notSignedIn = status === 'loading' || !session;
 
   const handleAuth = () => {
-    console.log({ notSignedIn });
-
     notSignedIn ? signIn('github') : signOut();
   };
 
