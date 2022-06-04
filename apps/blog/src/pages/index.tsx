@@ -1,4 +1,5 @@
 /* eslint-disable react/no-array-index-key */
+/* eslint-disable no-nested-ternary */
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
