@@ -1,8 +1,8 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { sluggy } from 'utils';
 import createRouter from '@/backend/utils/createRouter';
 import { markdownToHtml } from '@/lib/editor';
-import { sluggy } from 'utils';
 
 const postRouter = createRouter()
   .middleware(async ({ ctx, next, path }) => {
@@ -77,9 +77,7 @@ const postRouter = createRouter()
           tags: {
             deleteMany: {},
             createMany: {
-              data: data.tags.map(id => ({
-                tagId: id,
-              })),
+              data: data.tags.map(tagId => ({ tagId })),
             },
           },
           slug: sluggy(data.title),

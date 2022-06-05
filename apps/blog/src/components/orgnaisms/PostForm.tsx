@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Tag } from '@prisma/client';
 import useLeaveConfirm from '@/lib/form';
 import { TextField } from '../atoms/TextField';
 import MarkdownEditor from './MarkdownEditor';
@@ -7,7 +8,6 @@ import { Button } from '../atoms/Button';
 import ButtonLink from '../atoms/ButtonLink';
 import { MarkdownIcon } from '../atoms/Icons';
 import TagPicker from '../molecules/TagPicker';
-import { Tag } from '@prisma/client';
 
 type FormData = {
   title: string;
@@ -38,7 +38,7 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
   }, [isSubmitSuccessful, reset, getValues]);
 
   const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
-    const tags = getValues().tags;
+    const {tags} = getValues();
     if (tags.includes(tag.id)) {
       reset({ ...getValues(), tags: tags.filter(t => t !== tag.id) });
     } else {

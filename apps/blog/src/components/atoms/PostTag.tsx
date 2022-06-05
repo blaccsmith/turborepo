@@ -9,8 +9,7 @@ interface Props {
   onClick?: (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => void;
 }
 
-export default function PostTag({ tag, isSelected, isActive, onClick }: Props) {
-  return (
+const PostTag = ({ tag, isSelected, isActive, onClick }: Props) => (
     <button
       type="button"
       onClick={() => onClick?.(tag)}
@@ -35,5 +34,6 @@ export default function PostTag({ tag, isSelected, isActive, onClick }: Props) {
       )}
       {tag.name}
     </button>
-  );
-}
+  )
+
+export default PostTag;

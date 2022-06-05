@@ -1,6 +1,6 @@
-import { trpc } from '@/lib/trpc';
 import { Tag } from '@prisma/client';
 import React from 'react';
+import { trpc } from '@/lib/trpc';
 import PostTag from '../atoms/PostTag';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   handleTagClick: (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => void;
 }
 
-export default function TagPicker({ handleTagClick, selectedTags }: Props) {
+const TagPicker = ({ handleTagClick, selectedTags }: Props) => {
   const { data: tags } = trpc.useQuery(['tag.list']);
 
   return (
@@ -28,3 +28,5 @@ export default function TagPicker({ handleTagClick, selectedTags }: Props) {
     </div>
   );
 }
+
+export default TagPicker;

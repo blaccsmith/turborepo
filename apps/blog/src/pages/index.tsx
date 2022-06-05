@@ -5,15 +5,15 @@ import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { SearchIcon, PlusIcon } from '@heroicons/react/outline';
+import NextLink from 'ui/components/atoms/NextLink';
+import { Tag } from '@prisma/client';
+import { sluggy } from 'utils';
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
 import PostTag from '@/components/atoms/PostTag';
-import { SearchIcon, PlusIcon } from '@heroicons/react/outline';
-import NextLink from 'ui/components/atoms/NextLink';
-import { Tag } from '@prisma/client';
-import { sluggy } from 'utils';
 
 const POSTS_PER_PAGE = 20;
 
