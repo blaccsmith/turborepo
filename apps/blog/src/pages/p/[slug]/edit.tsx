@@ -36,7 +36,7 @@ const EditPostPage = () => {
                 isSubmitting={editPostMutation.isLoading}
                 defaultValues={{
                   title: postQuery.data.title,
-                  tags: postQuery.data.tags.map(el => el.tagId),
+                  tags: postQuery.data.tags.map(el => el.tag.id),
                   content: postQuery.data.content,
                 }}
                 backTo={`/p/${postQuery.data.slug}`}
