@@ -39,6 +39,7 @@ import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 
 import { IconButton } from '@/components/atoms/IconButton';
 import LikeButton from '@/components/atoms/LikeButton';
+import PostTag from '@/components/atoms/PostTag';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
@@ -601,6 +602,11 @@ const PostPage = () => {
             </div>
             <div className="mt-6">
               <AuthorWithDate author={postQuery.data.author} date={postQuery.data.createdAt} />
+              <div className="scrollbar-hide mt-4 flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
+                {postQuery.data.tags?.map(el => (
+                  <PostTag key={el.tag.id} tag={el.tag} isSelected />
+                ))}
+              </div>
             </div>
             <HtmlView html={postQuery.data.contentHtml} className="mt-8" />
             <div className="clear-both mt-6 flex gap-4">

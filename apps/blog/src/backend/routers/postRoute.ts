@@ -283,7 +283,11 @@ const postRouter = createRouter()
           id: true,
           title: true,
           slug: true,
-          tags: true,
+          tags: {
+            select: {
+              tag: true,
+            },
+          },
           content: true,
           contentHtml: true,
           createdAt: true,

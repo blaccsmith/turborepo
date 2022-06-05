@@ -18,7 +18,7 @@ export default function PostTag({ tag, isSelected, isActive, onClick }: Props) {
         isSelected
           ? 'bg-brand-purple-400 border-transparent text-white'
           : 'hover:text-brand-purple-400 hover:border-brand-purple-400  border-[#424242] bg-transparent text-[#9E9E9E]',
-        'focus-ring inline-flex cursor-pointer items-center rounded-md border px-3 py-0.5 text-sm transition-all',
+        'focus-ring inline-flex min-w-max cursor-pointer items-center rounded-md border px-3 py-0.5 text-sm transition-all',
       )}
     >
       {isActive && (
