@@ -6,8 +6,10 @@ import { useSession } from 'next-auth/react';
 import React from 'react';
 import Avatar from 'ui/components/atoms/Avatar';
 import NextLink from 'ui/components/atoms/NextLink';
+import { sluggy } from 'utils';
 import { InferQueryOutput } from '@/lib/trpc';
 import { HeartFilledIcon, HeartIcon, MessageIcon } from '../atoms/Icons';
+import PostTag from '../atoms/PostTag';
 
 export type PostSummaryProps = {
   post: InferQueryOutput<'post.feed'>['posts'][number];
@@ -65,13 +67,18 @@ export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
             <Avatar user={post.author as Session['user']} size={5} /> {post.author.name}
           </div>
         </div>
+        <div className="scrollbar-hide flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
+          {post.tags?.map(el => (
+            <PostTag key={el.tag.id} tag={el.tag} isSelected />
+          ))}
+        </div>
       </div>
       <div className="flex w-full items-center space-x-6 text-white md:w-min">
         <div className="inline-flex items-center gap-1.5">
           {isLikedByCurrentUser ? (
-            <HeartFilledIcon className="h-4 w-4 text-brand-purple-500" />
+            <HeartFilledIcon className="text-brand-purple-400 h-4 w-4" />
           ) : (
-            <HeartIcon className="h-4 w-4 text-brand-purple-500" />
+            <HeartIcon className="h-4 w-4 text-white" />
           )}
           <span className="text-sm font-semibold tabular-nums">{likeCount}</span>
         </div>
