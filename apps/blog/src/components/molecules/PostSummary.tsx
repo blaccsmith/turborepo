@@ -6,10 +6,10 @@ import { useSession } from 'next-auth/react';
 import React from 'react';
 import Avatar from 'ui/components/atoms/Avatar';
 import NextLink from 'ui/components/atoms/NextLink';
+import { sluggy } from 'utils';
 import { InferQueryOutput } from '@/lib/trpc';
 import { HeartFilledIcon, HeartIcon, MessageIcon } from '../atoms/Icons';
 import PostTag from '../atoms/PostTag';
-import { sluggy } from 'utils';
 
 export type PostSummaryProps = {
   post: InferQueryOutput<'post.feed'>['posts'][number];
