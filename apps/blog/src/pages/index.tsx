@@ -5,10 +5,15 @@ import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { SearchIcon, PlusIcon } from '@heroicons/react/outline';
+import NextLink from 'ui/components/atoms/NextLink';
+import { Tag } from '@prisma/client';
+import { sluggy } from 'utils';
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
+import PostTag from '@/components/atoms/PostTag';
 
 const POSTS_PER_PAGE = 20;
 
@@ -27,6 +32,8 @@ const Home: NextPage = () => {
     getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
   ];
   const feedQuery = trpc.useQuery(feedQueryPathAndInput);
+  const { data: tags } = trpc.useQuery(['tag.list']);
+
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
       await utils.cancelQuery(feedQueryPathAndInput);
@@ -93,6 +100,11 @@ const Home: NextPage = () => {
     return <div>Error: {feedQuery.error.message}</div>;
   }
 
+  const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
+    if (router.query.sort === sluggy(tag.name)) router.push('/', undefined, { shallow: true });
+    else router.push(`/?sort=${sluggy(tag.name)}`, undefined, { shallow: true });
+  };
+
   return (
     <>
       <Head>
@@ -100,7 +112,32 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="flow-root">
-        <h1 className="mt-6 mb-12 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
+        <div className="mt-6 mb-12">
+          <h1 className=" mb-6 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
+          <div className="flex items-center justify-between space-x-4">
+            <div className="scrollbar-hide flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
+              {tags?.map(tag => (
+                <PostTag
+                  key={tag.id}
+                  tag={tag}
+                  isSelected={router.query.sort === sluggy(tag.name)}
+                  onClick={handleTagClick}
+                />
+              ))}
+            </div>
+            <div className="flex items-center justify-start space-x-2">
+              <button className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white">
+                <SearchIcon className="h-3 w-3" />
+              </button>
+              <NextLink
+                href="/new"
+                className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+              >
+                <PlusIcon className="h-3 w-3" />
+              </NextLink>
+            </div>
+          </div>
+        </div>
         <ul className="divide-primary divide-y divide-[#424242]">
           {feedQuery.isLoading ? (
             [...Array(3)].map((_, idx) => (

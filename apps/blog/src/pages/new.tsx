@@ -26,12 +26,13 @@ const New = () => {
           isSubmitting={addPostMutation.isLoading}
           defaultValues={{
             title: '',
+            tags: [],
             content: '',
           }}
           backTo="/"
           onSubmit={values => {
             addPostMutation.mutate(
-              { title: values.title, content: values.content },
+              { ...values },
               {
                 onSuccess: data => router.push(`/p/${data.slug}`),
               },

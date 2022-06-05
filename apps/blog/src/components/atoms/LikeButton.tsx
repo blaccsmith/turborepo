@@ -58,23 +58,21 @@ const LikeButton = ({ likedBy, responsive, onLike, onUnlike }: LikeButtonProps) 
           variant="secondary"
           responsive={responsive}
           className={classNames(
-            'space-x-1.5 overflow-hidden transition-colors [transform:translateZ(0)]',
-            isLikedByCurrentUser
-              ? 'border-red-300 !bg-red-100 dark:border-red-700 dark:!bg-red-900'
-              : '',
-            isLikingAnimation ? '!border-red-600 !bg-red-600 dark:!bg-red-600' : '',
+            'space-x-1.5 overflow-hidden border-[#424242] transition-colors [transform:translateZ(0)]',
+            isLikedByCurrentUser ? 'border-brand-purple-400 !bg-transparent' : '',
+            isLikingAnimation ? '!border-brand-purple-400 !bg-brand-purple-400' : '',
           )}
           onClick={handleClick}
         >
-          <span className="relative block h-4 w-4 shrink-0">
+          <span className="relative block h-4 w-4 shrink-0 border-[#424242]">
             {isLikedByCurrentUser && !isLikingAnimation ? (
-              <HeartFilledIcon className="text-red scale-1 absolute inset-0" />
+              <HeartFilledIcon className="scale-1 text-brand-purple-400 absolute inset-0" />
             ) : (
               <>
                 <HeartIcon
                   className={classNames(
-                    'text-red absolute inset-0 transform-gpu fill-transparent transition-all',
-                    isLikingAnimation ? '!scale-[12] !fill-red-600' : '',
+                    'absolute inset-0 transform-gpu fill-transparent transition-all',
+                    isLikingAnimation ? '!fill-brand-purple-400 !scale-[12]' : 'text-[#9E9E9E]',
                   )}
                 />
                 <span
@@ -95,7 +93,7 @@ const LikeButton = ({ likedBy, responsive, onLike, onUnlike }: LikeButtonProps) 
 
           <span
             className={classNames(
-              'relative z-10 tabular-nums',
+              'relative z-10 tabular-nums text-white',
               isLikingAnimation ? 'text-gray-50 transition-colors duration-100' : '',
             )}
           >
@@ -111,7 +109,7 @@ const LikeButton = ({ likedBy, responsive, onLike, onUnlike }: LikeButtonProps) 
           likeCount === 0 ? 'hidden' : '',
         )}
       >
-        <p className="text-sm">
+        <p className="text-sm text-white">
           {likedBy
             .slice(0, MAX_LIKED_BY_SHOWN)
             .map(item => (item.user.id === session?.user.id ? 'You' : item.user.name))

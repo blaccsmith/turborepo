@@ -36,6 +36,7 @@ const EditPostPage = () => {
                 isSubmitting={editPostMutation.isLoading}
                 defaultValues={{
                   title: postQuery.data.title,
+                  tags: postQuery.data.tags.map(el => el.tag.id),
                   content: postQuery.data.content,
                 }}
                 backTo={`/p/${postQuery.data.slug}`}
@@ -43,7 +44,7 @@ const EditPostPage = () => {
                   editPostMutation.mutate(
                     {
                       id: postQuery.data.id,
-                      data: { title: values.title, content: values.content },
+                      data: { ...values },
                     },
                     {
                       onSuccess: ({ slug }) => router.push(`/p/${slug}`),

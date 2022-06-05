@@ -13,7 +13,7 @@ body {
     @apply focus:outline-none;
     @apply focus:ring-offset-0;
     @apply focus:ring-brand-purple-200;
-    @apply dark:focus:ring-brand-purple-600;
+    @apply dark:focus:ring-brand-purple-400;
     @apply focus:border-brand-purple-500;
     @apply focus:shadow-none;
   }

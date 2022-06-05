@@ -8,5 +8,8 @@
     "config": "*",
     "tsconfig": "*",
     "typescript": "^4.5.3"
+  },
+  "dependencies": {
+    "slugify": "^1.6.5"
   }
 }

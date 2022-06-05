@@ -65,31 +65,39 @@ model VerificationToken {
 }
 
 model Post {
-    id          Int          @id @default(autoincrement())
-    title       String       @db.VarChar(255)
-    content     String       @db.Text
-    contentHtml String       @db.Text
-    slug        String       @unique
-    hidden      Boolean      @default(false)
-    createdAt   DateTime     @default(now())
-    updatedAt   DateTime     @updatedAt
-    author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    id          Int           @id @default(autoincrement())
+    title       String        @db.VarChar(255)
+    content     String        @db.Text
+    contentHtml String        @db.Text
+    slug        String        @unique
+    hidden      Boolean       @default(false)
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
     authorId    String
     likedBy     LikedPosts[]
     comments    Comment[]
-    tag         Tag?         @relation(fields: [tagId], references: [id])
-    tagId       String?
+    tags        TagsOnPosts[]
 
     @@index([authorId])
     @@fulltext([title, content])
 }
 
 model Tag {
-    id        String   @id @default(cuid())
-    name      String   @unique
-    posts     Post[]
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id        String        @id @default(cuid())
+    name      String        @unique
+    posts     TagsOnPosts[]
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
+}
+
+model TagsOnPosts {
+    post   Post   @relation(fields: [postId], references: [id])
+    postId Int // relation scalar field (used in the `@relation` attribute above)
+    tag    Tag    @relation(fields: [tagId], references: [id])
+    tagId  String // relation scalar field (used in the `@relation` attribute above)
+
+    @@id([postId, tagId])
 }
 
 model LikedPosts {
