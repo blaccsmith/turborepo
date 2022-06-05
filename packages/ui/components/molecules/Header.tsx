@@ -4,7 +4,6 @@ import Avatar from '../atoms/Avatar';
 import Image from 'next/image';
 import logo from '../../assets/logo_clear.png';
 import LockIcon from '../atoms/Icons/LockIcon';
-import { ReactNode } from 'react';
 
 interface Props {
   showAuth?: boolean;
