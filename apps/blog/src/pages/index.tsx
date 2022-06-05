@@ -47,7 +47,7 @@ const Home: NextPage = () => {
 
       setPosts(postsWithTag);
     } else setPosts(null);
-  }, [router]);
+  }, [router, feedQuery.data]);
 
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
