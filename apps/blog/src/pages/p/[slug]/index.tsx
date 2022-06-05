@@ -29,7 +29,7 @@ import {
 } from '@/components/molecules/Menu';
 import MarkdownEditor from '@/components/orgnaisms/MarkdownEditor';
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
-import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
+import { PencilIcon, TrashIcon, DotsHorizontalIcon } from '@heroicons/react/outline';
 
 import { IconButton } from '@/components/atoms/IconButton';
 import LikeButton from '@/components/atoms/LikeButton';
@@ -71,7 +71,7 @@ const AddCommentForm = ({ postSlug }: { postSlug: string }) => {
   };
 
   return (
-    <form className="flex-1" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex-1 text-white" onSubmit={handleSubmit(onSubmit)}>
       <Controller
         name="content"
         control={control}
@@ -93,6 +93,7 @@ const AddCommentForm = ({ postSlug }: { postSlug: string }) => {
           type="submit"
           isLoading={addCommentMutation.isLoading}
           loadingChildren="Adding comment"
+          className="text-white"
         >
           Add comment
         </Button>
@@ -138,7 +139,7 @@ const EditCommentForm = ({
   };
 
   return (
-    <form className="flex-1" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex-1 text-white" onSubmit={handleSubmit(onSubmit)}>
       <Controller
         name="content"
         control={control}
@@ -155,7 +156,7 @@ const EditCommentForm = ({
           />
         )}
       />
-      <div className="mt-4 flex gap-4">
+      <div className="mt-4 flex gap-4 text-white">
         <Button
           type="submit"
           isLoading={editCommentMutation.isLoading}
@@ -406,11 +407,11 @@ const Comment = ({
         <AuthorWithDate author={comment.author} date={comment.createdAt} />
         {commentBelongsToUser && (
           <Menu>
-            <MenuButton as={IconButton} variant="secondary" title="More">
-              <DotsIcon className="h-4 w-4" />
+            <MenuButton className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white">
+              <DotsHorizontalIcon className="h-3 w-3" />
             </MenuButton>
 
-            <MenuItems className="w-28">
+            <MenuItems className="w-28 border border-[#424242] text-white">
               <MenuItemsContent>
                 <MenuItemButton
                   onClick={() => {
@@ -433,8 +434,8 @@ const Comment = ({
         )}
       </div>
 
-      <div className="mt-4 pl-11 sm:pl-16">
-        <HtmlView html={comment.contentHtml} />
+      <div className="mt-4 pl-11 text-white sm:pl-16">
+        <HtmlView html={comment.contentHtml} className="text-white" />
       </div>
 
       <ConfirmDeleteCommentDialog
@@ -601,27 +602,13 @@ const PostPage = () => {
             </div>
             <div className="mt-6">
               <AuthorWithDate author={postQuery.data.author} date={postQuery.data.createdAt} />
-              <div className="scrollbar-hide mt-4 flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
+              <div className="scrollbar-hide mt-4 flex items-center justify-start space-x-2 overflow-x-auto pr-2">
                 {postQuery.data.tags?.map(el => (
                   <PostTag key={el.tag.id} tag={el.tag} isSelected />
                 ))}
               </div>
             </div>
             <HtmlView html={postQuery.data.contentHtml} className="mt-8 text-white" />
-            {/* <div className="flex w-full items-center space-x-6 text-white md:w-min">
-              <div className="inline-flex items-center gap-1.5">
-                {isLikedByCurrentUser ? (
-                  <HeartFilledIcon className="h-4 w-4 text-red-500" />
-                ) : (
-                  <HeartIcon className="h-4 w-4 text-red-500" />
-                )}
-                <span className="text-sm font-semibold tabular-nums">{likeCount}</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5">
-                <MessageIcon className="h-4 w-4 text-white" />
-                <span className="text-sm font-semibold tabular-nums">{post._count.comments}</span>
-              </div>
-            </div> */}
             <div className="clear-both mt-6 flex gap-4">
               <LikeButton
                 likedBy={postQuery.data.likedBy}
