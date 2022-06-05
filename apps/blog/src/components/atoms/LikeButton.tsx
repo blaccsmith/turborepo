@@ -59,20 +59,20 @@ const LikeButton = ({ likedBy, responsive, onLike, onUnlike }: LikeButtonProps) 
           responsive={responsive}
           className={classNames(
             'space-x-1.5 overflow-hidden border-[#424242] transition-colors [transform:translateZ(0)]',
-            isLikedByCurrentUser ? 'border-brand-purple-500 !bg-transparent' : '',
-            isLikingAnimation ? '!border-brand-purple-500 !bg-brand-purple-500' : '',
+            isLikedByCurrentUser ? 'border-brand-purple-400 !bg-transparent' : '',
+            isLikingAnimation ? '!border-brand-purple-400 !bg-brand-purple-400' : '',
           )}
           onClick={handleClick}
         >
           <span className="relative block h-4 w-4 shrink-0 border-[#424242]">
             {isLikedByCurrentUser && !isLikingAnimation ? (
-              <HeartFilledIcon className="scale-1 text-brand-purple-500 absolute inset-0" />
+              <HeartFilledIcon className="scale-1 text-brand-purple-400 absolute inset-0" />
             ) : (
               <>
                 <HeartIcon
                   className={classNames(
                     'absolute inset-0 transform-gpu fill-transparent transition-all',
-                    isLikingAnimation ? '!fill-brand-purple-500 !scale-[12]' : 'text-[#9E9E9E]',
+                    isLikingAnimation ? '!fill-brand-purple-400 !scale-[12]' : 'text-[#9E9E9E]',
                   )}
                 />
                 <span
