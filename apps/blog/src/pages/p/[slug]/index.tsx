@@ -9,14 +9,7 @@ import ButtonLink from '@/components/atoms/ButtonLink';
 import HtmlView from '@/components/atoms/HtmlView';
 import { Button } from '@/components/atoms/Button';
 import BlogAvatar from '@/components/atoms/BlogAvatar';
-import {
-  DotsIcon,
-  EyeIcon,
-  EyeClosedIcon,
-  EditIcon,
-  TrashIcon,
-  MessageIcon,
-} from '@/components/atoms/Icons';
+import { DotsIcon, EyeIcon, EyeClosedIcon, MessageIcon } from '@/components/atoms/Icons';
 import Banner from '@/components/atoms/Layout/Banner';
 import {
   Dialog,
@@ -36,10 +29,12 @@ import {
 } from '@/components/molecules/Menu';
 import MarkdownEditor from '@/components/orgnaisms/MarkdownEditor';
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
+import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
 
 import { IconButton } from '@/components/atoms/IconButton';
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
+import NextLink from 'ui/components/atoms/NextLink';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
@@ -517,10 +512,6 @@ const PostPage = () => {
     setIsConfirmUnhideDialogOpen(true);
   }
 
-  function handleEdit() {
-    router.push(`/p/${postQuery.data?.slug}/edit`);
-  }
-
   function handleDelete() {
     setIsConfirmDeleteDialogOpen(true);
   }
@@ -544,7 +535,7 @@ const PostPage = () => {
             )}
 
             <div className="flex items-center justify-between gap-4">
-              <h1 className="text-3xl font-semibold tracking-tighter md:text-4xl">
+              <h1 className="text-3xl font-semibold tracking-tighter text-white md:text-4xl">
                 {postQuery.data.title}
               </h1>
               {(postBelongsToUser || isUserAdmin) && (
@@ -565,7 +556,9 @@ const PostPage = () => {
                             ))}
                           {postBelongsToUser && (
                             <>
-                              <MenuItemButton onClick={handleEdit}>Edit</MenuItemButton>
+                              <NextLink href={`/edit-post/${postQuery.data.slug}`}>
+                                <MenuItemButton onClick={() => null}>Edit</MenuItemButton>
+                              </NextLink>
                               <MenuItemButton className="!text-red" onClick={handleDelete}>
                                 Delete
                               </MenuItemButton>
@@ -587,14 +580,20 @@ const PostPage = () => {
                         </IconButton>
                       ))}
                     {postBelongsToUser && (
-                      <>
-                        <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
-                          <EditIcon className="h-4 w-4" />
-                        </IconButton>
-                        <IconButton variant="secondary" title="Delete" onClick={handleDelete}>
-                          <TrashIcon className="text-red h-4 w-4" />
-                        </IconButton>
-                      </>
+                      <div className="flex items-center justify-start space-x-2">
+                        <NextLink
+                          href={`/p/${postQuery.data.slug}/edit`}
+                          className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+                        >
+                          <PencilIcon className="h-3 w-3" />
+                        </NextLink>
+                        <button
+                          onClick={handleDelete}
+                          className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+                        >
+                          <TrashIcon className="h-3 w-3" />
+                        </button>
+                      </div>
                     )}
                   </div>
                 </>
@@ -608,7 +607,21 @@ const PostPage = () => {
                 ))}
               </div>
             </div>
-            <HtmlView html={postQuery.data.contentHtml} className="mt-8" />
+            <HtmlView html={postQuery.data.contentHtml} className="mt-8 text-white" />
+            {/* <div className="flex w-full items-center space-x-6 text-white md:w-min">
+              <div className="inline-flex items-center gap-1.5">
+                {isLikedByCurrentUser ? (
+                  <HeartFilledIcon className="h-4 w-4 text-red-500" />
+                ) : (
+                  <HeartIcon className="h-4 w-4 text-red-500" />
+                )}
+                <span className="text-sm font-semibold tabular-nums">{likeCount}</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5">
+                <MessageIcon className="h-4 w-4 text-white" />
+                <span className="text-sm font-semibold tabular-nums">{post._count.comments}</span>
+              </div>
+            </div> */}
             <div className="clear-both mt-6 flex gap-4">
               <LikeButton
                 likedBy={postQuery.data.likedBy}
@@ -620,8 +633,8 @@ const PostPage = () => {
                 }}
               />
               <ButtonLink href={`/p/${postQuery.data.slug}#comments`} variant="secondary">
-                <MessageIcon className="text-secondary h-4 w-4" />
-                <span className="ml-1.5">{postQuery.data.comments.length}</span>
+                <MessageIcon className="h-4 w-4 text-[#9E9E9E]" />
+                <span className="ml-1.5 text-[#9E9E9E]">{postQuery.data.comments.length}</span>
               </ButtonLink>
             </div>
           </div>
