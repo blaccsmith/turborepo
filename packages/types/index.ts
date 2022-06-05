@@ -9,5 +9,6 @@ export type AnotherType = {
 };
 
 export type LayoutProps = {
+  showAuth?: boolean;
   children: ReactNode;
 };
