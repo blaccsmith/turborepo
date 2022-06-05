@@ -69,9 +69,9 @@ export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
       <div className="flex w-full items-center space-x-6 text-white md:w-min">
         <div className="inline-flex items-center gap-1.5">
           {isLikedByCurrentUser ? (
-            <HeartFilledIcon className="h-4 w-4 text-red-500" />
+            <HeartFilledIcon className="h-4 w-4 text-brand-purple-500" />
           ) : (
-            <HeartIcon className="h-4 w-4 text-red-500" />
+            <HeartIcon className="h-4 w-4 text-brand-purple-500" />
           )}
           <span className="text-sm font-semibold tabular-nums">{likeCount}</span>
         </div>
