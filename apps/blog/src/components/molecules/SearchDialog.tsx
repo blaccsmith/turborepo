@@ -141,7 +141,7 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
             ))}
           </ul>
         ) : (
-          <div className="border-t py-3.5 px-3 text-center leading-tight">
+          <div className="bg-brand-black border-t py-3.5 px-3 text-center leading-tight">
             No results. Try something else
           </div>
         ))}
