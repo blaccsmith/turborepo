@@ -16,6 +16,7 @@ import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagi
 import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
 import PostTag from '@/components/atoms/PostTag';
 import PostTagSkeleton from '@/components/atoms/Skeletons/PostTagSkeleton';
+import SearchDialog from '@/components/molecules/SearchDialog';
 
 const POSTS_PER_PAGE = 20;
 
@@ -30,6 +31,7 @@ const Home: NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [posts, setPosts] = useState<PostsFromFeed | null>(null);
+  const [showSearch, setShowSearch] = useState(false);
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1;
   const utils = trpc.useContext();
   const feedQueryPathAndInput: InferQueryPathAndInput<'post.feed'> = [
@@ -128,7 +130,8 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="flow-root">
-        <div className="bg-brand-black sticky top-[78px] z-10 mb-12 pt-6">
+        <SearchDialog isOpen={showSearch} onClose={() => setShowSearch(false)} />
+        <div className="bg-brand-black sticky top-[78px] z-10 mb-12 pt-6 md:top-[94px]">
           <h1 className=" mb-6 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
           <div className="flex items-center justify-between space-x-4">
             <div className="scrollbar-hide flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
@@ -144,7 +147,10 @@ const Home: NextPage = () => {
                   ))}
             </div>
             <div className="flex items-center justify-start space-x-2">
-              <button className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white">
+              <button
+                onClick={() => setShowSearch(true)}
+                className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+              >
                 <SearchIcon className="h-3 w-3" />
               </button>
               <NextLink

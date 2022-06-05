@@ -18,7 +18,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="">
+    <div>
       <div className="peer cursor-pointer" onClick={handleAuth}>
         {notSignedIn ? (
           <div className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400">
@@ -37,7 +37,7 @@ const Auth = () => {
 
 const Header = ({ showAuth }: Props) => {
   return (
-    <div className="bg-brand-black/50 sticky top-0 z-50 mx-auto flex w-full max-w-7xl items-center justify-between p-6 text-white  backdrop-blur-lg md:p-8">
+    <div className="bg-brand-black/50 sticky top-0 z-20 mx-auto flex w-full max-w-7xl items-center justify-between p-6 text-white  backdrop-blur-lg md:p-8">
       <NextLink href="/">
         <Image src={logo} width={24} height={24} className="rounded-full" alt="BLACC Logo" />
       </NextLink>
