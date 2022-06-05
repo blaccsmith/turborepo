@@ -102,7 +102,7 @@ const Home: NextPage = () => {
 
   const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
     if (router.query.sort === sluggy(tag.name)) router.push('/', undefined, { shallow: true });
-    else router.push(`/?sort=${tag.name}`, undefined, { shallow: true });
+    else router.push(`/?sort=${sluggy(tag.name)}`, undefined, { shallow: true });
   };
 
   return (

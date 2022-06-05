@@ -22,6 +22,13 @@ const postRouter = createRouter()
         data: {
           title: input.title,
           content: input.content,
+          tags: {
+            createMany: {
+              data: input.tags.map(id => ({
+                tagId: id,
+              })),
+            },
+          },
           slug: sluggy(input.title),
           contentHtml: markdownToHtml(input.content),
           author: {

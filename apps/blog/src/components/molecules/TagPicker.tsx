@@ -1,7 +1,6 @@
 import { trpc } from '@/lib/trpc';
 import { Tag } from '@prisma/client';
 import React from 'react';
-import CONSTANTS from 'utils/constants';
 import PostTag from '../atoms/PostTag';
 
 interface Props {
