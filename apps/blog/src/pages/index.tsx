@@ -15,6 +15,7 @@ import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
 import PostTag from '@/components/atoms/PostTag';
+import PostTagSkeleton from '@/components/atoms/Skeletons/PostTagSkeleton';
 
 const POSTS_PER_PAGE = 20;
 
@@ -36,7 +37,7 @@ const Home: NextPage = () => {
     getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
   ];
   const feedQuery = trpc.useQuery(feedQueryPathAndInput);
-  const { data: tags } = trpc.useQuery(['tag.list']);
+  const { data: tags, isLoading: loadingTags } = trpc.useQuery(['tag.list']);
 
   useEffect(() => {
     if (router.query.tag && feedQuery.data) {
@@ -46,7 +47,7 @@ const Home: NextPage = () => {
 
       setPosts(postsWithTag);
     } else setPosts(null);
-  }, [router]);
+  }, [router, feedQuery.data]);
 
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
@@ -131,14 +132,16 @@ const Home: NextPage = () => {
           <h1 className=" mb-6 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
           <div className="flex items-center justify-between space-x-4">
             <div className="scrollbar-hide flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
-              {tags?.map(tag => (
-                <PostTag
-                  key={tag.id}
-                  tag={tag}
-                  isSelected={router.query.tag === sluggy(tag.name)}
-                  onClick={handleTagClick}
-                />
-              ))}
+              {loadingTags
+                ? [...Array(3)].map((_, idx) => <PostTagSkeleton key={idx} />)
+                : tags?.map(tag => (
+                    <PostTag
+                      key={tag.id}
+                      tag={tag}
+                      isSelected={router.query.tag === sluggy(tag.name)}
+                      onClick={handleTagClick}
+                    />
+                  ))}
             </div>
             <div className="flex items-center justify-start space-x-2">
               <button className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white">
