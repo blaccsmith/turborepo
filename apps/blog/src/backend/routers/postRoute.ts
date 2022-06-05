@@ -15,7 +15,7 @@ const postRouter = createRouter()
     input: z.object({
       title: z.string().min(1),
       content: z.string().min(1),
-      tags: z.array(z.string()).min(1),
+      tags: z.array(z.string()),
     }),
     async resolve({ ctx, input }) {
       const post = await ctx.prisma.post.create({
@@ -46,6 +46,7 @@ const postRouter = createRouter()
       id: z.number(),
       data: z.object({
         title: z.string().min(1),
+        tags: z.array(z.string()),
         content: z.string().min(1),
       }),
     }),
@@ -73,6 +74,14 @@ const postRouter = createRouter()
         where: { id },
         data: {
           title: data.title,
+          tags: {
+            deleteMany: {},
+            createMany: {
+              data: data.tags.map(id => ({
+                tagId: id,
+              })),
+            },
+          },
           slug: sluggy(data.title),
           content: data.content,
           contentHtml: markdownToHtml(data.content),
@@ -209,6 +218,16 @@ const postRouter = createRouter()
           id: true,
           title: true,
           slug: true,
+          tags: {
+            select: {
+              tag: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
           contentHtml: true,
           createdAt: true,
           hidden: true,
@@ -264,6 +283,7 @@ const postRouter = createRouter()
           id: true,
           title: true,
           slug: true,
+          tags: true,
           content: true,
           contentHtml: true,
           createdAt: true,
