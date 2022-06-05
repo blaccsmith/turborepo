@@ -39,7 +39,7 @@ const SearchResult = ({
       <Link href={`/p/${result.slug}`}>
         <a
           className={classNames(
-            'bg-brand-black block py-3.5 pl-10 pr-3 leading-tight transition-colors',
+            'bg-brand-black block cursor-pointer py-3.5 pl-10 pr-3 leading-tight transition-colors',
             highlighted && ' bg-brand-purple-400 text-white',
           )}
         >
@@ -156,33 +156,39 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
 
 const SearchDialog = ({ isOpen, onClose }: SearchDialogProps) => (
   <Transition.Root show={isOpen} as={React.Fragment}>
-    <Dialog as="div" className="fixed inset-0 z-30 overflow-y-auto" onClose={onClose}>
-      <div className="min-h-screen px-4 text-center">
-        <Transition.Child
-          as={React.Fragment}
-          enter="ease-out duration-100"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-50"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Dialog.Overlay className="bg-brand-black/75 fixed inset-0 opacity-90 transition-opacity" />
-        </Transition.Child>
+    <Dialog as="div" className="relative z-10" onClose={onClose}>
+      <Transition.Child
+        as={React.Fragment}
+        enter="ease-in-out duration-500"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="ease-in-out duration-500"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="bg-brand-black/75 fixed inset-0 transition-opacity" />
+      </Transition.Child>
 
-        <Transition.Child
-          as={React.Fragment}
-          enter="ease-out duration-100"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="ease-in duration-50"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          <div className="bg-primary mt-[10vh] mb-8 inline-block w-full max-w-md transform overflow-hidden rounded-lg border border-[#424242] text-left align-middle shadow-xl transition-all">
-            {isOpen ? <SearchField onSelect={onClose} /> : <div className="h-12" />}
+      <div className="fixed inset-0 overflow-hidden">
+        <div className="absolute inset-0 flex items-start justify-center overflow-hidden">
+          <div className="pointer-events-none mt-[20vh] flex max-w-md ">
+            <Transition.Child
+              as={React.Fragment}
+              enter="ease-out duration-100"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-50"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="pointer-events-auto w-screen px-6">
+                <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg border border-[#424242] text-left align-middle shadow-xl transition-all md:mx-0">
+                  <SearchField onSelect={onClose} />
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
           </div>
-        </Transition.Child>
+        </div>
       </div>
     </Dialog>
   </Transition.Root>
