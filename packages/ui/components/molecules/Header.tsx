@@ -16,14 +16,7 @@ const Header = () => {
   return (
     <div className="bg-brand-black/50 sticky top-0 z-50 mx-auto flex w-full max-w-7xl items-center justify-between p-6 text-white  backdrop-blur-lg md:p-8">
       <NextLink href="/">
-        <Image
-          src={logo}
-          width={24}
-          height={24}
-          className="rounded-full"
-          alt="BLACC Logo"
-          placeholder="blur"
-        />
+        <Image src={logo} width={24} height={24} className="rounded-full" alt="BLACC Logo" />
       </NextLink>
 
       <ul className="flex items-center space-x-6">
