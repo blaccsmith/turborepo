@@ -2,10 +2,10 @@ import { LayoutProps } from 'types';
 import Header from '../../molecules/Header';
 import Content from './Content';
 
-const RootLayout = ({ children }: LayoutProps) => {
+const RootLayout = ({ children, showAuth }: LayoutProps) => {
   return (
     <div className="bg-brand-black flex h-full min-h-screen w-screen flex-col">
-      <Header />
+      <Header showAuth={showAuth} />
       <Content>{children}</Content>
     </div>
   );
