@@ -9,11 +9,12 @@ import { SearchIcon, PlusIcon } from '@heroicons/react/outline';
 import NextLink from 'ui/components/atoms/NextLink';
 import { Tag } from '@prisma/client';
 import { sluggy } from 'utils';
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc';
+import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
 import PostTag from '@/components/atoms/PostTag';
+import { useEffect, useState } from 'react';
 
 const POSTS_PER_PAGE = 20;
 
@@ -22,9 +23,12 @@ const PostSummary = dynamic<PostSummaryProps>(
   { ssr: false },
 );
 
+type PostsFromFeed = InferQueryOutput<'post.feed'>['posts'];
+
 const Home: NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const [posts, setPosts] = useState<PostsFromFeed | null>(null);
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1;
   const utils = trpc.useContext();
   const feedQueryPathAndInput: InferQueryPathAndInput<'post.feed'> = [
@@ -33,6 +37,16 @@ const Home: NextPage = () => {
   ];
   const feedQuery = trpc.useQuery(feedQueryPathAndInput);
   const { data: tags } = trpc.useQuery(['tag.list']);
+
+  useEffect(() => {
+    if (router.query.tag && feedQuery.data) {
+      const postsWithTag = feedQuery.data.posts.filter(post =>
+        post.tags.some(el => sluggy(el.tag.name) === router.query.tag),
+      );
+
+      setPosts(postsWithTag);
+    } else setPosts(null);
+  }, [router]);
 
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
@@ -67,6 +81,7 @@ const Home: NextPage = () => {
       }
     },
   });
+
   const unlikeMutation = trpc.useMutation(['post.unlike'], {
     onMutate: async unlikedPostId => {
       await utils.cancelQuery(feedQueryPathAndInput);
@@ -101,8 +116,8 @@ const Home: NextPage = () => {
   }
 
   const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
-    if (router.query.sort === sluggy(tag.name)) router.push('/', undefined, { shallow: true });
-    else router.push(`/?sort=${sluggy(tag.name)}`, undefined, { shallow: true });
+    if (router.query.tag === sluggy(tag.name)) router.push('/', undefined, { shallow: true });
+    else router.push(`/?tag=${sluggy(tag.name)}`, undefined, { shallow: true });
   };
 
   return (
@@ -112,7 +127,7 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="flow-root">
-        <div className="mt-6 mb-12">
+        <div className="bg-brand-black sticky top-[78px] z-10 mb-12 pt-6">
           <h1 className=" mb-6 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
           <div className="flex items-center justify-between space-x-4">
             <div className="scrollbar-hide flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
@@ -120,7 +135,7 @@ const Home: NextPage = () => {
                 <PostTag
                   key={tag.id}
                   tag={tag}
-                  isSelected={router.query.sort === sluggy(tag.name)}
+                  isSelected={router.query.tag === sluggy(tag.name)}
                   onClick={handleTagClick}
                 />
               ))}
@@ -152,7 +167,7 @@ const Home: NextPage = () => {
           ) : (
             <div className="flow-root">
               <ul className="divide-primary divide-y divide-[#424242]">
-                {feedQuery.data!.posts?.map(post => (
+                {(posts ?? feedQuery.data!.posts)?.map(post => (
                   <li key={post.id} className="py-9">
                     <PostSummary
                       post={post}

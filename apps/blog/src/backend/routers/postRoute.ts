@@ -218,12 +218,7 @@ const postRouter = createRouter()
           slug: true,
           tags: {
             select: {
-              tag: {
-                select: {
-                  id: true,
-                  name: true,
-                },
-              },
+              tag: true,
             },
           },
           contentHtml: true,
