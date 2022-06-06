@@ -4,7 +4,7 @@ import { trpc } from '@/lib/trpc';
 import PostTag from '../atoms/PostTag';
 
 interface Props {
-  selectedTags: string[];
+  selectedTags: number[];
   handleTagClick: (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => void;
 }
 
@@ -27,6 +27,6 @@ const TagPicker = ({ handleTagClick, selectedTags }: Props) => {
       </div>
     </div>
   );
-}
+};
 
 export default TagPicker;
