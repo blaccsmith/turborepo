@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
 import { ItemOptions, useItemList } from 'use-item-list';
+import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
 import { InferQueryOutput, trpc } from '@/lib/trpc';
 import { SearchIcon, SpinnerIcon } from '@/components/atoms/Icons';
-import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
 
 type SearchDialogProps = {
   isOpen: boolean;

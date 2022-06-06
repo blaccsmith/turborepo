@@ -6,21 +6,14 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { PencilIcon, TrashIcon, DotsHorizontalIcon } from '@heroicons/react/outline';
 import NextLink from 'ui/components/atoms/NextLink';
+import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
 import AuthorWithDate from '@/components/atoms/AuthorWithDate';
 import ButtonLink from '@/components/atoms/ButtonLink';
 import HtmlView from '@/components/atoms/HtmlView';
 import { Button } from '@/components/atoms/Button';
 import BlogAvatar from '@/components/atoms/BlogAvatar';
-import { DotsIcon, EyeIcon, EyeClosedIcon, MessageIcon } from '@/components/atoms/Icons';
+import { MessageIcon } from '@/components/atoms/Icons';
 import Banner from '@/components/atoms/Layout/Banner';
-import {
-  Dialog,
-  DialogActions,
-  DialogCloseButton,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from '@/components/molecules/Dialog';
 import Layout from '@/components/molecules/SearchLayout';
 import {
   Menu,
@@ -32,10 +25,8 @@ import {
 import MarkdownEditor from '@/components/orgnaisms/MarkdownEditor';
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 
-import { IconButton } from '@/components/atoms/IconButton';
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
-import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
@@ -195,8 +186,27 @@ const ConfirmDeleteCommentDialog = ({
 
   return (
     <ModalWrapper isOpen={isOpen} onClose={onClose}>
-      <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg border border-[#424242] text-left align-middle shadow-xl transition-all md:mx-0">
-        hi there
+      <div className="bg-brand-black rounded-lg border border-[#353535] px-6 py-4 text-white shadow-2xl shadow-[#282828]">
+        <h1 className="text-2xl font-bold">Delete comment</h1>
+        <p className="mt-6 text-[#fafafa]">Are you sure you want to delete this comment?</p>
+        <div className="mt-6 flex justify-end gap-4">
+          <Button variant="secondary" onClick={onClose} ref={cancelRef}>
+            Cancel
+          </Button>
+          <Button
+            variant="secondary"
+            className="!text-red-400"
+            isLoading={deleteCommentMutation.isLoading}
+            loadingChildren="Deleting comment"
+            onClick={() => {
+              deleteCommentMutation.mutate(commentId, {
+                onSuccess: () => onClose(),
+              });
+            }}
+          >
+            Delete comment
+          </Button>
+        </div>
       </div>
     </ModalWrapper>
   );
@@ -224,10 +234,13 @@ const ConfirmDeleteDialog = ({
       <div className="bg-brand-black rounded-lg border border-[#353535] px-6 py-4 text-white shadow-2xl shadow-[#282828]">
         <h1 className="text-2xl font-bold">Delete post</h1>
         <p className="mt-6 text-[#fafafa]">Are you sure you want to delete this post?</p>
-        <div className="mt-6 flex flex-row-reverse justify-start gap-4">
+        <div className="mt-6 flex justify-end gap-4">
+          <Button variant="secondary" onClick={onClose} ref={cancelRef}>
+            Cancel
+          </Button>
           <Button
             variant="secondary"
-            className="!text-red"
+            className="!text-red-400"
             isLoading={deletePostMutation.isLoading}
             loadingChildren="Deleting post"
             onClick={() => {
@@ -238,114 +251,9 @@ const ConfirmDeleteDialog = ({
           >
             Delete post
           </Button>
-          <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-            Cancel
-          </Button>
         </div>
       </div>
     </ModalWrapper>
-  );
-};
-
-const ConfirmHideDialog = ({
-  postSlug,
-  isOpen,
-  onClose,
-}: {
-  postSlug: string;
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const utils = trpc.useContext();
-  const hidePostMutation = trpc.useMutation('post.hide', {
-    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
-    onError: error => {
-      toast.error(`Something went wrong: ${error.message}`);
-    },
-  });
-
-  return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Hide post</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to hide this post?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          isLoading={hidePostMutation.isLoading}
-          loadingChildren="Hiding post"
-          onClick={() => {
-            hidePostMutation.mutate(postSlug, {
-              onSuccess: () => {
-                toast.success('Post hidden');
-                onClose();
-              },
-            });
-          }}
-        >
-          Hide post
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-const ConfirmUnhideDialog = ({
-  postSlug,
-  isOpen,
-  onClose,
-}: {
-  postSlug: string;
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const utils = trpc.useContext();
-  const unhidePostMutation = trpc.useMutation('post.unhide', {
-    onSuccess: () => utils.invalidateQueries(getPostQueryPathAndInput(postSlug)),
-    onError: error => {
-      toast.error(`Something went wrong: ${error.message}`);
-    },
-  });
-
-  return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Unhide post</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to unhide this post?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          isLoading={unhidePostMutation.isLoading}
-          loadingChildren="Unhiding post"
-          onClick={() => {
-            unhidePostMutation.mutate(postSlug, {
-              onSuccess: () => {
-                toast.success('Post unhidden');
-                onClose();
-              },
-            });
-          }}
-        >
-          Unhide post
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
   );
 };
 
@@ -478,16 +386,6 @@ const PostPage = () => {
     },
   });
   const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] = React.useState(false);
-  const [isConfirmHideDialogOpen, setIsConfirmHideDialogOpen] = React.useState(false);
-  const [isConfirmUnhideDialogOpen, setIsConfirmUnhideDialogOpen] = React.useState(false);
-
-  function handleHide() {
-    setIsConfirmHideDialogOpen(true);
-  }
-
-  function handleUnhide() {
-    setIsConfirmUnhideDialogOpen(true);
-  }
 
   function handleDelete() {
     setIsConfirmDeleteDialogOpen(true);
@@ -525,12 +423,6 @@ const PostPage = () => {
 
                       <MenuItems className="w-28 border border-[#424242] text-white">
                         <MenuItemsContent>
-                          {isUserAdmin &&
-                            (postQuery.data.hidden ? (
-                              <MenuItemButton onClick={handleUnhide}>Unhide</MenuItemButton>
-                            ) : (
-                              <MenuItemButton onClick={handleHide}>Hide</MenuItemButton>
-                            ))}
                           {postBelongsToUser && (
                             <>
                               <NextLink href={`/p/${postQuery.data.slug}/edit`}>
@@ -546,16 +438,6 @@ const PostPage = () => {
                     </Menu>
                   </div>
                   <div className="hidden md:flex md:gap-4">
-                    {isUserAdmin &&
-                      (postQuery.data.hidden ? (
-                        <IconButton variant="secondary" title="Unhide" onClick={handleUnhide}>
-                          <EyeIcon className="h-4 w-4" />
-                        </IconButton>
-                      ) : (
-                        <IconButton variant="secondary" title="Hide" onClick={handleHide}>
-                          <EyeClosedIcon className="h-4 w-4" />
-                        </IconButton>
-                      ))}
                     {postBelongsToUser && (
                       <div className="flex items-center justify-start space-x-2">
                         <NextLink
@@ -642,22 +524,6 @@ const PostPage = () => {
             setIsConfirmDeleteDialogOpen(false);
           }}
         />
-
-        <ConfirmHideDialog
-          postSlug={postQuery.data.slug}
-          isOpen={isConfirmHideDialogOpen}
-          onClose={() => {
-            setIsConfirmHideDialogOpen(false);
-          }}
-        />
-
-        <ConfirmUnhideDialog
-          postSlug={postQuery.data.slug}
-          isOpen={isConfirmUnhideDialogOpen}
-          onClose={() => {
-            setIsConfirmUnhideDialogOpen(false);
-          }}
-        />
       </>
     );
   }
@@ -668,27 +534,27 @@ const PostPage = () => {
 
   return (
     <div className="animate-pulse">
-      <div className="h-9 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="h-9 w-3/4 rounded bg-gray-500" />
       <div className="mt-6 flex items-center gap-4">
-        <div className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700" />
+        <div className="h-12 w-12 rounded-full bg-gray-500" />
         <div className="flex-1">
-          <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700" />
-          <div className="mt-2 h-3 w-32 rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="h-4 w-24 rounded bg-gray-500" />
+          <div className="mt-2 h-3 w-32 rounded bg-gray-500" />
         </div>
       </div>
       <div className="mt-7 space-y-3">
         {[...Array(3)].map((_, idx) => (
           <React.Fragment key={idx}>
             <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-2 h-5 rounded bg-gray-200 dark:bg-gray-700" />
-              <div className="col-span-1 h-5 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="col-span-2 h-5 rounded bg-gray-500" />
+              <div className="col-span-1 h-5 rounded bg-gray-500" />
             </div>
-            <div className="h-5 w-1/2 rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-5 w-1/2 rounded bg-gray-500" />
             <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-1 h-5 rounded bg-gray-200 dark:bg-gray-700" />
-              <div className="col-span-2 h-5 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="col-span-1 h-5 rounded bg-gray-500" />
+              <div className="col-span-2 h-5 rounded bg-gray-500" />
             </div>
-            <div className="h-5 w-3/5 rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-5 w-3/5 rounded bg-gray-500" />
           </React.Fragment>
         ))}
       </div>
