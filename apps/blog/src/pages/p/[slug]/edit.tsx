@@ -31,7 +31,7 @@ const EditPostPage = () => {
               Edit &quot;{postQuery.data.title}&quot;
             </h1>
 
-            <div className="mt-6 text-white">
+            <div className="my-6 text-white">
               <PostForm
                 isSubmitting={editPostMutation.isLoading}
                 defaultValues={{

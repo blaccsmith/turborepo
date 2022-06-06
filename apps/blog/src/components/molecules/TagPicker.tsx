@@ -14,7 +14,7 @@ const TagPicker = ({ handleTagClick, selectedTags }: Props) => {
   return (
     <div className="mt-6">
       <p className="mb-2 block font-semibold">Add tags</p>
-      <div className="bg-secondary border-secondary focus-ring flex min-h-[50px] w-full items-center space-x-2 rounded p-3 text-lg font-light shadow-sm">
+      <div className="bg-secondary overflow-x-auto scrollbar-hide border-secondary focus-ring flex min-h-[50px] w-full items-center space-x-2 rounded p-3 text-lg font-light shadow-sm">
         {tags?.map(tag => (
           <PostTag
             key={tag.id}

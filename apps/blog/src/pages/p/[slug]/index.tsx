@@ -35,6 +35,7 @@ import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import { IconButton } from '@/components/atoms/IconButton';
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
+import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
@@ -193,33 +194,11 @@ const ConfirmDeleteCommentDialog = ({
   });
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Delete comment</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to delete this comment?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          className="!text-red"
-          isLoading={deleteCommentMutation.isLoading}
-          loadingChildren="Deleting comment"
-          onClick={() => {
-            deleteCommentMutation.mutate(commentId, {
-              onSuccess: () => onClose(),
-            });
-          }}
-        >
-          Delete comment
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <ModalWrapper isOpen={isOpen} onClose={onClose}>
+      <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg border border-[#424242] text-left align-middle shadow-xl transition-all md:mx-0">
+        hi there
+      </div>
+    </ModalWrapper>
   );
 };
 
@@ -241,33 +220,30 @@ const ConfirmDeleteDialog = ({
   });
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Delete post</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to delete this post?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          className="!text-red"
-          isLoading={deletePostMutation.isLoading}
-          loadingChildren="Deleting post"
-          onClick={() => {
-            deletePostMutation.mutate(postSlug, {
-              onSuccess: () => router.push('/'),
-            });
-          }}
-        >
-          Delete post
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <ModalWrapper isOpen={isOpen} onClose={onClose}>
+      <div className="bg-brand-black rounded-lg border border-[#353535] px-6 py-4 text-white shadow-2xl shadow-[#282828]">
+        <h1 className="text-2xl font-bold">Delete post</h1>
+        <p className="mt-6 text-[#fafafa]">Are you sure you want to delete this post?</p>
+        <div className="mt-6 flex flex-row-reverse justify-start gap-4">
+          <Button
+            variant="secondary"
+            className="!text-red"
+            isLoading={deletePostMutation.isLoading}
+            loadingChildren="Deleting post"
+            onClick={() => {
+              deletePostMutation.mutate(postSlug, {
+                onSuccess: () => router.push('/'),
+              });
+            }}
+          >
+            Delete post
+          </Button>
+          <Button variant="secondary" onClick={onClose} ref={cancelRef}>
+            Cancel
+          </Button>
+        </div>
+      </div>
+    </ModalWrapper>
   );
 };
 
@@ -543,11 +519,11 @@ const PostPage = () => {
                 <>
                   <div className="flex md:hidden">
                     <Menu>
-                      <MenuButton as={IconButton} variant="secondary" title="More">
-                        <DotsIcon className="h-4 w-4" />
+                      <MenuButton className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white">
+                        <DotsHorizontalIcon className="h-3 w-3" />
                       </MenuButton>
 
-                      <MenuItems className="w-28">
+                      <MenuItems className="w-28 border border-[#424242] text-white">
                         <MenuItemsContent>
                           {isUserAdmin &&
                             (postQuery.data.hidden ? (
@@ -557,7 +533,7 @@ const PostPage = () => {
                             ))}
                           {postBelongsToUser && (
                             <>
-                              <NextLink href={`/edit-post/${postQuery.data.slug}`}>
+                              <NextLink href={`/p/${postQuery.data.slug}/edit`}>
                                 <MenuItemButton onClick={() => null}>Edit</MenuItemButton>
                               </NextLink>
                               <MenuItemButton className="!text-red" onClick={handleDelete}>
