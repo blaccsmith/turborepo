@@ -11,7 +11,7 @@ import TagPicker from '../molecules/TagPicker';
 
 type FormData = {
   title: string;
-  tags: string[];
+  tags: number[];
   content: string;
 };
 
@@ -38,7 +38,7 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
   }, [isSubmitSuccessful, reset, getValues]);
 
   const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
-    const {tags} = getValues();
+    const { tags } = getValues();
     if (tags.includes(tag.id)) {
       reset({ ...getValues(), tags: tags.filter(t => t !== tag.id) });
     } else {
