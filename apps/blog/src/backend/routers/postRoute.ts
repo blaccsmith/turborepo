@@ -15,7 +15,7 @@ const postRouter = createRouter()
     input: z.object({
       title: z.string().min(1),
       content: z.string().min(1),
-      tags: z.array(z.string()),
+      tags: z.array(z.number()),
     }),
     async resolve({ ctx, input }) {
       const post = await ctx.prisma.post.create({
@@ -46,7 +46,7 @@ const postRouter = createRouter()
       id: z.number(),
       data: z.object({
         title: z.string().min(1),
-        tags: z.array(z.string()),
+        tags: z.array(z.number()),
         content: z.string().min(1),
       }),
     }),

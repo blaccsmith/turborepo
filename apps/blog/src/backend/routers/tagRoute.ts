@@ -6,13 +6,14 @@ const tagRouter = createRouter()
     async resolve({ ctx }) {
       const tags = await ctx.prisma.tag.findMany({
         select: { id: true, name: true },
+        orderBy: { id: 'asc' },
       });
       return tags;
     },
   })
   .query('getById', {
     input: z.object({
-      id: z.string(),
+      id: z.number(),
     }),
     async resolve({ ctx, input }) {
       const posts = await ctx.prisma.tag.findUnique({

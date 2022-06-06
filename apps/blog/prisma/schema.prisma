@@ -84,7 +84,7 @@ model Post {
 }
 
 model Tag {
-    id        String        @id @default(cuid())
+    id        Int           @id @default(autoincrement())
     name      String        @unique
     posts     TagsOnPosts[]
     createdAt DateTime      @default(now())
@@ -92,10 +92,10 @@ model Tag {
 }
 
 model TagsOnPosts {
-    post   Post   @relation(fields: [postId], references: [id])
+    post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId Int // relation scalar field (used in the `@relation` attribute above)
-    tag    Tag    @relation(fields: [tagId], references: [id])
-    tagId  String // relation scalar field (used in the `@relation` attribute above)
+    tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+    tagId  Int // relation scalar field (used in the `@relation` attribute above)
 
     @@id([postId, tagId])
 }
