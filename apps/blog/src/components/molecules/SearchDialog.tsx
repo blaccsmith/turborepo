@@ -1,10 +1,10 @@
 import { classNames } from 'utils';
-import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
 import { ItemOptions, useItemList } from 'use-item-list';
+import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
 import { InferQueryOutput, trpc } from '@/lib/trpc';
 import { SearchIcon, SpinnerIcon } from '@/components/atoms/Icons';
 
@@ -155,43 +155,11 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
 };
 
 const SearchDialog = ({ isOpen, onClose }: SearchDialogProps) => (
-  <Transition.Root show={isOpen} as={React.Fragment}>
-    <Dialog as="div" className="relative z-10" onClose={onClose}>
-      <Transition.Child
-        as={React.Fragment}
-        enter="ease-in-out duration-500"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="ease-in-out duration-500"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        <div className="bg-brand-black/75 fixed inset-0 transition-opacity" />
-      </Transition.Child>
-
-      <div className="fixed inset-0 overflow-hidden">
-        <div className="absolute inset-0 flex items-start justify-center overflow-hidden">
-          <div className="pointer-events-none mt-[20vh] flex max-w-md ">
-            <Transition.Child
-              as={React.Fragment}
-              enter="ease-out duration-100"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-50"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="pointer-events-auto w-screen px-6">
-                <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg border border-[#424242] text-left align-middle shadow-xl transition-all md:mx-0">
-                  <SearchField onSelect={onClose} />
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </div>
-    </Dialog>
-  </Transition.Root>
+  <ModalWrapper isOpen={isOpen} onClose={onClose}>
+    <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg border border-[#424242] text-left align-middle shadow-xl transition-all md:mx-0">
+      <SearchField onSelect={onClose} />
+    </div>
+  </ModalWrapper>
 );
 
 export default SearchDialog;
