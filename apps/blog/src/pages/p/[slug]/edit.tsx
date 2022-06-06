@@ -27,11 +27,11 @@ const EditPostPage = () => {
 
         {postBelongsToUser ? (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
               Edit &quot;{postQuery.data.title}&quot;
             </h1>
 
-            <div className="mt-6">
+            <div className="mt-6 text-white">
               <PostForm
                 isSubmitting={editPostMutation.isLoading}
                 defaultValues={{
@@ -67,20 +67,20 @@ const EditPostPage = () => {
 
   return (
     <div className="animate-pulse">
-      <div className="h-9 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="h-9 w-3/4 rounded bg-gray-500" />
       <div className="mt-7">
         <div>
-          <div className="h-5 w-10 rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="h-5 w-10 rounded bg-gray-500" />
           <div className="border-secondary mt-2 h-[42px] rounded border" />
         </div>
         <div className="mt-6">
-          <div className="h-5 w-10 rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="h-5 w-10 rounded bg-gray-500" />
           <div className="border-secondary mt-2 h-9 rounded border" />
           <div className="border-secondary mt-2 h-[378px] rounded border" />
         </div>
       </div>
       <div className="mt-9 flex gap-4">
-        <div className="h-button w-[92px] rounded-full bg-gray-200 dark:bg-gray-700" />
+        <div className="h-button w-[92px] rounded-full bg-gray-500" />
         <div className="h-button border-secondary w-20 rounded-full border" />
       </div>
     </div>
