@@ -56,6 +56,7 @@
     "@types/react-dom": "18.0.3",
     "@types/textarea-caret": "^3.0.1",
     "autoprefixer": "^10.4.5",
+    "babel-plugin-superjson-next": "^0.4.3",
     "eslint": "8.14.0",
     "eslint-config-next": "12.1.5",
     "postcss": "^8.4.13",
