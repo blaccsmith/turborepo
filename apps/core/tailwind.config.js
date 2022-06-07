@@ -16,6 +16,7 @@ module.exports = {
       },
       animation: {
         slide: 'keyFrameSlide 10s linear infinite alternate;',
+        glow: 'keyFrameGlow 1.25s linear infinite',
       },
       keyframes: {
         keyFrameSlide: {
@@ -24,6 +25,11 @@ module.exports = {
           },
           '100%': {
             transform: 'translate3d(-130px, 0, 0)',
+          },
+        },
+        keyFrameGlow: {
+          '100%': {
+            background_position: '200% 50%',
           },
         },
       },

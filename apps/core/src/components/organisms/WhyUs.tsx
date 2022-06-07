@@ -8,7 +8,10 @@ const WhyUs = () => (
         {whyUsContent.map(({ heading, subHeading }) => (
           <div
             key={heading}
-            className="flex w-40 flex-col text-center transition-all duration-200 hover:translate-y-[-9px] hover:translate-x-[-9px] hover:shadow-[6px_6px_rgba(123,97,255,1)]"
+            className="after:translate-[transform:translateZ(50px)] -z-[2] flex w-40 animate-glow flex-col rounded-sm bg-brand-black text-center shadow-[0_0_0_1px_rgba(255,255,255,.01)] transition-all duration-200
+              after:absolute after:top-3.5
+              after:left-0
+              after:right-0 after:h-full after:w-full after:scale-90 after:bg-[linear-gradient(to_left,#ff5770,#e4428d,#FFF000)] after:bg-[length:200%_100%] after:blur-lg"
           >
             <h2 className="text-6xl font-bold text-white">{heading}</h2>
             <p className="text-xl text-white ">{subHeading}</p>
