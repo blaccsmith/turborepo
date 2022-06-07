@@ -7,14 +7,15 @@ const WhyUs = () => (
       <div className="grid w-full grid-cols-2 grid-rows-2 gap-20">
         {whyUsContent.map(({ heading, subHeading }) => (
           <div
-            key={heading}
-            className="after:translate-[transform:translateZ(50px)] -z-[2] flex w-40 animate-glow flex-col rounded-sm bg-brand-black text-center shadow-[0_0_0_1px_rgba(255,255,255,.01)] transition-all duration-200
-              after:absolute after:top-3.5
-              after:left-0
-              after:right-0 after:h-full after:w-full after:scale-90 after:bg-[linear-gradient(to_left,#ff5770,#e4428d,#FFF000)] after:bg-[length:200%_100%] after:blur-lg"
+            className="after:translate-[transform:translateZ(50px)] after:scale-80 relative z-20    rounded-sm p-1  
+          shadow-[0_0_0_1px_rgba(255,255,255,0.2)] after:absolute
+          after:top-2
+          after:left-0 after:right-0 after:-z-[1] after:h-[104%] after:w-[105%] after:animate-glow after:bg-[linear-gradient(137deg,#5ddcff,#3c67e3_43%,#4e00c2)] after:blur-lg"
           >
-            <h2 className="text-6xl font-bold text-white">{heading}</h2>
-            <p className="text-xl text-white ">{subHeading}</p>
+            <div key={heading} className="flex w-40 flex-col text-center">
+              <h2 className="text-6xl font-bold text-white">{heading}</h2>
+              <p className="text-xl text-white ">{subHeading}</p>
+            </div>
           </div>
         ))}
       </div>

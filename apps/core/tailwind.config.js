@@ -16,7 +16,7 @@ module.exports = {
       },
       animation: {
         slide: 'keyFrameSlide 10s linear infinite alternate;',
-        glow: 'keyFrameGlow 1.25s linear infinite',
+        glow: 'keyFrameGlow 3s linear infinite',
       },
       keyframes: {
         keyFrameSlide: {
@@ -28,8 +28,11 @@ module.exports = {
           },
         },
         keyFrameGlow: {
+          '0%': {
+            transform: 'rotate(0deg)',
+          },
           '100%': {
-            background_position: '200% 50%',
+            transform: 'rotate(360deg)',
           },
         },
       },
