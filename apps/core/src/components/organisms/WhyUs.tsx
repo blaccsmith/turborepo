@@ -11,8 +11,8 @@ const WhyUs = () => (
               key={heading}
               className="flex w-full flex-col rounded-sm bg-[#212121] text-center md:w-40"
             >
-              <h2 className="text-4xl font-bold text-white md:text-6xl">{heading}</h2>
-              <p className="text-lg text-white md:text-xl ">{subHeading}</p>
+              <h2 className="text-5xl font-bold text-white md:text-6xl">{heading}</h2>
+              <p className=" text-xl text-white ">{subHeading}</p>
             </div>
           </div>
         ))}

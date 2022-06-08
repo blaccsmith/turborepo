@@ -47,7 +47,7 @@ const Landing = (): JSX.Element => (
       <div className="flex flex-col overflow-hidden">
         <h2 className="ml-3 text-xl text-white">People like you: </h2>
         {/* HStack */}
-        <div className="animate-slide flex">
+        <div className="flex animate-slide">
           {experienceTitles.map(title => (
             <div
               className="ml-3 flex h-auto w-auto items-center justify-center bg-[#333333] md:h-9"
