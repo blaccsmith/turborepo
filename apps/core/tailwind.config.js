@@ -16,7 +16,7 @@ module.exports = {
       },
       animation: {
         slide: 'keyFrameSlide 10s linear infinite alternate;',
-        glow: 'keyFrameGlow 5s linear infinite',
+        glow: 'keyFrameGlow 3.5s linear infinite',
       },
       keyframes: {
         keyFrameSlide: {
