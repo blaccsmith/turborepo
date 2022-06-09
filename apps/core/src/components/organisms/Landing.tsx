@@ -44,10 +44,10 @@ const Landing = (): JSX.Element => (
     <div className="mt-36 w-full flex-col overflow-hidden text-center md:mt-0 md:flex md:flex-row md:justify-start md:text-left">
       <h2 className="text-7xl font-bold text-white">600+</h2>
       {/* Stack */}
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-hidden">
         <h2 className="ml-3 text-xl text-white">People like you: </h2>
         {/* HStack */}
-        <div className="flex">
+        <div className="flex animate-slide">
           {experienceTitles.map(title => (
             <div
               className="ml-3 flex h-auto w-auto items-center justify-center bg-[#333333] md:h-9"

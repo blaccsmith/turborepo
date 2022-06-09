@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Tag } from '@prisma/client';
 import useLeaveConfirm from '@/lib/form';
 import { TextField } from '../atoms/TextField';
 import MarkdownEditor from './MarkdownEditor';
 import { Button } from '../atoms/Button';
 import ButtonLink from '../atoms/ButtonLink';
 import { MarkdownIcon } from '../atoms/Icons';
+import TagPicker from '../molecules/TagPicker';
 
 type FormData = {
   title: string;
+  tags: number[];
   content: string;
 };
 
@@ -34,6 +37,15 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
     }
   }, [isSubmitSuccessful, reset, getValues]);
 
+  const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
+    const { tags } = getValues();
+    if (tags.includes(tag.id)) {
+      reset({ ...getValues(), tags: tags.filter(t => t !== tag.id) });
+    } else {
+      reset({ ...getValues(), tags: [...tags, tag.id] });
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
@@ -41,8 +53,9 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
         label="Title"
         autoFocus
         required
-        className="!py-1.5 text-lg font-semibold"
+        className="!py-1.5 text-lg"
       />
+      <TagPicker handleTagClick={handleTagClick} selectedTags={getValues().tags} />
       <div className="mt-6">
         <Controller
           name="content"
@@ -50,7 +63,7 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
           rules={{ required: true }}
           render={({ field }) => (
             <MarkdownEditor
-              label="Post"
+              label="Content"
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}
@@ -77,7 +90,7 @@ const PostForm = ({ defaultValues, isSubmitting, backTo, onSubmit }: PostFormPro
             href="https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
             target="_blank"
             rel="noreferrer"
-            className="text-secondary hover:text-blue flex items-center gap-2 transition-colors"
+            className="text-secondary hover:text-brand-purple-300 flex items-center gap-2 transition-colors"
           >
             <MarkdownIcon />
             <span className="h-full text-xs">Markdown supported</span>

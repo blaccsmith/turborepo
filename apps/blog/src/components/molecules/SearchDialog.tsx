@@ -1,10 +1,10 @@
 import { classNames } from 'utils';
-import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
 import { ItemOptions, useItemList } from 'use-item-list';
+import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
 import { InferQueryOutput, trpc } from '@/lib/trpc';
 import { SearchIcon, SpinnerIcon } from '@/components/atoms/Icons';
 
@@ -39,8 +39,8 @@ const SearchResult = ({
       <Link href={`/p/${result.slug}`}>
         <a
           className={classNames(
-            'block py-3.5 pl-10 pr-3 leading-tight transition-colors',
-            highlighted && 'bg-blue-600 text-white',
+            'bg-brand-black block cursor-pointer py-3.5 pl-10 pr-3 leading-tight transition-colors',
+            highlighted && ' bg-brand-purple-400 text-white',
           )}
         >
           {result.title}
@@ -55,17 +55,9 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
   const [debouncedValue] = useDebounce(value, 1000);
   const router = useRouter();
 
-  const feedQuery = trpc.useQuery(
-    [
-      'post.search',
-      {
-        query: debouncedValue,
-      },
-    ],
-    {
-      enabled: debouncedValue.trim().length > 0,
-    },
-  );
+  const feedQuery = trpc.useQuery(['post.search', { query: debouncedValue }], {
+    enabled: debouncedValue.trim().length > 0,
+  });
 
   const { moveHighlightedItem, selectHighlightedItem, useItem } = useItemList({
     onSelect: item => {
@@ -102,8 +94,8 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
   }, [moveHighlightedItem, selectHighlightedItem, router]);
 
   return (
-    <div>
-      <div className="relative">
+    <div className=" text-white">
+      <div className="relative ">
         <div
           className={classNames(
             'pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 transition-opacity',
@@ -127,7 +119,7 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
           autoCapitalize="off"
           spellCheck={false}
           placeholder="Search"
-          className="block w-full border-0 bg-transparent py-3 pl-10 focus:ring-0"
+          className="bg-brand-black focus-ring block w-full border-0 py-3 pl-10"
           role="combobox"
           aria-controls="search-results"
           aria-expanded
@@ -139,13 +131,17 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
       </div>
       {feedQuery.data &&
         (feedQuery.data.length > 0 ? (
-          <ul id="search-results" role="listbox" className="max-h-[286px] overflow-y-auto border-t">
+          <ul
+            id="search-results"
+            role="listbox"
+            className="max-h-[286px] overflow-y-auto border-t border-t-[#424242]"
+          >
             {feedQuery.data.map(result => (
               <SearchResult key={result.id} useItem={useItem} result={result} />
             ))}
           </ul>
         ) : (
-          <div className="border-t py-3.5 px-3 text-center leading-tight">
+          <div className="bg-brand-black border-t py-3.5 px-3 text-center leading-tight">
             No results. Try something else
           </div>
         ))}
@@ -159,37 +155,11 @@ const SearchField = ({ onSelect }: { onSelect: () => void }) => {
 };
 
 const SearchDialog = ({ isOpen, onClose }: SearchDialogProps) => (
-  <Transition.Root show={isOpen} as={React.Fragment}>
-    <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
-      <div className="min-h-screen px-4 text-center">
-        <Transition.Child
-          as={React.Fragment}
-          enter="ease-out duration-100"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-50"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Dialog.Overlay className="fixed inset-0 bg-gray-700 opacity-90 transition-opacity dark:bg-gray-900" />
-        </Transition.Child>
-
-        <Transition.Child
-          as={React.Fragment}
-          enter="ease-out duration-100"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="ease-in duration-50"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          <div className="bg-primary mt-[10vh] mb-8 inline-block w-full max-w-md transform overflow-hidden rounded-lg text-left align-middle shadow-xl transition-all dark:border">
-            {isOpen ? <SearchField onSelect={onClose} /> : <div className="h-12" />}
-          </div>
-        </Transition.Child>
-      </div>
-    </Dialog>
-  </Transition.Root>
+  <ModalWrapper isOpen={isOpen} onClose={onClose}>
+    <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg border border-[#424242] text-left align-middle shadow-xl transition-all md:mx-0">
+      <SearchField onSelect={onClose} />
+    </div>
+  </ModalWrapper>
 );
 
 export default SearchDialog;

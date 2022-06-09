@@ -15,7 +15,7 @@ function getBaseUrl() {
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
-    <RootLayout>
+    <RootLayout showAuth>
       <Component {...pageProps} />
     </RootLayout>
   </SessionProvider>

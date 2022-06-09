@@ -14,6 +14,28 @@ module.exports = {
           },
         },
       },
+      animation: {
+        slide: 'keyFrameSlide 10s linear infinite alternate;',
+        glow: 'keyFrameGlow 3.5s linear infinite',
+      },
+      keyframes: {
+        keyFrameSlide: {
+          '0%': {
+            transform: 'translate3d(0, 0, 0)',
+          },
+          '100%': {
+            transform: 'translate3d(-130px, 0, 0)',
+          },
+        },
+        keyFrameGlow: {
+          '0%': {
+            transform: 'rotate(0deg)',
+          },
+          '100%': {
+            transform: 'rotate(360deg)',
+          },
+        },
+      },
     },
   },
   plugins: [],

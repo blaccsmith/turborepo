@@ -1,12 +1,13 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import slugify from 'slugify';
+import { sluggy } from 'utils';
 import createRouter from '@/backend/utils/createRouter';
 import { markdownToHtml } from '@/lib/editor';
 
 const postRouter = createRouter()
   .middleware(async ({ ctx, next, path }) => {
-    if (path === 'post.feed') return next();
+    const anonPaths = ['post.feed', 'post.detail'];
+    if (anonPaths.includes(path)) return next();
     if (!ctx.session) throw new TRPCError({ code: 'UNAUTHORIZED' });
     return next();
   })
@@ -14,13 +15,21 @@ const postRouter = createRouter()
     input: z.object({
       title: z.string().min(1),
       content: z.string().min(1),
+      tags: z.array(z.number()),
     }),
     async resolve({ ctx, input }) {
       const post = await ctx.prisma.post.create({
         data: {
           title: input.title,
           content: input.content,
-          slug: slugify(input.title.toLowerCase()),
+          tags: {
+            createMany: {
+              data: input.tags.map(id => ({
+                tagId: id,
+              })),
+            },
+          },
+          slug: sluggy(input.title),
           contentHtml: markdownToHtml(input.content),
           author: {
             connect: {
@@ -37,6 +46,7 @@ const postRouter = createRouter()
       id: z.number(),
       data: z.object({
         title: z.string().min(1),
+        tags: z.array(z.number()),
         content: z.string().min(1),
       }),
     }),
@@ -64,7 +74,13 @@ const postRouter = createRouter()
         where: { id },
         data: {
           title: data.title,
-          slug: slugify(data.title.toLowerCase()),
+          tags: {
+            deleteMany: {},
+            createMany: {
+              data: data.tags.map(tagId => ({ tagId })),
+            },
+          },
+          slug: sluggy(data.title),
           content: data.content,
           contentHtml: markdownToHtml(data.content),
         },
@@ -200,6 +216,11 @@ const postRouter = createRouter()
           id: true,
           title: true,
           slug: true,
+          tags: {
+            select: {
+              tag: true,
+            },
+          },
           contentHtml: true,
           createdAt: true,
           hidden: true,
@@ -255,6 +276,11 @@ const postRouter = createRouter()
           id: true,
           title: true,
           slug: true,
+          tags: {
+            select: {
+              tag: true,
+            },
+          },
           content: true,
           contentHtml: true,
           createdAt: true,

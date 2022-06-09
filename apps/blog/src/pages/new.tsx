@@ -21,17 +21,18 @@ const New = () => {
 
       <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">New post</h1>
 
-      <div className="mt-6 text-white">
+      <div className="my-6 text-white">
         <PostForm
           isSubmitting={addPostMutation.isLoading}
           defaultValues={{
             title: '',
+            tags: [],
             content: '',
           }}
           backTo="/"
           onSubmit={values => {
             addPostMutation.mutate(
-              { title: values.title, content: values.content },
+              { ...values },
               {
                 onSuccess: data => router.push(`/p/${data.slug}`),
               },

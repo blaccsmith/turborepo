@@ -19,7 +19,7 @@ export function buttonClasses({
   disabled,
 }: ButtonProps) {
   return classNames(
-    'inline-flex items-center justify-center font-semibold transition-colors rounded-full focus-ring',
+    'inline-flex items-center justify-center font-semibold transition-colors py-2 rounded-full focus-ring',
     responsive ? 'px-3 h-8 text-xs sm:px-4 sm:text-sm sm:h-button' : 'px-4 text-sm h-button',
     variant === 'primary'
       ? 'text-secondary-inverse bg-secondary-inverse hover:text-primary-inverse hover:bg-primary-inverse'

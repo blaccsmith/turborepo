@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.6.4",
+    "@heroicons/react": "^1.0.6",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@prisma/client": "^3.13.0",
     "@radix-ui/react-tooltip": "^0.1.7",
@@ -38,6 +39,7 @@
     "react-textarea-autosize": "^8.3.4",
     "slugify": "^1.6.5",
     "superjson": "^1.9.1",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "textarea-caret": "^3.1.0",
     "textarea-markdown-editor": "^1.0.1",
     "ui": "*",

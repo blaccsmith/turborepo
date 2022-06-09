@@ -1,13 +1,22 @@
 /* eslint-disable react/no-array-index-key */
+/* eslint-disable no-nested-ternary */
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc';
+import { SearchIcon, PlusIcon } from '@heroicons/react/outline';
+import NextLink from 'ui/components/atoms/NextLink';
+import { Tag } from '@prisma/client';
+import { sluggy } from 'utils';
+import { useEffect, useState } from 'react';
+import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
+import PostTag from '@/components/atoms/PostTag';
+import PostTagSkeleton from '@/components/atoms/Skeletons/PostTagSkeleton';
+import SearchDialog from '@/components/molecules/SearchDialog';
 
 const POSTS_PER_PAGE = 20;
 
@@ -16,9 +25,13 @@ const PostSummary = dynamic<PostSummaryProps>(
   { ssr: false },
 );
 
+type PostsFromFeed = InferQueryOutput<'post.feed'>['posts'];
+
 const Home: NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const [posts, setPosts] = useState<PostsFromFeed | null>(null);
+  const [showSearch, setShowSearch] = useState(false);
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1;
   const utils = trpc.useContext();
   const feedQueryPathAndInput: InferQueryPathAndInput<'post.feed'> = [
@@ -26,6 +39,18 @@ const Home: NextPage = () => {
     getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
   ];
   const feedQuery = trpc.useQuery(feedQueryPathAndInput);
+  const { data: tags, isLoading: loadingTags } = trpc.useQuery(['tag.list']);
+
+  useEffect(() => {
+    if (router.query.tag && feedQuery.data) {
+      const postsWithTag = feedQuery.data.posts.filter(post =>
+        post.tags.some(el => sluggy(el.tag.name) === router.query.tag),
+      );
+
+      setPosts(postsWithTag);
+    } else setPosts(null);
+  }, [router, feedQuery.data]);
+
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
       await utils.cancelQuery(feedQueryPathAndInput);
@@ -59,6 +84,7 @@ const Home: NextPage = () => {
       }
     },
   });
+
   const unlikeMutation = trpc.useMutation(['post.unlike'], {
     onMutate: async unlikedPostId => {
       await utils.cancelQuery(feedQueryPathAndInput);
@@ -88,61 +114,95 @@ const Home: NextPage = () => {
     },
   });
 
-  if (feedQuery.data) {
-    return (
-      <>
-        <Head>
-          <title>The BLACC Blog</title>
-        </Head>
-
-        <h1 className="mt-6 mb-12 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
-        {feedQuery.data.postCount === 0 ? (
-          <div className="text-secondary rounded border py-20 px-10 text-center">
-            There are no published posts to show yet.
-          </div>
-        ) : (
-          <div className="flow-root">
-            <ul className="divide-primary divide-y divide-[#424242]">
-              {feedQuery.data.posts?.map(post => (
-                <li key={post.id} className="py-9">
-                  <PostSummary
-                    post={post}
-                    onLike={() => {
-                      likeMutation.mutate(post.id);
-                    }}
-                    onUnlike={() => {
-                      unlikeMutation.mutate(post.id);
-                    }}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <Pagination
-          itemCount={feedQuery.data.postCount}
-          itemsPerPage={POSTS_PER_PAGE}
-          currentPageNumber={currentPageNumber}
-        />
-      </>
-    );
-  }
-
   if (feedQuery.isError) {
     return <div>Error: {feedQuery.error.message}</div>;
   }
 
+  const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
+    if (router.query.tag === sluggy(tag.name)) router.push('/', undefined, { shallow: true });
+    else router.push(`/?tag=${sluggy(tag.name)}`, undefined, { shallow: true });
+  };
+
   return (
-    <div className="flow-root">
-      <ul className="divide-primary -my-12 divide-y">
-        {[...Array(3)].map((_, idx) => (
-          <li key={idx} className="py-10">
-            <PostSummarySkeleton />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Head>
+        <title>The BLACC Blog</title>
+      </Head>
+
+      <div className="flow-root">
+        <SearchDialog isOpen={showSearch} onClose={() => setShowSearch(false)} />
+        <div className="bg-brand-black sticky top-[78px] z-10 mb-12 pt-6 md:top-[94px]">
+          <h1 className=" mb-6 text-4xl font-black text-white md:text-5xl">The BLACC Blog</h1>
+          <div className="flex items-center justify-between space-x-4">
+            <div className="scrollbar-hide flex min-h-[50px] items-center justify-start space-x-2 overflow-x-auto pr-2">
+              {loadingTags
+                ? [...Array(3)].map((_, idx) => <PostTagSkeleton key={idx} />)
+                : tags?.map(tag => (
+                    <PostTag
+                      key={tag.id}
+                      tag={tag}
+                      isSelected={router.query.tag === sluggy(tag.name)}
+                      onClick={handleTagClick}
+                    />
+                  ))}
+            </div>
+            <div className="flex items-center justify-start space-x-2">
+              <button
+                onClick={() => setShowSearch(true)}
+                className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+              >
+                <SearchIcon className="h-3 w-3" />
+              </button>
+              <NextLink
+                href="/new"
+                className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+              >
+                <PlusIcon className="h-3 w-3" />
+              </NextLink>
+            </div>
+          </div>
+        </div>
+        <ul className="divide-primary divide-y divide-[#424242]">
+          {feedQuery.isLoading ? (
+            [...Array(3)].map((_, idx) => (
+              <li key={idx} className="py-9">
+                <PostSummarySkeleton />
+              </li>
+            ))
+          ) : feedQuery.data!.postCount === 0 ? (
+            <div className="text-secondary rounded border py-20 px-10 text-center">
+              There are no published posts to show yet.
+            </div>
+          ) : (
+            <div className="flow-root">
+              <ul className="divide-primary divide-y divide-[#424242]">
+                {(posts ?? feedQuery.data!.posts)?.map(post => (
+                  <li key={post.id} className="py-9">
+                    <PostSummary
+                      post={post}
+                      onLike={() => {
+                        likeMutation.mutate(post.id);
+                      }}
+                      onUnlike={() => {
+                        unlikeMutation.mutate(post.id);
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {feedQuery.data && (
+            <Pagination
+              itemCount={feedQuery.data.postCount}
+              itemsPerPage={POSTS_PER_PAGE}
+              currentPageNumber={currentPageNumber}
+            />
+          )}
+        </ul>
+      </div>
+    </>
   );
 };
 

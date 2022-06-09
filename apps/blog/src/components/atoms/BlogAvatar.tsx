@@ -23,7 +23,7 @@ const initialSize: Record<AvatarSize, string> = {
 };
 
 const BlogAvatar = ({ size = 'md', name, src }: AvatarProps) => {
-  const initial = name.charAt(0).toLocaleLowerCase();
+  const initial = name?.charAt(0).toLocaleLowerCase();
 
   return (
     <div className="relative inline-flex flex-shrink-0 rounded-full">
