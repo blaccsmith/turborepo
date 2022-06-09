@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import superjson from 'superjson';
 import safeJsonStringify from 'safe-json-stringify';
 import { createSSGHelpers } from '@trpc/react/ssg';
-import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
+import { InferQueryOutput, InferQueryPathAndInput, transformer, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 // import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
@@ -33,12 +33,10 @@ const PostSummary = dynamic<PostSummaryProps>(
 type PostsFromFeed = InferQueryOutput<'post.feed'>['posts'];
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  console.log({ env: process.env });
-
   const ssg = await createSSGHelpers({
     router: appRouter,
     ctx: await createContext(),
-    transformer: superjson,
+    transformer,
   });
 
   const { posts } = await ssg.fetchQuery('post.feed');
