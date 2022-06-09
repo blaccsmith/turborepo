@@ -11,6 +11,7 @@ import { Tag } from '@prisma/client';
 import { sluggy } from 'utils';
 import { useEffect, useState } from 'react';
 import superjson from 'superjson';
+import safeJsonStringify from 'safe-json-stringify';
 import { createSSGHelpers } from '@trpc/react/ssg';
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
@@ -41,10 +42,12 @@ export const getStaticProps: GetStaticProps = async ctx => {
   });
 
   const { posts } = await ssg.fetchQuery('post.feed');
-  return { props: { posts } };
+  return { props: { posts: JSON.parse(safeJsonStringify(posts)) } };
 };
 
 const Home = ({ posts: _posts }: { posts: PostsFromFeed }) => {
+  console.log({ _posts });
+
   const { data: session } = useSession();
   const router = useRouter();
   const [posts, setPosts] = useState<PostsFromFeed>(_posts);

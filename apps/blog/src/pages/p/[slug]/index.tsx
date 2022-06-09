@@ -288,7 +288,7 @@ const Comment = ({
   return (
     <div>
       <div className="flex items-center justify-between gap-4">
-        <AuthorWithDate author={comment.author} date={comment.createdAt} />
+        <AuthorWithDate author={comment.author} date={new Date(comment.createdAt)} />
         {commentBelongsToUser && (
           <Menu>
             <MenuButton className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white">
@@ -459,7 +459,10 @@ const PostPage = () => {
               )}
             </div>
             <div className="mt-6">
-              <AuthorWithDate author={postQuery.data.author} date={postQuery.data.createdAt} />
+              <AuthorWithDate
+                author={postQuery.data.author}
+                date={new Date(postQuery.data.createdAt)}
+              />
               <div className="scrollbar-hide mt-4 flex items-center justify-start space-x-2 overflow-x-auto pr-2">
                 {postQuery.data.tags?.map(el => (
                   <PostTag key={el.tag.id} tag={el.tag} isSelected />
