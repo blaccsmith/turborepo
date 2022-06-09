@@ -32,6 +32,8 @@ const PostSummary = dynamic<PostSummaryProps>(
 type PostsFromFeed = InferQueryOutput<'post.feed'>['posts'];
 
 export const getStaticProps: GetStaticProps = async ctx => {
+  console.log({ env: process.env });
+
   const ssg = await createSSGHelpers({
     router: appRouter,
     ctx: await createContext(),
