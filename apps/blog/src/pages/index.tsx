@@ -10,13 +10,11 @@ import NextLink from 'ui/components/atoms/NextLink';
 import { Tag } from '@prisma/client';
 import { sluggy } from 'utils';
 import { useEffect, useState } from 'react';
-import superjson from 'superjson';
 import safeJsonStringify from 'safe-json-stringify';
 import { createSSGHelpers } from '@trpc/react/ssg';
 import { InferQueryOutput, InferQueryPathAndInput, transformer, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
-// import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
 import PostTag from '@/components/atoms/PostTag';
 import PostTagSkeleton from '@/components/atoms/Skeletons/PostTagSkeleton';
 import SearchDialog from '@/components/molecules/SearchDialog';
@@ -31,6 +29,7 @@ const PostSummary = dynamic<PostSummaryProps>(
 );
 
 type PostsFromFeed = InferQueryOutput<'post.feed'>['posts'];
+type FeedTags = InferQueryOutput<'tag.list'>;
 
 export const getStaticProps: GetStaticProps = async ctx => {
   const ssg = await createSSGHelpers({
@@ -39,11 +38,16 @@ export const getStaticProps: GetStaticProps = async ctx => {
     transformer,
   });
 
-  const { posts } = await ssg.fetchQuery('post.feed');
-  return { props: { posts: JSON.parse(safeJsonStringify(posts)) } };
+  const [postsRes, tags] = await Promise.all([
+    ssg.fetchQuery('post.feed'),
+    ssg.fetchQuery('tag.list'),
+  ]);
+
+  const posts = JSON.parse(safeJsonStringify(postsRes.posts));
+  return { props: { posts, tags } };
 };
 
-const Home = ({ posts: _posts }: { posts: PostsFromFeed }) => {
+const Home = ({ posts: _posts, tags: _tags }: { posts: PostsFromFeed; tags: FeedTags }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [posts, setPosts] = useState<PostsFromFeed>(_posts);
@@ -54,7 +58,6 @@ const Home = ({ posts: _posts }: { posts: PostsFromFeed }) => {
     'post.feed',
     getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
   ];
-  // const feedQuery = trpc.useQuery(feedQueryPathAndInput);
   const { data: tags, isLoading: loadingTags } = trpc.useQuery(['tag.list']);
 
   useEffect(() => {
@@ -176,38 +179,9 @@ const Home = ({ posts: _posts }: { posts: PostsFromFeed }) => {
           </div>
         </div>
         <ul className="divide-primary divide-y divide-[#424242]">
-          {/* {feedQuery.isLoading ? (
-            [...Array(3)].map((_, idx) => (
-              <li key={idx} className="py-9">
-                <PostSummarySkeleton />
-              </li>
-            ))
-          ) : feedQuery.data!.postCount === 0 ? (
-            <div className="text-secondary rounded border py-20 px-10 text-center">
-              There are no published posts to show yet.
-            </div>
-          ) : (
-            <div className="flow-root">
-              <ul className="divide-primary divide-y divide-[#424242]">
-                {(posts ?? feedQuery.data!.posts)?.map(post => (
-                  <li key={post.id} className="py-9">
-                    <PostSummary
-                      post={post}
-                      onLike={() => {
-                        likeMutation.mutate(post.id);
-                      }}
-                      onUnlike={() => {
-                        unlikeMutation.mutate(post.id);
-                      }}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )} */}
           <div className="flow-root">
             <ul className="divide-primary divide-y divide-[#424242]">
-              {posts?.map(post => (
+              {posts.map(post => (
                 <li key={post.id} className="py-9">
                   <PostSummary
                     post={post}
