@@ -27,6 +27,31 @@ import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
+import { writeFileSync } from 'fs';
+import RSS from 'rss'
+
+const getStaticProps = async () => {
+  const feed = new RSS({
+    title: 'BLACC',
+    site_url: 'https://blog.blacc.xyz/',
+    feed_url: 'https://blog.blacc.xyz/'
+  });
+  
+  const data = trpc.useQuery(['post.feed', {take: 100}]);
+  
+  console.log({data});
+  
+  data?.data?.posts.map(({post}: any) => {
+    feed.item({
+      title: post.title,
+      url: `https://leerob.io/blog/${post.slug}`,
+      date: post.publishedAt,
+      description: post.summary
+    });
+  });
+
+  writeFileSync('../../public/feed.xml', feed.xml({ indent: true }));
+}
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
