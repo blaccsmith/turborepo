@@ -44,8 +44,6 @@ export const getStaticProps: GetStaticProps = async ctx => {
 };
 
 const Home = ({ posts: _posts }: { posts: PostsFromFeed }) => {
-  console.log({ _posts });
-
   const { data: session } = useSession();
   const router = useRouter();
   const [posts, setPosts] = useState<PostsFromFeed>(_posts);
