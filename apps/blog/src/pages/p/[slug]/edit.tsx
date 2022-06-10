@@ -2,13 +2,13 @@ import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { createSSGHelpers } from '@trpc/react/ssg';
+import { GetServerSideProps } from 'next';
+import safeJsonStringify from 'safe-json-stringify';
 import { InferQueryOutput, transformer, trpc } from '@/lib/trpc';
 import PostForm from '@/components/orgnaisms/PostForm';
 import Layout from '@/components/molecules/SearchLayout';
 import { appRouter } from '@/backend/routers';
-import { createSSGHelpers } from '@trpc/react/ssg';
-import { GetServerSideProps } from 'next';
-import safeJsonStringify from 'safe-json-stringify';
 import { createContext } from '@/backend/utils/context';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {

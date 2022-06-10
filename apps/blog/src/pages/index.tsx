@@ -81,7 +81,7 @@ const Home = ({ posts: _posts, tags: _tags }: { posts: PostsFromFeed; tags: Feed
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
           posts: previousQuery.posts.map(post =>
-            post.id === likedPostId
+            post.id === likedPostId.id
               ? {
                   ...post,
                   likedBy: [
@@ -115,7 +115,7 @@ const Home = ({ posts: _posts, tags: _tags }: { posts: PostsFromFeed; tags: Feed
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
           posts: previousQuery.posts.map(post =>
-            post.id === unlikedPostId
+            post.id === unlikedPostId.id
               ? {
                   ...post,
                   likedBy: post.likedBy.filter(item => item.user.id !== session!.user.id),
@@ -186,10 +186,10 @@ const Home = ({ posts: _posts, tags: _tags }: { posts: PostsFromFeed; tags: Feed
                   <PostSummary
                     post={post}
                     onLike={() => {
-                      likeMutation.mutate(post.id);
+                      likeMutation.mutate({ id: post.id, slug: post.slug });
                     }}
                     onUnlike={() => {
-                      unlikeMutation.mutate(post.id);
+                      unlikeMutation.mutate({ id: post.id, slug: post.slug });
                     }}
                   />
                 </li>
