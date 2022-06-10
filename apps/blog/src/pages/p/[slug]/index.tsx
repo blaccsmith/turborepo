@@ -37,7 +37,7 @@ const getStaticProps = async () => {
     feed_url: 'https://blog.blacc.xyz/feed.xml'
   });
   
-  const { data } = trpc.useQuery(['post.feed', {take: 100}]);
+  const { data } = trpc.useQuery(['post.feed', { take: 100 }]);
   
   data?.posts.forEach(({ title, author,tags, slug, createdAt, hidden }) => {
     if(hidden) return;

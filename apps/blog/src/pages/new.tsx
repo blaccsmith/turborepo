@@ -3,9 +3,11 @@ import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import PostForm from '@/components/orgnaisms/PostForm';
 import { trpc } from '@/lib/trpc';
+import { useSession } from 'next-auth/react';
 
 const New = () => {
   const router = useRouter();
+  const { data: userData } = useSession();
 
   const addPostMutation = trpc.useMutation('post.add', {
     onError: error => {
@@ -34,7 +36,24 @@ const New = () => {
             addPostMutation.mutate(
               { ...values },
               {
-                onSuccess: data => router.push(`/p/${data.slug}`),
+                onSuccess: async (data: any) => {
+                  const feedData = {
+                    title: values.title,
+                    author: userData?.user?.name || '',
+                    description: values.title,
+                    slug: data.slug,
+                  };
+
+                  await fetch('/api/rss', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(feedData),
+                  });
+
+                  router.push(`/p/${data.slug}`);
+                },
               },
             );
           }}
