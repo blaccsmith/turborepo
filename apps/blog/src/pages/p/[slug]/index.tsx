@@ -510,7 +510,7 @@ const PostPage = ({ post }: PostDetail) => {
                 likeMutation.mutate({ id: post.id, slug: post.slug });
               }}
               onUnlike={() => {
-                unlikeMutation.mutate(post.id);
+                unlikeMutation.mutate({ id: post.id, slug: post.slug });
               }}
             />
             <ButtonLink href={`/p/${post.slug}#comments`} variant="secondary">
