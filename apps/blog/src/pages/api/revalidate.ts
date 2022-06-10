@@ -10,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await res.unstable_revalidate('/');
     return res.status(200).json({ revalidated: true });
   } catch (err) {
+    console.log({ err });
     return res.status(500).json({ err });
   }
 }
