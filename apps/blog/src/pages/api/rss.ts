@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   });
 
-  await writeFile('./public/feed.xml', feed.xml({ indent: true }));
+  await writeFile('./public/feed.xml', feed.xml({ indent: true }), { flag: 'a+' });
 
   res.status(200).json({ status: 200, message: 'success' });
 }
