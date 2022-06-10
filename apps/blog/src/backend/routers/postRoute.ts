@@ -114,13 +114,16 @@ const postRouter = createRouter()
     },
   })
   .mutation('like', {
-    input: z.number(),
-    async resolve({ input: id, ctx }) {
+    input: z.object({
+      id: z.number(),
+      slug: z.string(),
+    }),
+    async resolve({ input, ctx }) {
       await ctx.prisma.likedPosts.create({
         data: {
           post: {
             connect: {
-              id,
+              id: input.id,
             },
           },
           user: {
@@ -131,7 +134,12 @@ const postRouter = createRouter()
         },
       });
 
-      return id;
+      await Promise.all([
+        ctx.res?.unstable_revalidate(`/`),
+        ctx.res?.unstable_revalidate(`/p/${input.slug}`),
+      ]);
+
+      return input.id;
     },
   })
   .mutation('unlike', {

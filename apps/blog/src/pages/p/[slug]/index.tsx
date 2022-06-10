@@ -30,7 +30,7 @@ import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
 import { appRouter } from '@/backend/routers';
 import { createSSGHelpers } from '@trpc/react/ssg';
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import safeJsonStringify from 'safe-json-stringify';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
@@ -507,7 +507,7 @@ const PostPage = ({ post }: PostDetail) => {
             <LikeButton
               likedBy={post.likedBy}
               onLike={() => {
-                likeMutation.mutate(post.id);
+                likeMutation.mutate({ id: post.id, slug: post.slug });
               }}
               onUnlike={() => {
                 unlikeMutation.mutate(post.id);
