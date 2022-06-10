@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import PostForm from '@/components/orgnaisms/PostForm';
+import updateRSS from '@/lib/rss';
 import { trpc } from '@/lib/trpc';
 
 const New = () => {
@@ -11,10 +12,6 @@ const New = () => {
       toast.error(`Something went wrong: ${error.message}`);
     },
   });
-
-  const updateRSS = async () => {
-    await fetch('/api/rss', { method: 'POST' });
-  };
 
   return (
     <>

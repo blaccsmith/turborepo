@@ -1,5 +1,3 @@
-import RSS from 'rss';
-import { writeFileSync } from 'fs';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -29,31 +27,7 @@ import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
-
-const getStaticProps = async () => {
-  const feed = new RSS({
-    title: 'BLACC',
-    site_url: 'https://blog.blacc.xyz/',
-    feed_url: 'https://blog.blacc.xyz/feed.xml'
-  });
-  
-  const { data } = trpc.useQuery(['post.feed', { take: 100 }]);
-  
-  data?.posts.forEach(({ title, author,tags, slug, createdAt, hidden }) => {
-    if(hidden) return;
-
-    feed.item({
-      title,
-      author: author.name ?? 'null',
-      categories: tags.map(tag => tag.tag.name),
-      url: `https://blog.blacc.xyz/blog/${slug}`,
-      date: createdAt,
-      description: `${title}`
-    });
-  });
-
-  writeFileSync('../../public/feed.xml', feed.xml({ indent: true }));
-}
+import updateRSS from '@/lib/rss';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
@@ -251,6 +225,7 @@ const ConfirmDeleteDialog = ({
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const deletePostMutation = trpc.useMutation('post.delete', {
+    onSuccess: async () => await updateRSS(),
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },
