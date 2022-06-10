@@ -225,7 +225,9 @@ const ConfirmDeleteDialog = ({
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const deletePostMutation = trpc.useMutation('post.delete', {
-    onSuccess: async () => await updateRSS(),
+    onSuccess: async () => {
+      await updateRSS();
+    },
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },
