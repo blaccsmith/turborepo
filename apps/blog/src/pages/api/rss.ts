@@ -1,44 +1,37 @@
 import RSS from 'rss';
-import { writeFileSync } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
-
-interface FeedData {
-  title: string;
-  author: string;
-  description: string;
-  slug: string;
-}
+import { InferQueryOutput } from '@/lib/trpc';
+import { writeFile } from 'fs/promises';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { body, method } = req;
+  const { headers } = req;
 
-  if (method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).json({ status: 405, message: 'Method not allowed' });
-    return;
-  }
+  const {
+    result: {
+      data: { json },
+    },
+  } = await fetch(`${headers.origin}/api/trpc/post.feed`).then(res => res.json());
 
-  const { title, author, description, slug }: FeedData = body;
-
-  console.log({ title, author, description, slug });
+  const posts: InferQueryOutput<'post.feed'>['posts'] = json['posts'];
 
   const feed = new RSS({
     title: 'BLACC',
     site_url: 'https://blog.blacc.xyz/',
     feed_url: 'https://blog.blacc.xyz/feed.xml',
+    description: 'BLACC Posts',
   });
 
-  feed.item({
-    title,
-    author,
-    url: `https://blog.blacc.xyz/blog/${slug}`,
-    date: new Date(),
-    description,
+  posts?.map(({ title, author, createdAt, slug }) => {
+    feed.item({
+      title,
+      description: `${title} by ${author}`,
+      url: `https://blog.blacc.xyz/${slug}`,
+      author: author.name as string,
+      date: createdAt,
+    });
   });
 
-  console.log({ feed });
-
-  writeFileSync('./public/feed.xml', feed.xml({ indent: true }));
+  await writeFile('./public/feed.xml', feed.xml({ indent: true }));
 
   res.status(200).json({ status: 200, message: 'success' });
 }
