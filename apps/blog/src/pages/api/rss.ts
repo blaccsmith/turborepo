@@ -1,7 +1,7 @@
 import RSS from 'rss';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { InferQueryOutput } from '@/lib/trpc';
 import { writeFile } from 'fs/promises';
+import { InferQueryOutput } from '@/lib/trpc';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { headers } = req;
@@ -10,9 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     result: {
       data: { json },
     },
-  } = await fetch(`${headers.origin}/api/trpc/post.feed`).then(res => res.json());
+  } = await fetch(`${headers.origin}/api/trpc/post.feed`).then(resp => resp.json());
 
-  const posts: InferQueryOutput<'post.feed'>['posts'] = json['posts'];
+  const { posts }: InferQueryOutput<'post.feed'> = json;
 
   const feed = new RSS({
     title: 'BLACC',
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     description: 'BLACC Posts',
   });
 
-  posts?.map(({ title, author, createdAt, slug }) => {
+  posts?.forEach(({ title, author, createdAt, slug }) => {
     feed.item({
       title,
       description: `${title} by ${author}`,
