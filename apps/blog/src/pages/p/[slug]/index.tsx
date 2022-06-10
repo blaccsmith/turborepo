@@ -27,6 +27,7 @@ import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
+import updateRSS from '@/lib/rss';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
@@ -224,6 +225,9 @@ const ConfirmDeleteDialog = ({
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const deletePostMutation = trpc.useMutation('post.delete', {
+    onSuccess: async () => {
+      await updateRSS();
+    },
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },

@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { trpc } from '@/lib/trpc';
 import PostForm from '@/components/orgnaisms/PostForm';
 import Layout from '@/components/molecules/SearchLayout';
+import updateRSS from '@/lib/rss';
 
 const EditPostPage = () => {
   const { data: session } = useSession();
@@ -47,7 +48,10 @@ const EditPostPage = () => {
                       data: { ...values },
                     },
                     {
-                      onSuccess: ({ slug }) => router.push(`/p/${slug}`),
+                      onSuccess: async ({ slug }) => {
+                        await updateRSS();
+                        router.push(`/p/${slug}`);
+                      },
                     },
                   );
                 }}

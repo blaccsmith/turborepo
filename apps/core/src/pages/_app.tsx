@@ -5,7 +5,7 @@ import RootLayout from 'ui/components/atoms/Layouts/RootLayout';
 import { DefaultSeo } from 'next-seo';
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
-  <>
+    <SessionProvider session={session}>
     <DefaultSeo
       title="The Black Coder Community"
       description="A community exemplifying black excellence and pushing the needle within tech"
@@ -41,12 +41,10 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         site: '@blaccxyz_',
       }}
     />
-    <SessionProvider session={session}>
       <RootLayout>
         <Component {...pageProps} />
       </RootLayout>
     </SessionProvider>
-  </>
 );
 
 export default MyApp;
