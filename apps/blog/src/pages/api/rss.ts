@@ -3,6 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { writeFile } from 'fs/promises';
 import { InferQueryOutput } from '@/lib/trpc';
 
+const RSSPath = process.env.NODE_ENV === 'production' ? '../feed.xml' : './public/feed.xml';
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { headers } = req;
 
@@ -24,14 +26,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   posts?.forEach(({ title, author, createdAt, slug }) => {
     feed.item({
       title,
-      description: `${title} by ${author}`,
-      url: `https://blog.blacc.xyz/${slug}`,
+      description: `${title} by ${author.name}`,
+      url: `https://blog.blacc.xyz/p/${slug}`,
       author: author.name as string,
       date: createdAt,
     });
   });
 
-  await writeFile('./public/feed.xml', feed.xml({ indent: true }), { flag: 'a+' });
+  await writeFile(RSSPath, feed.xml({ indent: true }), { flag: 'w+' });
 
   res.status(200).json({ status: 200, message: 'success' });
 }
