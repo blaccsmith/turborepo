@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/blog/:match*",
+      "destination": "https://blog.blacc.xyz/:match*"
+    }
+  ]
+}
