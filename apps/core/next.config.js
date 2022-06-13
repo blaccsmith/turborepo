@@ -3,11 +3,12 @@
 const withTM = require('next-transpile-modules')(['ui', 'utils', 'types']);
 
 module.exports = withTM({
-  async rewrites() {
+  async redirects() {
     return [
       {
         source: '/blog/:match*',
         destination: 'https://blog.blacc.xyz/:match*',
+        permanent: true,
       },
     ];
   },
