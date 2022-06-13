@@ -22,6 +22,7 @@ export default function Avatar({ user, size }: Props) {
           className={`inline-block h-${size} w-${size} rounded-full`}
           src={user!.image}
           alt="user avatar"
+          
         />
       )}
     </div>
