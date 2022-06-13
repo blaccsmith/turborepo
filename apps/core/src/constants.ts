@@ -11,9 +11,17 @@ const homePageImages: string[] = [
 ];
 
 const experienceTitles: string[] = [
+  'Software Engineer',
   'Junior Developers',
   'Students',
+  'Career Switchers',
+  'Interns',
+  'Cyber Security',
+  'Self Taught',
+  'Freelancers',
   'Bootcampers',
+  'Mentors',
+  'Co-Founders',
   'Analysts',
   'Data Engineers',
 ];
@@ -24,6 +32,7 @@ const pillars: { label: string; heading: string; description: string }[] = [
     heading: 'Equality is key',
     description:
       'We respect and value people of all backgrounds no matter the experience level. Together, we create a more equal place to learn and collaborate with others.',
+
   },
   {
     label: 'EDUCATION',

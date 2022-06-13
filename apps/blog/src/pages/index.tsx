@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-nested-ternary */
-import { NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
+import RSS from 'rss';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -10,6 +11,7 @@ import NextLink from 'ui/components/atoms/NextLink';
 import { Tag } from '@prisma/client';
 import { sluggy } from 'utils';
 import { useEffect, useState } from 'react';
+import { writeFile } from 'fs/promises';
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
@@ -26,6 +28,41 @@ const PostSummary = dynamic<PostSummaryProps>(
 );
 
 type PostsFromFeed = InferQueryOutput<'post.feed'>['posts'];
+
+const RSSPath = process.env.NODE_ENV === 'production' ? '../feed.xml' : './public/feed.xml';
+const baseURL =
+  process.env.NODE_ENV === 'production' ? 'https://blog.blacc.xyz' : 'http://localhost:3000';
+
+export const getStaticProps: GetStaticProps = async () => {
+  const {
+    result: {
+      data: { json },
+    },
+  } = await fetch(`${baseURL}/api/trpc/post.feed`).then(resp => resp.json());
+
+  const { posts }: InferQueryOutput<'post.feed'> = json;
+
+  const feed = new RSS({
+    title: 'BLACC',
+    site_url: 'https://blog.blacc.xyz/',
+    feed_url: 'https://blog.blacc.xyz/feed.xml',
+    description: 'BLACC Posts',
+  });
+
+  posts?.forEach(({ title, author, createdAt, slug }) => {
+    feed.item({
+      title,
+      description: `${title} by ${author.name}`,
+      url: `https://blog.blacc.xyz/p/${slug}`,
+      author: author.name as string,
+      date: createdAt,
+    });
+  });
+  console.log({ feed: feed.xml() });
+
+  await writeFile(RSSPath, feed.xml({ indent: true }), { flag: 'w+' });
+  return { props: { posts: [] } };
+};
 
 const Home: NextPage = () => {
   const { data: session } = useSession();

@@ -16,7 +16,9 @@
     "next-seo": "^4.28.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "ui": "*"
+    "ui": "*",
+    "utils": "*",
+    "assets": "*"
   },
   "devDependencies": {
     "@types/node": "17.0.4",
