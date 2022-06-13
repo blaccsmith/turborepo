@@ -15,9 +15,10 @@ const Landing = (): JSX.Element => (
         <h2 className="mb-5 text-xl text-white">Please change this to something more meaningful</h2>
         <NextLink
           href="https://discord.gg/yafQvrZ8bQ"
-          className="rounded-[90px] bg-purple-400 px-4 py-2 font-bold text-white hover:cursor-pointer hover:bg-purple-500"
+          className="hover:border-brand-purple-500 relative h-min rounded-[90px] border border-transparent bg-black/25 px-4 py-3 font-bold text-white backdrop-blur-lg transition-all duration-200 hover:cursor-pointer"
         >
           Join the community
+          <span className="animate-glow absolute left-0 h-1/2 w-full bg-[linear-gradient(137deg,#5ddcff,#5b44fd,#7B61FF)] p-4 blur-2xl" />
         </NextLink>
       </div>
       {/* Grid */}
