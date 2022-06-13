@@ -1,9 +1,10 @@
 import { whyUsContent } from '@constants';
+import NextLink from 'ui/components/atoms/NextLink';
 
 const WhyUs = () => (
   <div className="flex min-h-screen snap-center flex-col items-center justify-center  p-3">
-    <h1 className="mb-40 text-4xl font-medium text-white">Why us?</h1>
-    <div className="grid w-full grid-cols-1 gap-6 md:w-max md:grid-cols-2 md:gap-12">
+    <h1 className="text-4xl font-medium text-white">Why us?</h1>
+    <div className="my-32 grid w-full grid-cols-1 gap-6 md:w-max md:grid-cols-2 md:gap-12">
       {whyUsContent.map(({ heading, subHeading }) => (
         <div
           key={heading}
@@ -14,6 +15,13 @@ const WhyUs = () => (
         </div>
       ))}
     </div>
+    <NextLink
+      href="https://discord.gg/yafQvrZ8bQ"
+      className="hover:border-brand-purple-500 relative h-min rounded-[90px] border border-transparent bg-black/25 px-4 py-3 font-bold text-white backdrop-blur-lg transition-all duration-200 hover:cursor-pointer"
+    >
+      Join the community
+      <span className="animate-glow absolute left-0 h-1/2 w-full bg-[linear-gradient(137deg,#5ddcff,#5b44fd,#7B61FF)] p-4 blur-2xl" />
+    </NextLink>
   </div>
 );
 
