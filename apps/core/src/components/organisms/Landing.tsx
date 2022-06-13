@@ -6,13 +6,16 @@ import NextImage from 'ui/components/atoms/NextImage';
 const Landing = (): JSX.Element => (
   <div className="flex h-screen snap-center flex-col items-center justify-center pt-20 md:pt-0">
     {/* /HStack */}
-    <div className="flex items-center justify-center md:h-full">
+    <div className="flex items-center justify-center space-x-12 md:h-full">
       {/* Stack */}
       <div className="flex h-full flex-col items-center justify-center text-center md:h-1/2 md:w-1/2 md:items-start md:text-left">
-        <h1 className="leading-3.25 mb-10 text-5xl font-bold text-white">
+        <h1 className="mb-10 text-5xl font-bold text-white">
           A global community for you, built by people like you.
         </h1>
-        <h2 className="mb-5 text-xl text-white">Please change this to something more meaningful</h2>
+        <h2 className="mb-12 text-xl text-white">
+          We&apos;re a community of like-minded Black developers, creatives, and people who just
+          like to hang out.
+        </h2>
         <NextLink
           href="https://discord.gg/yafQvrZ8bQ"
           className="hover:border-brand-purple-500 relative h-min rounded-[90px] border border-transparent bg-black/25 px-4 py-3 font-bold text-white backdrop-blur-lg transition-all duration-200 hover:cursor-pointer"
@@ -41,7 +44,7 @@ const Landing = (): JSX.Element => (
       </div>
     </div>
     {/* HStack */}
-    <div className="mt-36 mb-6 w-full flex-col items-center text-center md:mt-0 md:flex md:flex-row md:justify-start md:space-x-3 md:text-left">
+    <div className="mt-36 mb-16 w-full flex-col items-center text-center md:mt-0 md:flex md:flex-row md:justify-start md:space-x-3 md:text-left">
       <h2 className="text-4xl font-bold text-white md:text-7xl">600+</h2>
       {/* Stack */}
       <div className="flex w-full flex-col space-y-6 overflow-hidden">

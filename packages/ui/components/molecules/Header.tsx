@@ -40,7 +40,10 @@ const Header = ({ showAuth }: Props) => (
     <NextLink href="/" className="flex items-center space-x-4">
       <>
         <Image src={logo} width={24} height={24} className="rounded-full" alt="BLACC Logo" />
-        <span className="text-xl font-medium">The Black Coder Community</span>
+        <span className="hidden text-xl font-medium md:inline-block">
+          The Black Coder Community
+        </span>
+        <span className="inline-block text-xl font-medium md:hidden">BLACC</span>
       </>
     </NextLink>
 
