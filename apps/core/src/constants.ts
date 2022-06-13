@@ -21,21 +21,21 @@ const experienceTitles: string[] = [
 const pillars: { label: string; heading: string; description: string }[] = [
   {
     label: 'EQUITY',
-    heading: 'Do z see teletubbies',
+    heading: 'Equality is key',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae sollicitudin libero. Sed placerat mollis tortor, sit amet ullamcorper ex fermentum a. Sed mauris lacus, euismod nec tincidunt id, scelerisque eget justo.',
+      'We respect and value people of all backgrounds no matter the experience level. Together, we create a more equal place to learn and collaborate with others.',
   },
   {
     label: 'EDUCATION',
-    heading: 'Do y see teletubbies',
+    heading: 'Knowledge is power',
     description:
-      'Mauris dapibus tellus faucibus, ultricies tellus et, aliquet libero. Suspendisse a eleifend purus. Maecenas rutrum rhoncus risus, ut tempus odio.',
+      'We believe that knowledge transfer between members within the community is the key to a persons education.',
   },
   {
     label: 'COLLABORATION',
-    heading: 'Do x see teletubbies',
+    heading: 'A Common Vision',
     description:
-      'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer sodales libero ipsum, et pharetra ante tincidunt ut.',
+      'Our community thrives as we build and work toward a common goal. To consistently thrive, we promote a culture of collaboration and respect.',
   },
 ];
 
