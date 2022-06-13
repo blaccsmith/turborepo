@@ -1,5 +1,5 @@
 {
-  "redirect": [
+  "rewrite": [
     {
       "source": "/:match*",
       "destination": "https://core.blacc.xyz/:match*"
