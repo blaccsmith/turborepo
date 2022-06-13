@@ -10,7 +10,7 @@ const ProjectSpark = () => (
       alt="jumbotron image"
       src={questions}
     />
-    <div className="after:animate-glow flex w-full scale-105 p-4 after:absolute after:-top-full after:left-0 after:right-0 after:-z-[1] after:h-full  after:w-full after:scale-75 after:bg-[linear-gradient(137deg,#5ddcff,#5b44fd,#7B61FF)]  after:blur-2xl after:content-['']" />
+    <div className="flex w-full scale-105 p-4" />
   </div>
 );
 
