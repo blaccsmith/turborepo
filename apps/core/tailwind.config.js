@@ -15,24 +15,42 @@ module.exports = {
         },
       },
       animation: {
-        slide: 'keyFrameSlide 10s linear infinite alternate;',
-        glow: 'keyFrameGlow 3.5s linear infinite',
+        fadeOut: 'fadeOut 0.5s ease-in',
+        fadeIn: 'fadeIn 0.5s ease-out 0.5s',
+        slide: 'keyFrameSlide 15s linear infinite forwards',
+        glow: 'keyFrameGlow 1s linear infinite alternate',
       },
       keyframes: {
-        keyFrameSlide: {
+        fadeOut: {
           '0%': {
-            transform: 'translate3d(0, 0, 0)',
+            transform: 'scale(1)',
           },
           '100%': {
-            transform: 'translate3d(-130px, 0, 0)',
+            transform: 'scale(0)',
+          },
+        },
+        fadeIn: {
+          '0%': {
+            transform: 'scale(0)',
+          },
+          '100%': {
+            transform: 'scale(1)',
+          },
+        },
+        keyFrameSlide: {
+          '0%': {
+            transform: 'translateX(-110%)',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
           },
         },
         keyFrameGlow: {
           '0%': {
-            transform: 'rotate(0deg)',
+            transform: 'scale(1)',
           },
           '100%': {
-            transform: 'rotate(360deg)',
+            transform: 'scale(0.9)',
           },
         },
       },

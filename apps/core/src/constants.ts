@@ -11,9 +11,17 @@ const homePageImages: string[] = [
 ];
 
 const experienceTitles: string[] = [
+  'Software Engineer',
   'Junior Developers',
   'Students',
+  'Career Switchers',
+  'Interns',
+  'Cyber Security',
+  'Self Taught',
+  'Freelancers',
   'Bootcampers',
+  'Mentors',
+  'Co-Founders',
   'Analysts',
   'Data Engineers',
 ];

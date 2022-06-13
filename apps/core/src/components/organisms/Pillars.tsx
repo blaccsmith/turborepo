@@ -1,38 +1,26 @@
 import { pillars } from '@constants';
-import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
+import { classNames } from 'utils/helpers';
 
 const Pillars = () => {
   const scrollingContainer = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState(0);
-  const scrollBarStyle: string =
-    'absolute h-0.5 md:h-1/4 md:w-0.5 bg-purple-400 transition-all duration-500';
-
-  const scrollMobile: string = classNames(scrollBarStyle, {
-    'left-0 w-[63px]': pos === 0,
-    'left-[23%] w-[99px]': pos === 1,
-    'left-[58%] w-[144px]': pos === 2,
-  });
-
-  const scrollDesktop: string = classNames(scrollBarStyle, {
-    'md:top-0 md:left-auto': pos === 0,
-    'md:top-[39%] md:left-auto': pos === 1,
-    'md:top-[75%] md:left-auto': pos === 2,
-  });
 
   useEffect(() => {
-    if (window && window.innerWidth > 768) {
+    setTimeout(() => {
+      if (window && window.innerWidth > 768) {
+        scrollingContainer.current?.scrollTo({
+          top: 207 * pos,
+          behavior: 'smooth',
+        });
+        return;
+      }
+
       scrollingContainer.current?.scrollTo({
-        top: 207 * pos,
+        left: scrollingContainer.current.clientWidth * pos,
         behavior: 'smooth',
       });
-      return;
-    }
-
-    scrollingContainer.current?.scrollTo({
-      left: scrollingContainer.current.clientWidth * pos,
-      behavior: 'smooth',
-    });
+    }, 500);
   }, [pos]);
 
   return (
@@ -41,42 +29,47 @@ const Pillars = () => {
         <h1 className="mb-10 text-4xl font-medium text-white md:mb-40">What we&apos;re about</h1>
         <div className="h-4/5 w-full md:w-4/5">
           {/* HStack */}
-          <div className="flex h-full flex-col md:flex-row ">
+          <div className="flex h-full flex-col md:flex-row md:space-x-4 ">
             {/* Stack */}
-            <div className="relative flex w-full items-end justify-between text-center md:mr-4 md:flex-col">
+            <div className="relative flex w-full items-end border-r border-r-[#909090] md:flex-col">
               {pillars.map((pillar, idx) => (
-                <div>
+                <div key={pillar.label} className="h-full">
                   <div
-                    key={pillar.label}
                     aria-hidden="true"
-                    className="h-auto w-auto"
-                    onClick={() => {
-                      setPos(idx);
-                    }}
+                    className={classNames(
+                      pos === idx ? 'text-purple-500' : 'text-slate-300 hover:text-purple-400',
+                      'flex h-full cursor-pointer items-center align-top text-lg md:pr-4 md:align-bottom md:text-4xl',
+                    )}
+                    onClick={() => setPos(idx)}
                   >
-                    <p className="mt-2 align-top text-lg text-slate-300 hover:text-purple-400 md:pr-2 md:align-bottom md:text-4xl">
-                      {pillar.label}
-                    </p>
+                    {pillar.label}
                   </div>
-                  <div className="absolute bottom-0 left-0 h-0.5 w-full bg-[#909090] md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-0.5" />
                 </div>
               ))}
-              <div className={`${scrollMobile} ${scrollDesktop}`} />
+              <div
+                className={classNames(
+                  pos === 0 ? 'left-0 w-[63px] md:top-0 md:left-full' : '',
+                  pos === 1 ? 'left-[23%] w-[99px] md:top-[33.3%] md:left-full' : '',
+                  pos === 2 ? 'left-[58%] w-[144px] md:top-[66.6%] md:left-full' : '',
+                  'absolute h-0.5 bg-purple-500 transition-all duration-500 md:h-1/3 md:w-0.5',
+                )}
+              />
             </div>
             {/* Stack */}
             <div
-              className="flex h-auto w-[342px] overflow-x-hidden md:block md:h-[207px] md:w-full md:overflow-y-hidden"
+              className="flex h-auto w-[342px] origin-center overflow-x-hidden  md:block md:h-[207px] md:w-full md:overflow-y-hidden"
               ref={scrollingContainer}
             >
-              {pillars.map(pillar => (
+              {pillars.map((pillar, idx) => (
                 <div
                   key={pillar.description}
-                  className="h-full min-w-[calc(100vw-3rem)] px-4 md:h-[207px] md:w-full md:min-w-full"
+                  className={classNames(
+                    pos === idx ? 'animate-fadeIn' : 'animate-fadeOut',
+                    'h-full min-w-[calc(100vw-3rem)] space-y-3 px-4 md:h-[207px] md:w-full md:min-w-full',
+                  )}
                 >
-                  <div className="mb-3 w-full text-center md:mb-0">
-                    <h2 className="text-3xl text-white  md:text-4xl">{pillar.heading}</h2>
-                  </div>
-                  <p className="text-base text-white md:text-xl">{pillar.description}</p>
+                  <h2 className="text-3xl font-medium text-white md:text-4xl">{pillar.heading}</h2>
+                  <p className="text-base font-light text-white md:text-xl">{pillar.description}</p>
                 </div>
               ))}
             </div>
