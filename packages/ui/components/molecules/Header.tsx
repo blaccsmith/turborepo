@@ -1,7 +1,7 @@
-import NextLink from '../atoms/NextLink';
 import { useSession, signOut, signIn } from 'next-auth/react';
-import Avatar from '../atoms/Avatar';
 import Image from 'next/image';
+import NextLink from '../atoms/NextLink';
+import Avatar from '../atoms/Avatar';
 import logo from '../../assets/logo_clear.png';
 import LockIcon from '../atoms/Icons/LockIcon';
 
@@ -35,20 +35,21 @@ const Auth = () => {
   );
 };
 
-const Header = ({ showAuth }: Props) => {
-  return (
-    <div className="bg-brand-black/50 sticky top-0 z-20 mx-auto flex w-full max-w-7xl items-center justify-between p-6 text-white  backdrop-blur-lg md:p-8">
-      <NextLink href="/">
+const Header = ({ showAuth }: Props) => (
+  <div className="bg-brand-black/50 sticky top-0 z-20 mx-auto flex w-full max-w-7xl items-center justify-between p-6 text-white  backdrop-blur-lg md:p-8">
+    <NextLink href="/" className="flex items-center space-x-4">
+      <>
         <Image src={logo} width={24} height={24} className="rounded-full" alt="BLACC Logo" />
-      </NextLink>
+        <span className="text-xl font-medium">The Black Coder Community</span>
+      </>
+    </NextLink>
 
-      <ul className="flex items-center space-x-6">
-        <NextLink href="/">Home</NextLink>
-        <NextLink href="/">Blog</NextLink>
-        {showAuth && <Auth />}
-      </ul>
-    </div>
-  );
-};
+    <ul className="flex items-center space-image.pngx-6">
+      <NextLink href="/">Home</NextLink>
+      <NextLink href="/">Blog</NextLink>
+      {showAuth && <Auth />}
+    </ul>
+  </div>
+);
 
 export default Header;
