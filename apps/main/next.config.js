@@ -3,8 +3,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/:match*',
-        destination: 'https://core.blacc.xyz/:match*',
+        source: '/',
+        destination: 'https://core.blacc.xyz',
         permanent: true,
       },
       {
