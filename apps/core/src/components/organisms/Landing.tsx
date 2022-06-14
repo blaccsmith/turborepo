@@ -4,7 +4,7 @@ import NextLink from 'ui/components/atoms/NextLink';
 import NextImage from 'ui/components/atoms/NextImage';
 
 const Landing = (): JSX.Element => (
-  <div className="flex h-screen snap-center flex-col items-center justify-center pt-20 md:pt-0">
+  <div className="flex h-screen flex-col items-center justify-center pt-20 md:pt-0">
     {/* /HStack */}
     <div className="flex items-center justify-center space-x-12 md:h-full">
       {/* Stack */}

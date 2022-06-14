@@ -24,7 +24,7 @@ const Pillars = () => {
   }, [pos]);
 
   return (
-    <div className="min-w-screen flex min-h-screen snap-center items-center justify-center">
+    <div className="min-w-screen flex min-h-screen items-center justify-center">
       <div className="w-[calc(100vw-3rem) flex flex-col items-center md:w-auto">
         <h1 className="mb-10 text-4xl font-medium text-white md:mb-40">What we&apos;re about</h1>
         <div className="h-4/5 w-full md:w-4/5">
@@ -59,7 +59,9 @@ const Pillars = () => {
             </div>
             {/* Stack */}
             <div className="flex items-center overflow-x-hidden ">
-              <p className="font-light text-center text-white md:text-xl">{pillars[pos].description}</p>
+              <p className="text-center font-light text-white md:text-xl">
+                {pillars[pos].description}
+              </p>
             </div>
             {/* <div
               className="flex h-auto w-[342px] origin-center overflow-x-hidden  md:block md:h-[207px] md:w-full md:overflow-y-hidden"

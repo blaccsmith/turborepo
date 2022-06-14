@@ -15,7 +15,7 @@ const testimonals: { text: string; avatar: string; handle: string }[] = [
 ];
 
 const Testimonials = () => (
-  <div className="min-w-screen flex min-h-screen snap-start items-center justify-center pt-40 md:pt-0">
+  <div className="min-w-screen flex min-h-screen items-center justify-center pt-40 md:pt-0">
     <div className="flex w-full flex-col items-center">
       <h1 className="mb-20 text-center text-4xl font-medium text-white md:mb-40">
         What people are saying about us
