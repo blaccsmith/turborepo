@@ -29,21 +29,22 @@ const experienceTitles: string[] = [
 const pillars: { label: string; heading: string; description: string }[] = [
   {
     label: 'EQUITY',
-    heading: 'Do z see teletubbies',
+    heading: 'Equality is key',
     description:
-      'BLACC is a space for people to express themselves, connect with others, and share their ideas – no matter their role in tech. We want to uplift each other and provide guidance in the best way possible.',
+      'We respect and value people of all backgrounds no matter the experience level. Together, we create a more equal place to learn and collaborate with others.',
+
   },
   {
     label: 'EDUCATION',
-    heading: 'Do y see teletubbies',
+    heading: 'Knowledge is power',
     description:
-      "BLACC is a place for you to ask and answer questions posted by others in the community. Whether you're looking for help with a problem or just want to chat, you can find answers to your questions here.",
+      'We believe that knowledge transfer between members within the community is the key to a persons education.',
   },
   {
     label: 'COLLABORATION',
-    heading: 'Do x see teletubbies',
+    heading: 'A Common Vision',
     description:
-      "We believe that collaboration is important in the learning process, so we make it easy to connect and share knowledge with others. We're a space where you can find people who share the same interests as you and make meaningful connections.",
+      'Our community thrives as we build and work toward a common goal. To consistently thrive, we promote a culture of collaboration and respect.',
   },
 ];
 
