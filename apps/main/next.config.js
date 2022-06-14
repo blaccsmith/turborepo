@@ -4,13 +4,15 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: 'https://core.blacc.xyz',
+        destination: 'https://www.core.blacc.xyz/:match*',
         permanent: true,
+        basePath: false,
       },
       {
         source: '/blog/:match*',
-        destination: 'https://blog.blacc.xyz/:match*',
+        destination: 'https://www.blog.blacc.xyz/:match*',
         permanent: true,
+        basePath: false,
       },
     ];
   },
