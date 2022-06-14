@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: 'https://www.core.blacc.xyz/:match*',
+        destination: 'https://www.core.blacc.xyz',
         permanent: true,
         basePath: false,
       },
