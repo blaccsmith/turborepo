@@ -28,6 +28,7 @@ import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
 import updateRSS from '@/lib/rss';
+import { NextSeo } from 'next-seo';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
@@ -404,7 +405,31 @@ const PostPage = () => {
         <Head>
           <title>{postQuery.data.title} - Beam</title>
         </Head>
-
+        <NextSeo
+          title={postQuery.data.title}
+          description="This example uses more of the available config options."
+          canonical="https://www.blacc.xyz/blog"
+          openGraph={{
+            url: `https://www.blog.blacc.xyz/blog/p/${postQuery.data.slug}`,
+            title: `${postQuery.data.title}`,
+            description: 'Open Graph Description',
+            images: [
+              {
+                url: 'https://www.blacc.xyz/blog_banner.png',
+                width: 800,
+                height: 600,
+                alt: 'BLACC Blog',
+                type: 'image/png',
+              },
+            ],
+            site_name: 'The Black Coder Community',
+          }}
+          twitter={{
+            handle: '@blaccxyz_',
+            site: '@blaccxyz_',
+            cardType: 'summary_large_image',
+          }}
+        />
         <div className="divide-primary divide-y">
           <div className="pb-12">
             {postQuery.data.hidden && (

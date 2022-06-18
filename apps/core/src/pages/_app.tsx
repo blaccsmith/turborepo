@@ -12,11 +12,11 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
       additionalLinkTags={[
         {
           rel: 'icon',
-          href: `https://www.core.blacc.xyz/favicon.ico`,
+          href: `https://www.blacc.xyz/favicon.ico`,
         },
         {
           rel: 'apple-touch-icon',
-          href: `https://www.core.blacc.xyz/logo.png`,
+          href: `https://www.blacc.xyz/logo.png`,
           sizes: '76x76',
         },
       ]}
@@ -27,7 +27,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         site_name: 'The Black Coder Community',
         images: [
           {
-            url: 'https://www.core.blacc.xyz/banner.png',
+            url: 'https://www.blacc.xyz/banner.png',
             width: 800,
             height: 450,
             alt: 'BLACC Banner',
