@@ -4,7 +4,7 @@ import NextLink from 'ui/components/atoms/NextLink';
 import NextImage from 'ui/components/atoms/NextImage';
 
 const Landing = (): JSX.Element => (
-  <div className="flex h-screen snap-center flex-col items-center justify-center pt-20 md:pt-0">
+  <div className="flex h-screen flex-col items-center justify-center pt-20 md:pt-0">
     {/* /HStack */}
     <div className="flex items-center justify-center space-x-12 md:h-full">
       {/* Stack */}
@@ -17,7 +17,7 @@ const Landing = (): JSX.Element => (
           like to hang out.
         </h2>
         <NextLink
-          href="https://discord.gg/yafQvrZ8bQ"
+          href="https://discord.gg/GNuc6ZrG"
           className="hover:border-brand-purple-500 relative h-min rounded-[90px] border border-transparent bg-black/25 px-4 py-3 font-bold text-white backdrop-blur-lg transition-all duration-200 hover:cursor-pointer"
         >
           Join the community
