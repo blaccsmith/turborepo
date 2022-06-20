@@ -58,7 +58,6 @@ export const getStaticProps: GetStaticProps = async () => {
       date: createdAt,
     });
   });
-  console.log({ feed: feed.xml() });
 
   await writeFile(RSSPath, feed.xml({ indent: true }), { flag: 'w+' });
   return { props: { posts: [] } };

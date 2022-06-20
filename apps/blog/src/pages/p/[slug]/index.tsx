@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { PencilIcon, TrashIcon, DotsHorizontalIcon } from '@heroicons/react/outline';
 import NextLink from 'ui/components/atoms/NextLink';
 import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
+import { NextSeo } from 'next-seo';
 import AuthorWithDate from '@/components/atoms/AuthorWithDate';
 import ButtonLink from '@/components/atoms/ButtonLink';
 import HtmlView from '@/components/atoms/HtmlView';
@@ -28,7 +29,6 @@ import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
 import updateRSS from '@/lib/rss';
-import { NextSeo } from 'next-seo';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [

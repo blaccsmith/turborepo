@@ -3,9 +3,9 @@ import type { AppProps } from 'next/app';
 import { withTRPC } from '@trpc/next';
 import { SessionProvider } from 'next-auth/react';
 import RootLayout from 'ui/components/atoms/Layouts/RootLayout';
+import { DefaultSeo } from 'next-seo';
 import { AppRouter } from '@/backend/routers';
 import { transformer } from '@/lib/trpc';
-import { DefaultSeo } from 'next-seo';
 
 function getBaseUrl() {
   if (process.browser) return ''; // Browser should use current path
