@@ -17,7 +17,7 @@ const Landing = (): JSX.Element => (
           like to hang out.
         </h2>
         <NextLink
-          href="https://discord.gg/yafQvrZ8bQ"
+          href="https://discord.gg/GNuc6ZrG"
           className="hover:border-brand-purple-500 relative h-min rounded-[90px] border border-transparent bg-black/25 px-4 py-3 font-bold text-white backdrop-blur-lg transition-all duration-200 hover:cursor-pointer"
         >
           Join the community
