@@ -1,5 +1,6 @@
 import { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
+import DiscordProvider from 'next-auth/providers/discord';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient, Role } from '@prisma/client';
 
@@ -7,38 +8,13 @@ const prisma = new PrismaClient();
 
 const authOptions: NextAuthOptions = {
   providers: [
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+    }),
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
-      authorization: 'https://github.com/login/oauth/authorize?scope=read:user+user:email+read:org',
-      userinfo: {
-        url: 'https://api.github.com/user',
-        async request({ client, tokens }) {
-          // Get base profile
-          // @ts-ignore
-          const profile = await client.userinfo(tokens);
-
-          // If user has email hidden, get their primary email from the GitHub API
-          if (!profile.email) {
-            const emails = await (
-              await fetch('https://api.github.com/user/emails', {
-                headers: {
-                  Authorization: `token ${tokens.access_token}`,
-                },
-              })
-            ).json();
-
-            if (emails?.length > 0) {
-              // Get primary email
-              profile.email = emails.find((email: any) => email.primary)?.email;
-              // And if for some reason it doesn't exist, just use the first
-              if (!profile.email) profile.email = emails[0].email;
-            }
-          }
-
-          return profile;
-        },
-      },
     }),
   ],
   callbacks: {
@@ -53,7 +29,6 @@ const authOptions: NextAuthOptions = {
       };
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
 };
 
