@@ -47,8 +47,8 @@ export const getStaticProps: GetStaticProps = async ctx => {
     ssg.fetchQuery('tag.list'),
   ]);
 
-  const posts = JSON.parse(safeJsonStringify(postsRes.posts));
-  
+  const posts = JSON.parse(safeJsonStringify(postsRes.posts)) as PostsFromFeed;
+
   const feed = new RSS({
     title: 'BLACC',
     site_url: 'https://blog.blacc.xyz/',
@@ -67,7 +67,7 @@ export const getStaticProps: GetStaticProps = async ctx => {
   });
 
   await writeFile(RSSPath, feed.xml({ indent: true }), { flag: 'w+' });
-  
+
   return { props: { posts, tags } };
 };
 

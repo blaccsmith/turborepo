@@ -358,6 +358,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: true,
   };
 };
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const ssg = await createSSGHelpers({
     router: appRouter,
@@ -436,100 +437,99 @@ const PostPage = ({ post }: PostDetail) => {
   const isUserAdmin = session?.user.role === 'ADMIN';
   const postBelongsToUser = post.author.id === session?.user.id;
 
-    return (
-      <>
-        <Head>
-          <title>{postQuery.data.title} - Beam</title>
-        </Head>
-        <NextSeo
-          title={postQuery.data.title}
-          description="This example uses more of the available config options."
-          canonical="https://www.blacc.xyz/blog"
-          openGraph={{
-            url: `https://www.blog.blacc.xyz/blog/p/${postQuery.data.slug}`,
-            title: `${postQuery.data.title}`,
-            description: 'Open Graph Description',
-            images: [
-              {
-                url: 'https://www.blacc.xyz/blog_banner.png',
-                width: 800,
-                height: 600,
-                alt: 'BLACC Blog',
-                type: 'image/png',
-              },
-            ],
-            site_name: 'The Black Coder Community',
-          }}
-          twitter={{
-            handle: '@blaccxyz_',
-            site: '@blaccxyz_',
-            cardType: 'summary_large_image',
-          }}
-        />
-        <div className="divide-primary divide-y">
-          <div className="pb-12">
-            {postQuery.data.hidden && (
-              <Banner className="mb-6">
-                This post has been hidden and is only visible to administrators.
-              </Banner>
-            )}
-          </div>
-          <div className="mt-6">
-            <AuthorWithDate author={post.author} date={new Date(post.createdAt)} />
-            <div className="scrollbar-hide mt-4 flex items-center justify-start space-x-2 overflow-x-auto pr-2">
-              {post.tags?.map(el => (
-                <PostTag key={el.tag.id} tag={el.tag} isSelected />
-              ))}
-            </div>
-          </div>
-          <HtmlView html={post.contentHtml} className="mt-8 text-white" />
-          <div className="clear-both mt-6 flex gap-4">
-            <LikeButton
-              likedBy={post.likedBy}
-              onLike={() => {
-                likeMutation.mutate({ id: post.id, slug: post.slug });
-              }}
-              onUnlike={() => {
-                unlikeMutation.mutate({ id: post.id, slug: post.slug });
-              }}
-            />
-            <ButtonLink href={`/p/${post.slug}#comments`} variant="secondary">
-              <MessageIcon className="h-4 w-4 text-[#9E9E9E]" />
-              <span className="ml-1.5 text-[#9E9E9E]">{post.comments.length}</span>
-            </ButtonLink>
+  return (
+    <>
+      <Head>
+        <title>{postQuery.data.title} - Beam</title>
+      </Head>
+      <NextSeo
+        title={postQuery.data.title}
+        description="This example uses more of the available config options."
+        canonical="https://www.blacc.xyz/blog"
+        openGraph={{
+          url: `https://www.blog.blacc.xyz/blog/p/${postQuery.data.slug}`,
+          title: `${postQuery.data.title}`,
+          description: 'Open Graph Description',
+          images: [
+            {
+              url: 'https://www.blacc.xyz/blog_banner.png',
+              width: 800,
+              height: 600,
+              alt: 'BLACC Blog',
+              type: 'image/png',
+            },
+          ],
+          site_name: 'The Black Coder Community',
+        }}
+        twitter={{
+          handle: '@blaccxyz_',
+          site: '@blaccxyz_',
+          cardType: 'summary_large_image',
+        }}
+      />
+      <div className="divide-primary divide-y">
+        <div className="pb-12">
+          {postQuery.data.hidden && (
+            <Banner className="mb-6">
+              This post has been hidden and is only visible to administrators.
+            </Banner>
+          )}
+        </div>
+        <div className="mt-6">
+          <AuthorWithDate author={post.author} date={new Date(post.createdAt)} />
+          <div className="scrollbar-hide mt-4 flex items-center justify-start space-x-2 overflow-x-auto pr-2">
+            {post.tags?.map(el => (
+              <PostTag key={el.tag.id} tag={el.tag} isSelected />
+            ))}
           </div>
         </div>
+        <HtmlView html={post.contentHtml} className="mt-8 text-white" />
+        <div className="clear-both mt-6 flex gap-4">
+          <LikeButton
+            likedBy={post.likedBy}
+            onLike={() => {
+              likeMutation.mutate({ id: post.id, slug: post.slug });
+            }}
+            onUnlike={() => {
+              unlikeMutation.mutate({ id: post.id, slug: post.slug });
+            }}
+          />
+          <ButtonLink href={`/p/${post.slug}#comments`} variant="secondary">
+            <MessageIcon className="h-4 w-4 text-[#9E9E9E]" />
+            <span className="ml-1.5 text-[#9E9E9E]">{post.comments.length}</span>
+          </ButtonLink>
+        </div>
+      </div>
 
-        <div id="comments" className="space-y-12 pt-12">
-          {post.comments.length > 0 && (
-            <ul className="space-y-12">
-              {post.comments.map(comment => (
-                <li key={comment.id}>
-                  <Comment postSlug={post.slug} comment={comment} />
-                </li>
-              ))}
-            </ul>
+      <div id="comments" className="space-y-12 pt-12">
+        {post.comments.length > 0 && (
+          <ul className="space-y-12">
+            {post.comments.map(comment => (
+              <li key={comment.id}>
+                <Comment postSlug={post.slug} comment={comment} />
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="flex items-start gap-2 sm:gap-4">
+          {session && (
+            <>
+              <span className="hidden sm:inline-block">
+                <BlogAvatar
+                  name={session!.user.name as string}
+                  src={session!.user.image as string}
+                />
+              </span>
+              <span className="inline-block sm:hidden">
+                <BlogAvatar
+                  name={session!.user.name as string}
+                  src={session!.user.image as string}
+                  size="sm"
+                />
+              </span>
+            </>
           )}
-          <div className="flex items-start gap-2 sm:gap-4">
-            {session && (
-              <>
-                <span className="hidden sm:inline-block">
-                  <BlogAvatar
-                    name={session!.user.name as string}
-                    src={session!.user.image as string}
-                  />
-                </span>
-                <span className="inline-block sm:hidden">
-                  <BlogAvatar
-                    name={session!.user.name as string}
-                    src={session!.user.image as string}
-                    size="sm"
-                  />
-                </span>
-              </>
-            )}
-            <AddCommentForm postSlug={post.slug} />
-          </div>
+          <AddCommentForm postSlug={post.slug} />
         </div>
       </div>
 
