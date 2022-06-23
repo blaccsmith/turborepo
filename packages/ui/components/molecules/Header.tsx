@@ -14,7 +14,7 @@ const Auth = () => {
   const notSignedIn = status === 'loading' || !session;
 
   const handleAuth = () => {
-    notSignedIn ? signIn('github') : signOut();
+    notSignedIn ? signIn() : signOut();
   };
 
   return (
