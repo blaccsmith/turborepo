@@ -10,6 +10,7 @@ import PostForm from '@/components/orgnaisms/PostForm';
 import Layout from '@/components/molecules/SearchLayout';
 import { appRouter } from '@/backend/routers';
 import { createContext } from '@/backend/utils/context';
+import updateRSS from '@/lib/rss';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const ssg = createSSGHelpers({ router: appRouter, ctx: await createContext(), transformer });
@@ -36,7 +37,7 @@ const EditPostPage = ({ post }: PostDetail) => {
   });
 
   const postBelongsToUser = post.author.id === session?.user.id;
-
+  
   return (
     <>
       <Head>
@@ -65,7 +66,10 @@ const EditPostPage = ({ post }: PostDetail) => {
                     data: { ...values },
                   },
                   {
-                    onSuccess: ({ slug }) => router.push(`/p/${slug}`),
+                    onSuccess: async ({ slug }) => {
+                      await updateRSS();
+                      router.push(`/p/${slug}`);
+                    },
                   },
                 );
               }}

@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-nested-ternary */
-import { GetStaticProps } from 'next';
+import { GetStaticProps, NextPage } from 'next';
+import RSS from 'rss';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -13,6 +14,7 @@ import { useEffect, useState } from 'react';
 import safeJsonStringify from 'safe-json-stringify';
 import { createSSGHelpers } from '@trpc/react/ssg';
 import { InferQueryOutput, InferQueryPathAndInput, transformer, trpc } from '@/lib/trpc';
+import { writeFile } from 'fs/promises';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
 import PostTag from '@/components/atoms/PostTag';
@@ -31,6 +33,8 @@ const PostSummary = dynamic<PostSummaryProps>(
 type PostsFromFeed = InferQueryOutput<'post.feed'>['posts'];
 type FeedTags = InferQueryOutput<'tag.list'>;
 
+const RSSPath = process.env.NODE_ENV === 'production' ? '../feed.xml' : './public/feed.xml';
+
 export const getStaticProps: GetStaticProps = async ctx => {
   const ssg = await createSSGHelpers({
     router: appRouter,
@@ -44,6 +48,26 @@ export const getStaticProps: GetStaticProps = async ctx => {
   ]);
 
   const posts = JSON.parse(safeJsonStringify(postsRes.posts));
+  
+  const feed = new RSS({
+    title: 'BLACC',
+    site_url: 'https://blog.blacc.xyz/',
+    feed_url: 'https://blog.blacc.xyz/feed.xml',
+    description: 'BLACC Posts',
+  });
+
+  posts.forEach(({ title, author, createdAt, slug }) => {
+    feed.item({
+      title,
+      description: `${title} by ${author.name}`,
+      url: `https://blog.blacc.xyz/p/${slug}`,
+      author: author.name as string,
+      date: createdAt,
+    });
+  });
+
+  await writeFile(RSSPath, feed.xml({ indent: true }), { flag: 'w+' });
+  
   return { props: { posts, tags } };
 };
 

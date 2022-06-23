@@ -10,6 +10,7 @@ import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
 import { createSSGHelpers } from '@trpc/react/ssg';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import safeJsonStringify from 'safe-json-stringify';
+import { NextSeo } from 'next-seo';
 import AuthorWithDate from '@/components/atoms/AuthorWithDate';
 import ButtonLink from '@/components/atoms/ButtonLink';
 import HtmlView from '@/components/atoms/HtmlView';
@@ -32,6 +33,7 @@ import { createContext } from '@/backend/utils/context';
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
 import { appRouter } from '@/backend/routers';
+import updateRSS from '@/lib/rss';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
   return [
@@ -229,6 +231,9 @@ const ConfirmDeleteDialog = ({
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const deletePostMutation = trpc.useMutation('post.delete', {
+    onSuccess: async () => {
+      await updateRSS();
+    },
     onError: error => {
       toast.error(`Something went wrong: ${error.message}`);
     },
@@ -431,67 +436,42 @@ const PostPage = ({ post }: PostDetail) => {
   const isUserAdmin = session?.user.role === 'ADMIN';
   const postBelongsToUser = post.author.id === session?.user.id;
 
-  return (
-    <>
-      <Head>
-        <title>{post.title} - Beam</title>
-      </Head>
-
-      <div className="divide-primary divide-y">
-        <div className="pb-12">
-          {post.hidden && (
-            <Banner className="mb-6">
-              This post has been hidden and is only visible to administrators.
-            </Banner>
-          )}
-
-          <div className="flex items-center justify-between gap-4">
-            <h1 className="text-3xl font-semibold tracking-tighter text-white md:text-4xl">
-              {post.title}
-            </h1>
-            {(postBelongsToUser || isUserAdmin) && (
-              <>
-                <div className="flex md:hidden">
-                  <Menu>
-                    <MenuButton className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white">
-                      <DotsHorizontalIcon className="h-3 w-3" />
-                    </MenuButton>
-
-                    <MenuItems className="w-28 border border-[#424242] text-white">
-                      <MenuItemsContent>
-                        {postBelongsToUser && (
-                          <>
-                            <NextLink href={`/p/${post.slug}/edit`}>
-                              <MenuItemButton onClick={() => null}>Edit</MenuItemButton>
-                            </NextLink>
-                            <MenuItemButton className="!text-red" onClick={handleDelete}>
-                              Delete
-                            </MenuItemButton>
-                          </>
-                        )}
-                      </MenuItemsContent>
-                    </MenuItems>
-                  </Menu>
-                </div>
-                <div className="hidden md:flex md:gap-4">
-                  {postBelongsToUser && (
-                    <div className="flex items-center justify-start space-x-2">
-                      <NextLink
-                        href={`/p/${post.slug}/edit`}
-                        className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
-                      >
-                        <PencilIcon className="h-3 w-3" />
-                      </NextLink>
-                      <button
-                        onClick={handleDelete}
-                        className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
-                      >
-                        <TrashIcon className="h-3 w-3" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
+    return (
+      <>
+        <Head>
+          <title>{postQuery.data.title} - Beam</title>
+        </Head>
+        <NextSeo
+          title={postQuery.data.title}
+          description="This example uses more of the available config options."
+          canonical="https://www.blacc.xyz/blog"
+          openGraph={{
+            url: `https://www.blog.blacc.xyz/blog/p/${postQuery.data.slug}`,
+            title: `${postQuery.data.title}`,
+            description: 'Open Graph Description',
+            images: [
+              {
+                url: 'https://www.blacc.xyz/blog_banner.png',
+                width: 800,
+                height: 600,
+                alt: 'BLACC Blog',
+                type: 'image/png',
+              },
+            ],
+            site_name: 'The Black Coder Community',
+          }}
+          twitter={{
+            handle: '@blaccxyz_',
+            site: '@blaccxyz_',
+            cardType: 'summary_large_image',
+          }}
+        />
+        <div className="divide-primary divide-y">
+          <div className="pb-12">
+            {postQuery.data.hidden && (
+              <Banner className="mb-6">
+                This post has been hidden and is only visible to administrators.
+              </Banner>
             )}
           </div>
           <div className="mt-6">

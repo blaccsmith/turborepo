@@ -9,21 +9,55 @@ module.exports = {
           black: '#212121',
           purple: {
             50: '#efe9ff',
-            400: '#7B61FF',
+            100: '#d5c9fe',
+            200: '#b8a5fe',
+            300: '#987fff',
+            400: '#7b61ff',
             500: '#5b44fd',
+            600: '#4c3ff6',
+            700: '#3237ed',
+            800: '#0031e7',
+            900: '#0026d8',
           },
         },
       },
       animation: {
-        slide: 'keyFrameSlide 10s linear infinite alternate;',
+        fadeOut: 'fadeOut 0.5s ease-in',
+        fadeIn: 'fadeIn 0.5s ease-out 0.5s',
+        slide: 'keyFrameSlide 20s linear infinite forwards',
+        glow: 'keyFrameGlow 1s linear infinite alternate',
       },
       keyframes: {
-        keyFrameSlide: {
+        fadeOut: {
           '0%': {
-            transform: 'translate3d(0, 0, 0)',
+            transform: 'scale(1)',
           },
           '100%': {
-            transform: 'translate3d(-130px, 0, 0)',
+            transform: 'scale(0)',
+          },
+        },
+        fadeIn: {
+          '0%': {
+            transform: 'scale(0)',
+          },
+          '100%': {
+            transform: 'scale(1)',
+          },
+        },
+        keyFrameSlide: {
+          '0%': {
+            transform: 'translateX(-110%)',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
+          },
+        },
+        keyFrameGlow: {
+          '0%': {
+            transform: 'scale(1)',
+          },
+          '100%': {
+            transform: 'scale(0.9)',
           },
         },
       },

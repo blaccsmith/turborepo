@@ -1,25 +1,28 @@
 import * as React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { homePageImages, experienceTitles } from '@constants';
+import NextLink from 'ui/components/atoms/NextLink';
+import NextImage from 'ui/components/atoms/NextImage';
 
 const Landing = (): JSX.Element => (
-  <div className="flex h-screen snap-center flex-col items-center justify-center pt-20 md:pt-0">
+  <div className="flex h-screen flex-col items-center justify-center pt-20 md:pt-0">
     {/* /HStack */}
-    <div className="flex items-center justify-center md:h-full">
+    <div className="flex items-center justify-center space-x-12 md:h-full">
       {/* Stack */}
       <div className="flex h-full flex-col items-center justify-center text-center md:h-1/2 md:w-1/2 md:items-start md:text-left">
-        <h1 className="leading-3.25 mb-10 text-5xl font-bold text-white">
+        <h1 className="mb-10 text-5xl font-bold text-white">
           A global community for you, built by people like you.
         </h1>
-        <h2 className="mb-5 text-xl text-white">
-          Now that we know who you are, I know who I am. I&apos;m not a mistake! It all makes sense!
+        <h2 className="mb-12 text-xl text-white">
+          We&apos;re a community of like-minded Black developers, creatives, and people who just
+          like to hang out.
         </h2>
-        <Link href="https://discord.gg/yafQvrZ8bQ" passHref>
-          <div className="flex h-9 w-32 items-center justify-center rounded-[90px] bg-purple-500 hover:cursor-pointer hover:bg-purple-400">
-            <p className="text-xs text-black">Join the community</p>
-          </div>
-        </Link>
+        <NextLink
+          href="https://discord.gg/GNuc6ZrG"
+          className="hover:border-brand-purple-500 relative h-min rounded-[90px] border border-transparent bg-black/25 px-4 py-3 font-bold text-white backdrop-blur-lg transition-all duration-200 hover:cursor-pointer"
+        >
+          Join the community
+          <span className="animate-glow absolute left-0 h-1/2 w-full bg-[linear-gradient(137deg,#5ddcff,#5b44fd,#7B61FF)] p-4 blur-2xl" />
+        </NextLink>
       </div>
       {/* Grid */}
       <div className="hidden h-1/2 grid-cols-3 grid-rows-3 gap-3 md:grid">
@@ -28,7 +31,7 @@ const Landing = (): JSX.Element => (
             <div key={src} className="h-40 w-40" />
           ) : (
             <div className="relative w-40 overflow-hidden rounded grayscale" key={src}>
-              <Image
+              <NextImage
                 src={src}
                 alt={`black people in tech #${idx}`}
                 width="172px"
@@ -41,20 +44,20 @@ const Landing = (): JSX.Element => (
       </div>
     </div>
     {/* HStack */}
-    <div className="mt-36 w-full flex-col overflow-hidden text-center md:mt-0 md:flex md:flex-row md:justify-start md:text-left">
-      <h2 className="text-7xl font-bold text-white">600+</h2>
+    <div className="mt-36 mb-16 w-full flex-col items-center text-center md:mt-0 md:flex md:flex-row md:justify-start md:space-x-3 md:text-left">
+      <h2 className="text-4xl font-bold text-white md:text-7xl">600+</h2>
       {/* Stack */}
-      <div className="flex flex-col overflow-hidden">
-        <h2 className="ml-3 text-xl text-white">People like you: </h2>
+      <div className="flex w-full flex-col space-y-6 overflow-hidden">
+        <h2 className="text-xl font-medium uppercase text-white">People like you: </h2>
         {/* HStack */}
-        <div className="animate-slide flex">
+        <div className="animate-slide flex space-x-3">
           {experienceTitles.map(title => (
-            <div
-              className="ml-3 flex h-auto w-auto items-center justify-center bg-[#333333] md:h-9"
+            <span
+              className="min-w-max rounded-md bg-[#333] p-2 font-medium uppercase text-[#e0e0e0]"
               key={title}
             >
-              <p className="text-base text-white">{title}</p>
-            </div>
+              {title}
+            </span>
           ))}
         </div>
       </div>
