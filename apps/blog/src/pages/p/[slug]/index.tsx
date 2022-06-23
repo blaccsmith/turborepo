@@ -434,21 +434,18 @@ const PostPage = ({ post }: PostDetail) => {
     setIsConfirmDeleteDialogOpen(true);
   }
 
-  const isUserAdmin = session?.user.role === 'ADMIN';
-  const postBelongsToUser = post.author.id === session?.user.id;
-
   return (
     <>
       <Head>
-        <title>{postQuery.data.title} - Beam</title>
+        <title>{post.title} - Beam</title>
       </Head>
       <NextSeo
-        title={postQuery.data.title}
+        title={post.title}
         description="This example uses more of the available config options."
         canonical="https://www.blacc.xyz/blog"
         openGraph={{
-          url: `https://www.blog.blacc.xyz/blog/p/${postQuery.data.slug}`,
-          title: `${postQuery.data.title}`,
+          url: `https://www.blog.blacc.xyz/blog/p/${post.slug}`,
+          title: `${post.title}`,
           description: 'Open Graph Description',
           images: [
             {
@@ -469,7 +466,7 @@ const PostPage = ({ post }: PostDetail) => {
       />
       <div className="divide-primary divide-y">
         <div className="pb-12">
-          {postQuery.data.hidden && (
+          {post.hidden && (
             <Banner className="mb-6">
               This post has been hidden and is only visible to administrators.
             </Banner>
