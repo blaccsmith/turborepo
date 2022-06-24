@@ -13,13 +13,9 @@ const Auth = () => {
   const { data: session, status } = useSession();
   const notSignedIn = status === 'loading' || !session;
 
-  const handleAuth = () => {
-    notSignedIn ? signIn() : signOut();
-  };
-
   return (
     <div>
-      <div className="peer cursor-pointer" onClick={handleAuth}>
+      <div className="peer cursor-pointer" onClick={() => (notSignedIn ? signIn() : signOut())}>
         {notSignedIn ? (
           <div className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400">
             <LockIcon className="h-3 w-3 text-gray-400" />
@@ -50,7 +46,7 @@ const Header = ({ showAuth }: Props) => (
     <ul className="flex items-center space-x-6">
       <NextLink href="https://blacc.xyz">Home</NextLink>
       <NextLink href="https://blog.blacc.xyz">Blog</NextLink>
-      {showAuth && <Auth />}
+      {/* {showAuth && <Auth />} */}
     </ul>
   </div>
 );
