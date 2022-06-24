@@ -379,6 +379,8 @@ type PostDetail = {
 };
 
 const PostPage = ({ post }: PostDetail) => {
+  console.log({ post });
+
   const { data: session } = useSession();
   const router = useRouter();
   const utils = trpc.useContext();
