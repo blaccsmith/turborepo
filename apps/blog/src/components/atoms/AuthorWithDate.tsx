@@ -31,7 +31,7 @@ const AuthorWithDate = ({ author, date }: AuthorWithDateProps) => (
       </div>
 
       <p className="tracking-tight text-[#bdbdbd]">
-        <time dateTime={date.toISOString()}>{formatDistanceToNow(date)}</time> ago
+        <time dateTime={date.toString()}>{formatDistanceToNow(new Date(date))}</time> ago
       </p>
     </div>
   </div>
