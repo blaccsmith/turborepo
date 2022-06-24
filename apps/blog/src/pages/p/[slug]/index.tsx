@@ -371,6 +371,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   });
 
   const post = JSON.parse(safeJsonStringify(queryRes));
+  console.log({ post });
+
   return { props: { post } };
 };
 
@@ -379,8 +381,6 @@ type PostDetail = {
 };
 
 const PostPage = ({ post }: PostDetail) => {
-  console.log({ post });
-
   const { data: session } = useSession();
   const router = useRouter();
   const utils = trpc.useContext();
