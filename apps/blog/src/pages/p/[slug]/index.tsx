@@ -352,7 +352,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   });
 
   const { posts } = await ssg.fetchQuery('post.feed');
-
+  console.log({ posts });
   return {
     paths: posts.map(post => ({ params: { slug: post.slug } })),
     fallback: true,
