@@ -46,7 +46,7 @@ const Header = ({ showAuth }: Props) => (
     <ul className="flex items-center space-x-6">
       <NextLink href="https://blacc.xyz">Home</NextLink>
       <NextLink href="https://blog.blacc.xyz">Blog</NextLink>
-      {showAuth && <Auth />}
+      {/* {showAuth && <Auth />} */}
     </ul>
   </div>
 );
