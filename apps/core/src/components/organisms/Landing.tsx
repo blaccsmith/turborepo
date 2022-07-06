@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { homePageImages, experienceTitles } from '@constants';
+import {  experienceTitles } from '@constants';
 import NextLink from 'ui/components/atoms/NextLink';
-import NextImage from 'ui/components/atoms/NextImage';
+import Globe from '@components/organisms/Globe';
 
 const Landing = (): JSX.Element => (
   <div className="flex h-screen flex-col items-center justify-center pt-20 md:pt-0">
     {/* /HStack */}
-    <div className="flex items-center justify-center space-x-12 md:h-full">
+    <div className="flex flex-col items-center justify-center pt-40 md:h-full md:flex-row md:space-x-12 md:pt-0">
       {/* Stack */}
       <div className="flex h-full flex-col items-center justify-center text-center md:h-1/2 md:w-1/2 md:items-start md:text-left">
         <h1 className="mb-10 text-5xl font-bold text-white">
@@ -24,24 +24,7 @@ const Landing = (): JSX.Element => (
           <span className="animate-glow absolute left-0 h-1/2 w-full bg-[linear-gradient(137deg,#5ddcff,#5b44fd,#7B61FF)] p-4 blur-2xl" />
         </NextLink>
       </div>
-      {/* Grid */}
-      <div className="hidden h-1/2 grid-cols-3 grid-rows-3 gap-3 md:grid">
-        {homePageImages.map((src: string, idx: number) =>
-          idx === 4 || idx === 5 ? (
-            <div key={src} className="h-40 w-40" />
-          ) : (
-            <div className="relative w-40 overflow-hidden rounded grayscale" key={src}>
-              <NextImage
-                src={src}
-                alt={`black people in tech #${idx}`}
-                width="172px"
-                height="172px"
-                objectFit="cover"
-              />
-            </div>
-          ),
-        )}
-      </div>
+      <Globe />
     </div>
     {/* HStack */}
     <div className="mt-36 mb-16 w-full flex-col items-center text-center md:mt-0 md:flex md:flex-row md:justify-start md:space-x-3 md:text-left">
