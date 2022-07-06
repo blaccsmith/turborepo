@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { homePageImages, experienceTitles } from '@constants';
+import {  experienceTitles } from '@constants';
 import NextLink from 'ui/components/atoms/NextLink';
-import NextImage from 'ui/components/atoms/NextImage';
+import Globe from '@components/organisms/Globe';
 
 const Landing = (): JSX.Element => (
   <div className="flex h-screen flex-col items-center justify-center pt-20 md:pt-0">
