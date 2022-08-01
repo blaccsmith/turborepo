@@ -10,6 +10,7 @@ const Globe = (): JSX.Element => {
 
   useEffect(() => {
     let phi = 0;
+
     const globe = createGlobe(globeRef.current, {
       devicePixelRatio: 2,
       width: isMobile(),
@@ -32,9 +33,6 @@ const Globe = (): JSX.Element => {
         phi += 0.005;
       },
     });
-    return () => {
-      globe.destroy();
-    };
   }, []);
 
   return (
