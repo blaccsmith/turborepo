@@ -41,6 +41,8 @@ To develop all sites and packages, run the following command:
 yarn run dev
 ```
 
+![start_script](https://user-images.githubusercontent.com/88869469/185513433-e6ada930-4d9c-4c43-bd90-d609d4bcd3d0.png)
+> You should see the following in your terminal with no errors.
 
 ### Build
 
