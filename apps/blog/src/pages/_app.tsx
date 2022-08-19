@@ -6,6 +6,7 @@ import RootLayout from 'ui/components/atoms/Layouts/RootLayout';
 import { DefaultSeo } from 'next-seo';
 import { AppRouter } from '@/backend/routers';
 import { transformer } from '@/lib/trpc';
+import { Toaster } from 'react-hot-toast';
 
 function getBaseUrl() {
   if (process.browser) return ''; // Browser should use current path
@@ -52,6 +53,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
       }}
     />
     <RootLayout showAuth>
+      <Toaster />
       <Component {...pageProps} />
     </RootLayout>
   </SessionProvider>
