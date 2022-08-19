@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  experienceTitles } from '@constants';
+import { experienceTitles } from '@constants';
 import NextLink from 'ui/components/atoms/NextLink';
 import Globe from '@components/organisms/Globe';
 
@@ -10,7 +10,7 @@ const Landing = (): JSX.Element => (
       {/* Stack */}
       <div className="flex h-full flex-col items-center justify-center text-center md:h-1/2 md:w-1/2 md:items-start md:text-left">
         <h1 className="mb-10 text-5xl font-bold text-white">
-          A global community for you, built by people like you.
+          A global place for you, built by people like you.
         </h1>
         <h2 className="mb-12 text-xl text-white">
           We&apos;re a community of like-minded Black developers, creatives, and people who just

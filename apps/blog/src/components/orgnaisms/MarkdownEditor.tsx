@@ -12,11 +12,11 @@ import getCaretCoordinates from 'textarea-caret';
 import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor';
 import { ItemOptions, useItemList } from 'use-item-list';
 import { classNames } from 'utils/helpers';
+import toast from 'react-hot-toast';
 import { getSuggestionData, handleUploadImages, markdownToHtml } from '@/lib/editor';
 import browserEnv from '@/env/browser';
 import { BoldIcon, ItalicIcon, LinkIcon, ListIcon } from '@/components/atoms/Icons';
 import HtmlView from '@/components/atoms/HtmlView';
-import toast from 'react-hot-toast';
 
 type MarkdownEditorProps = {
   label?: string;

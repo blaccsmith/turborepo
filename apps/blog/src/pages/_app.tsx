@@ -4,9 +4,9 @@ import { withTRPC } from '@trpc/next';
 import { SessionProvider } from 'next-auth/react';
 import RootLayout from 'ui/components/atoms/Layouts/RootLayout';
 import { DefaultSeo } from 'next-seo';
+import { Toaster } from 'react-hot-toast';
 import { AppRouter } from '@/backend/routers';
 import { transformer } from '@/lib/trpc';
-import { Toaster } from 'react-hot-toast';
 
 function getBaseUrl() {
   if (process.browser) return ''; // Browser should use current path

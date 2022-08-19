@@ -1,12 +1,11 @@
+/* eslint-disable no-param-reassign */
 import createGlobe from 'cobe';
 import { markers } from '@constants';
 import React, { useEffect, useRef } from 'react';
 
 const Globe = (): JSX.Element => {
   const globeRef = useRef<HTMLCanvasElement>({} as HTMLCanvasElement);
-  const isMobile = () => {
-    return window.screen.width < 769 ? 300 : 600;
-  };
+  const isMobile = () => window.screen.width < 769 ? 300 : 600;
 
   useEffect(() => {
     let phi = 0;
