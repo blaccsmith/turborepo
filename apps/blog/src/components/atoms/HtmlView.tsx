@@ -8,7 +8,7 @@ type HtmlViewProps = {
 
 const HtmlView = ({ html, className }: HtmlViewProps) => (
   <div
-    className={classNames('prose max-w-none', className ?? '')}
+    className={classNames('html-view-container prose max-w-none', className ?? '')}
     dangerouslySetInnerHTML={{ __html: html }}
   />
 );

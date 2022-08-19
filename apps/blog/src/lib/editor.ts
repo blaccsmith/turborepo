@@ -5,7 +5,7 @@ import { Cursor } from 'textarea-markdown-editor';
 import uploadImage from '@/lib/cloudinary';
 
 export function markdownToHtml(markdown: string) {
-  return DOMPurify.sanitize(marked.parse(markdown, { breaks: true }));
+  return DOMPurify.sanitize(marked.parse(markdown, { breaks: true, headerIds: true }));
 }
 
 export function handleUploadImages(textareaEl: HTMLTextAreaElement, files: File[]) {

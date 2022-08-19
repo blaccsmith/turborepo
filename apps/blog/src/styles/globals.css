@@ -18,3 +18,75 @@ body {
     @apply focus:shadow-none;
   }
 }
+
+.html-view-container > h1,h2,h3,h4 {   
+  @apply font-bold;
+  @apply text-2xl;
+  @apply text-white;
+  @apply my-4;
+}
+
+.html-view-container > h2 {  
+  @apply text-xl;
+}
+
+.html-view-container > h3 {  
+  @apply text-lg;
+}
+
+.html-view-container > h4 {  
+  @apply text-base;
+}
+
+.html-view-container a {  
+  @apply text-brand-purple-400;
+  @apply hover:text-brand-purple-500;
+  @apply visited:text-brand-purple-700;
+  @apply underline;
+}
+
+.html-view-container ul {  
+  @apply my-3;
+  @apply list-disc;
+  @apply ml-6;
+}
+
+.html-view-container img {
+  @apply mx-auto;
+  @apply my-4;
+  @apply rounded-md;
+  @apply shadow-lg; 
+}
+
+.html-view-container pre {
+  @apply my-2;
+  @apply p-2;
+  @apply bg-secondary;
+  @apply rounded-md;
+}
+
+.html-view-container code {
+  @apply font-mono;
+  @apply text-white;
+  @apply bg-secondary;
+  @apply text-xs;
+  @apply rounded-md;
+  @apply py-1;
+  @apply px-1.5;
+}
+
+.html-view-container pre > code {
+  @apply font-mono;
+  @apply text-white;
+  @apply text-sm;
+}
+
+.html-view-container blockquote {
+  @apply p-2;
+  @apply my-4;
+  @apply bg-brand-purple-400/5;
+  @apply rounded-l-sm;
+  @apply rounded-r-md;
+  @apply border-l-4;
+  @apply border-l-brand-purple-500;
+}
