@@ -59,7 +59,8 @@ body {
 }
 
 .html-view-container pre {
-  @apply my-2;
+  @apply mt-2;
+  @apply mb-4;
   @apply p-2;
   @apply bg-secondary;
   @apply rounded-md;
