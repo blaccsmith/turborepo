@@ -17,12 +17,19 @@ body:
   - type: checkboxes
     id: app
     attributes:
-      label: Where does the bug occur
+      label: Which app does the bug occur
       options:
         - label: blog
           required: false
         - label: core
           required: false
+  - type: input
+    id: Description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is
+    validations:
+      required: true
   - type: textarea
     id: Reproduce
     attributes:
