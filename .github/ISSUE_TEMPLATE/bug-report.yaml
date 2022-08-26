@@ -7,7 +7,7 @@ assignees:
   - darrylbrooks97
 body:
   - type: checkboxes
-    id: coc
+    id: Code-of-conduct
     attributes:
       label: Code of Conduct
       description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
@@ -17,7 +17,7 @@ body:
   - type: checkboxes
     id: app
     attributes:
-      label: Which app does the bug occur
+      label: Which app does the bug occur in
       options:
         - label: blog
           required: false
