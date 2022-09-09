@@ -27,7 +27,7 @@ const Landing = (): JSX.Element => (
       <Globe />
     </div>
     {/* HStack */}
-    <div className="mt-36 mb-16 w-full flex-col items-center text-center md:mt-0 md:flex md:flex-row md:justify-start md:space-x-3 md:text-left">
+    <div className="mt-16 mb-16 w-full flex-col items-center text-center md:mt-0 md:flex md:flex-row md:justify-start md:space-x-3 md:text-left">
       <h2 className="text-4xl font-bold text-white md:text-7xl">600+</h2>
       {/* Stack */}
       <div className="flex w-full flex-col space-y-6 overflow-hidden">
