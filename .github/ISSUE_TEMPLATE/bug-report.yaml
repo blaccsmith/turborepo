@@ -10,7 +10,7 @@ body:
     id: Code-of-conduct
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
