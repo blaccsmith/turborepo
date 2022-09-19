@@ -3,14 +3,14 @@ description: Suggest an idea for this project
 title: "💡 Feature request"
 labels: [💡 Feature Request]
 assignees:
-  - Garrett1Tolbert
+  - gt-codes
   - DarrylBrooks97
 body:
   - type: checkboxes
     id: Code-of-conduct
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://www.blacc.xyz/conduct/)
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
