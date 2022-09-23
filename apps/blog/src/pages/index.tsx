@@ -36,7 +36,7 @@ type FeedTags = InferQueryOutput<'tag.list'>;
 const RSSPath = process.env.NODE_ENV === 'production' ? '../feed.xml' : './public/feed.xml';
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const ssg = await createSSGHelpers({
+  const ssg = createSSGHelpers({
     router: appRouter,
     ctx: await createContext(),
     transformer,

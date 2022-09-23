@@ -345,7 +345,7 @@ const Comment = ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const ssg = await createSSGHelpers({
+  const ssg = createSSGHelpers({
     router: appRouter,
     ctx: await createContext(),
     transformer,
@@ -360,7 +360,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const ssg = await createSSGHelpers({
+  const ssg = createSSGHelpers({
     router: appRouter,
     ctx: await createContext(),
     transformer,
