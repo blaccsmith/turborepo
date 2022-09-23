@@ -51,7 +51,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         site: '@blaccxyz_',
       }}
     />
-    <RootLayout showAuth>
+    <RootLayout showAuth session={session}>
       <Component {...pageProps} />
     </RootLayout>
   </SessionProvider>

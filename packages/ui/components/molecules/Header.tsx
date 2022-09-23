@@ -1,5 +1,6 @@
-import { useSession, signOut, signIn } from 'next-auth/react';
+import { useSession, signOut, signIn, SessionProvider } from 'next-auth/react';
 import Image from 'next/image';
+import { Session } from 'next-auth';
 import NextLink from '../atoms/NextLink';
 import Avatar from '../atoms/Avatar';
 import logo from '../../assets/logo_clear.png';
@@ -7,6 +8,7 @@ import LockIcon from '../atoms/Icons/LockIcon';
 
 interface Props {
   showAuth?: boolean;
+  session: Session | null | undefined;
 }
 
 const Auth = () => {
@@ -31,7 +33,7 @@ const Auth = () => {
   );
 };
 
-const Header = ({ showAuth }: Props) => (
+const Header = ({ showAuth, session }: Props) => (
   <div className="bg-brand-black/50 sticky top-0 z-20 mx-auto flex w-full max-w-7xl items-center justify-between p-6 text-white  backdrop-blur-lg md:p-8">
     <NextLink href="/" className="flex items-center space-x-4">
       <>
@@ -46,7 +48,11 @@ const Header = ({ showAuth }: Props) => (
     <ul className="flex items-center space-x-6">
       <NextLink href="https://blacc.xyz">Home</NextLink>
       <NextLink href="https://blog.blacc.xyz">Blog</NextLink>
-      {/* {showAuth && <Auth />} */}
+      {showAuth && (
+        <SessionProvider>
+          <Auth />
+        </SessionProvider>
+      )}
     </ul>
   </div>
 );
