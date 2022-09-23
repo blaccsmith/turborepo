@@ -1,3 +1,5 @@
+import { Marker } from "cobe";
+
 const homePageImages: string[] = [
   'https://images.unsplash.com/photo-1573162915955-6a8ba9d2fe20?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1769&q=80',
   'https://images.unsplash.com/photo-1573164713347-df1f7d6aeb03?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1769&q=80',
@@ -67,4 +69,20 @@ const whyUsContent: { heading: string; subHeading: string }[] = [
   },
 ];
 
-export { homePageImages, experienceTitles, pillars, whyUsContent };
+const markers: Marker[] = [
+  { location: [32.776665, -96.796989], size: 0.1 }, // Dallas
+  { location: [40.712776, -74.005974], size: 0.1 }, // New York
+  { location: [6.524379, 3.379206], size: 0.1 }, // Lagos
+  { location: [37.774929, -122.419418], size: 0.1 }, // San Francisco
+  { location: [48.856613, 2.352222], size: 0.1 }, // Paris
+  { location: [51.507351, -0.127758], size: 0.1 }, // London
+  { location: [35.6762, 139.6503], size: 0.1 }, // Tokyo
+  { location: [28.6139, 77.209], size: 0.1 }, // New Delhi
+  { location: [-33.8688, 151.2093], size: 0.1 }, // Sydney
+  { location: [-33.9249, 18.4241], size: 0.1 }, // Cape town
+  { location: [18.1096, -77.2975], size: 0.1 }, // Jamaica
+  { location: [-15.7975, -47.8919], size: 0.1 }, // Brazil
+];
+
+
+export { homePageImages, experienceTitles, pillars, whyUsContent, markers };

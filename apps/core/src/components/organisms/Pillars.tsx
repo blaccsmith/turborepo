@@ -24,14 +24,14 @@ const Pillars = () => {
   }, [pos]);
 
   return (
-    <div className="min-w-screen flex min-h-screen items-center justify-center">
+    <div className="min-w-screen flex h-[500px] md:h-auto items-center justify-center mt-20">
       <div className="w-[calc(100vw-3rem) flex flex-col items-center md:w-auto">
         <h1 className="mb-10 text-4xl font-medium text-white md:mb-40">What we&apos;re about</h1>
         <div className="h-4/5 w-full md:w-4/5">
           {/* HStack */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Stack */}
-            <div className="relative flex w-full items-end border-r-[#909090] md:flex-col md:border-r md:border-b-0">
+            <div className="relative flex w-full items-end justify-center border-r-[#909090] md:flex-col md:border-r md:border-b-0">
               {pillars.map((pillar, idx) => (
                 <div key={pillar.label} className="h-full px-2 md:py-3 md:px-0">
                   <div

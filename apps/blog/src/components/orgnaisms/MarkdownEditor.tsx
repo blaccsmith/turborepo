@@ -12,6 +12,7 @@ import getCaretCoordinates from 'textarea-caret';
 import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor';
 import { ItemOptions, useItemList } from 'use-item-list';
 import { classNames } from 'utils/helpers';
+import toast from 'react-hot-toast';
 import { getSuggestionData, handleUploadImages, markdownToHtml } from '@/lib/editor';
 import browserEnv from '@/env/browser';
 import { BoldIcon, ItalicIcon, LinkIcon, ListIcon } from '@/components/atoms/Icons';
@@ -310,6 +311,10 @@ const MarkdownEditor = ({
     suggestionDispatch({ type: 'close' });
   }
 
+  const handleImageUpload = async (textareaEl: HTMLTextAreaElement, files: File[]) => {
+    await handleUploadImages(textareaEl, files);
+  };
+
   return (
     <div>
       {label && <label className="mb-2 block font-semibold">{label}</label>}
@@ -442,7 +447,11 @@ const MarkdownEditor = ({
 
                   event.preventDefault();
 
-                  handleUploadImages(event.currentTarget, imageFiles);
+                  toast.promise(handleImageUpload(event.currentTarget, imageFiles), {
+                    loading: 'Uploading image...',
+                    success: 'Image uploaded',
+                    error: 'Image upload failed',
+                  });
                 }
               }}
               onDrop={event => {
@@ -461,7 +470,11 @@ const MarkdownEditor = ({
 
                   event.preventDefault();
 
-                  handleUploadImages(event.currentTarget, imageFiles);
+                  toast.promise(handleImageUpload(event.currentTarget, imageFiles), {
+                    loading: 'Uploading image...',
+                    success: 'Image uploaded',
+                    error: 'Image upload failed',
+                  });
                 }
               }}
               className="bg-secondary border-secondary focus-ring block w-full rounded p-3 shadow-sm"

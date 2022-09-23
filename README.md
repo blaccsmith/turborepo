@@ -1,18 +1,18 @@
-# Turborepo starter
+# Welcome to BLACC's Website
 
-This is an official Yarn v1 starter turborepo.
+This repo is the monorepo for the [BLACC website](https://blacc.xyz).
 
 ## What's inside?
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/apps:
+This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/sites:
 
-### Apps and Packages
+### Sites and Packages
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+-   `core`: a [Next.js](https://nextjs.org) app
+-   `blog`: another [Next.js](https://nextjs.org) app
+-   `ui`: a stub React component library shared by both `core` and `blog` applications
+-   `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+-   `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -20,58 +20,34 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 This turborepo has some additional tools already setup for you:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+-   [TypeScript](https://www.typescriptlang.org/) for static type checking
+-   [ESLint](https://eslint.org/) for code linting
+-   [Prettier](https://prettier.io) for code formatting
 
 ## Setup
 
-This repository is used in the `npx create-turbo` command, and selected when choosing which package manager you wish to use with your monorepo (Yarn).
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run build
-```
+This repository primarilly uses [Turborepo](https://turborepo.org) as its build system and [Remote Caching (Beta)](https://turborepo.org/docs/features/remote-caching) to share cache artifacts across machines ✨ To learn more about Turborepo, visit their [docs](https://turborepo.org/docs).
 
 ### Develop
-
-To develop all apps and packages, run the following command:
+Before you start contributing, ensure you have installed the necessary dependencies by runninf the following command:
 
 ```
-cd my-turborepo
+yarn install
+```
+
+To develop all sites and packages, run the following command:
+
+```
 yarn run dev
 ```
 
-### Remote Caching
+![start_script](https://user-images.githubusercontent.com/88869469/185513433-e6ada930-4d9c-4c43-bd90-d609d4bcd3d0.png)
+> You should see the following in your terminal with no errors.
 
-Turborepo can use a technique known as [Remote Caching (Beta)](https://turborepo.org/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### Build
 
-By default, Turborepo will cache locally. To enable Remote Caching (Beta) you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
+To build all sites and packages, run the following command:
 
 ```
-npx turbo link
+yarn run build
 ```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
-- [Caching](https://turborepo.org/docs/core-concepts/caching)
-- [Remote Caching (Beta)](https://turborepo.org/docs/core-concepts/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)

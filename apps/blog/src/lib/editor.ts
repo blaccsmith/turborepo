@@ -5,24 +5,27 @@ import { Cursor } from 'textarea-markdown-editor';
 import uploadImage from '@/lib/cloudinary';
 
 export function markdownToHtml(markdown: string) {
-  return DOMPurify.sanitize(marked.parse(markdown, { breaks: true }));
+  return DOMPurify.sanitize(marked.parse(markdown, { breaks: true, headerIds: true }));
 }
 
 export function handleUploadImages(textareaEl: HTMLTextAreaElement, files: File[]) {
-  const cursor = new Cursor(textareaEl);
+  return new Promise((resolve, reject) => {
+    const cursor = new Cursor(textareaEl);
 
-  files.forEach(async file => {
-    try {
-      const uploadedImage = await uploadImage(file);
-
-      cursor.insert(
-        `<img width="${
-          uploadedImage.dpi >= 144 ? Math.round(uploadedImage.width / 2) : uploadedImage.width
-        }" alt="${uploadedImage.originalFilename}" src="${uploadedImage.url}">`,
-      );
-    } catch (error: any) {
-      toast.error(`Error uploading image: ${error.message}`);
-    }
+    files.forEach(async file => {
+      try {
+        const uploadedImage = await uploadImage(file);
+        resolve(true);
+        cursor.insert(
+          `<img width="${
+            uploadedImage.dpi >= 144 ? Math.round(uploadedImage.width / 2) : uploadedImage.width
+          }" alt="${uploadedImage.originalFilename}" src="${uploadedImage.url}">`,
+        );
+      } catch (error: any) {
+        toast.error(`Error uploading image: ${error.message}`);
+        reject(error);
+      }
+    });
   });
 }
 
