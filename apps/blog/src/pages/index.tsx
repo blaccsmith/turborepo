@@ -11,14 +11,17 @@ import NextLink from 'ui/components/atoms/NextLink';
 import { Tag } from '@prisma/client';
 import { sluggy } from 'utils';
 import { useEffect, useState } from 'react';
+import safeJsonStringify from 'safe-json-stringify';
+import { createSSGHelpers } from '@trpc/react/ssg';
 import { writeFile } from 'fs/promises';
-import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
+import { InferQueryOutput, InferQueryPathAndInput, transformer, trpc } from '@/lib/trpc';
 import { PostSummaryProps } from '@/components/molecules/PostSummary';
 import { getQueryPaginationInput, Pagination } from '@/components/molecules/Pagination';
-import PostSummarySkeleton from '@/components/atoms/Skeletons/PostSummarySkeleton';
 import PostTag from '@/components/atoms/PostTag';
 import PostTagSkeleton from '@/components/atoms/Skeletons/PostTagSkeleton';
 import SearchDialog from '@/components/molecules/SearchDialog';
+import { appRouter } from '@/backend/routers';
+import { createContext } from '@/backend/utils/context';
 
 const POSTS_PER_PAGE = 20;
 
@@ -28,19 +31,23 @@ const PostSummary = dynamic<PostSummaryProps>(
 );
 
 type PostsFromFeed = InferQueryOutput<'post.feed'>['posts'];
+type FeedTags = InferQueryOutput<'tag.list'>;
 
 const RSSPath = process.env.NODE_ENV === 'production' ? '../feed.xml' : './public/feed.xml';
-const baseURL =
-  process.env.NODE_ENV === 'production' ? 'https://blog.blacc.xyz' : 'http://localhost:3000';
 
-export const getStaticProps: GetStaticProps = async () => {
-  const {
-    result: {
-      data: { json },
-    },
-  } = await fetch(`${baseURL}/api/trpc/post.feed`).then(resp => resp.json());
+export const getStaticProps: GetStaticProps = async ctx => {
+  const ssg = createSSGHelpers({
+    router: appRouter,
+    ctx: await createContext(),
+    transformer,
+  });
 
-  const { posts }: InferQueryOutput<'post.feed'> = json;
+  const [postsRes, tags] = await Promise.all([
+    ssg.fetchQuery('post.feed'),
+    ssg.fetchQuery('tag.list'),
+  ]);
+
+  const posts = JSON.parse(safeJsonStringify(postsRes.posts)) as PostsFromFeed;
 
   const feed = new RSS({
     title: 'BLACC',
@@ -49,7 +56,7 @@ export const getStaticProps: GetStaticProps = async () => {
     description: 'BLACC Posts',
   });
 
-  posts?.forEach(({ title, author, createdAt, slug }) => {
+  posts.forEach(({ title, author, createdAt, slug }) => {
     feed.item({
       title,
       description: `${title} by ${author.name}`,
@@ -60,13 +67,14 @@ export const getStaticProps: GetStaticProps = async () => {
   });
 
   await writeFile(RSSPath, feed.xml({ indent: true }), { flag: 'w+' });
-  return { props: { posts: [] } };
+
+  return { props: { posts, tags } };
 };
 
-const Home: NextPage = () => {
+const Home = ({ posts: _posts, tags: _tags }: { posts: PostsFromFeed; tags: FeedTags }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [posts, setPosts] = useState<PostsFromFeed | null>(null);
+  const [posts, setPosts] = useState<PostsFromFeed>(_posts);
   const [showSearch, setShowSearch] = useState(false);
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1;
   const utils = trpc.useContext();
@@ -74,18 +82,18 @@ const Home: NextPage = () => {
     'post.feed',
     getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
   ];
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput);
   const { data: tags, isLoading: loadingTags } = trpc.useQuery(['tag.list']);
 
   useEffect(() => {
-    if (router.query.tag && feedQuery.data) {
-      const postsWithTag = feedQuery.data.posts.filter(post =>
+    if (router.query.tag) {
+      const postsWithTag = posts.filter(post =>
         post.tags.some(el => sluggy(el.tag.name) === router.query.tag),
       );
 
       setPosts(postsWithTag);
-    } else setPosts(null);
-  }, [router, feedQuery.data]);
+    } else setPosts(_posts);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
@@ -97,7 +105,7 @@ const Home: NextPage = () => {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
           posts: previousQuery.posts.map(post =>
-            post.id === likedPostId
+            post.id === likedPostId.id
               ? {
                   ...post,
                   likedBy: [
@@ -131,7 +139,7 @@ const Home: NextPage = () => {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
           posts: previousQuery.posts.map(post =>
-            post.id === unlikedPostId
+            post.id === unlikedPostId.id
               ? {
                   ...post,
                   likedBy: post.likedBy.filter(item => item.user.id !== session!.user.id),
@@ -149,10 +157,6 @@ const Home: NextPage = () => {
       }
     },
   });
-
-  if (feedQuery.isError) {
-    return <div>Error: {feedQuery.error.message}</div>;
-  }
 
   const handleTagClick = (tag: Omit<Tag, 'createdAt' | 'updatedAt'>) => {
     if (router.query.tag === sluggy(tag.name)) router.push('/', undefined, { shallow: true });
@@ -199,39 +203,27 @@ const Home: NextPage = () => {
           </div>
         </div>
         <ul className="divide-primary divide-y divide-[#424242]">
-          {feedQuery.isLoading ? (
-            [...Array(3)].map((_, idx) => (
-              <li key={idx} className="py-9">
-                <PostSummarySkeleton />
-              </li>
-            ))
-          ) : feedQuery.data!.postCount === 0 ? (
-            <div className="text-secondary rounded border py-20 px-10 text-center">
-              There are no published posts to show yet.
-            </div>
-          ) : (
-            <div className="flow-root">
-              <ul className="divide-primary divide-y divide-[#424242]">
-                {(posts ?? feedQuery.data!.posts)?.map(post => (
-                  <li key={post.id} className="py-9">
-                    <PostSummary
-                      post={post}
-                      onLike={() => {
-                        likeMutation.mutate(post.id);
-                      }}
-                      onUnlike={() => {
-                        unlikeMutation.mutate(post.id);
-                      }}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div className="flow-root">
+            <ul className="divide-primary divide-y divide-[#424242]">
+              {posts.map(post => (
+                <li key={post.id} className="py-9">
+                  <PostSummary
+                    post={post}
+                    onLike={() => {
+                      likeMutation.mutate({ id: post.id, slug: post.slug });
+                    }}
+                    onUnlike={() => {
+                      unlikeMutation.mutate({ id: post.id, slug: post.slug });
+                    }}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {feedQuery.data && (
+          {posts && (
             <Pagination
-              itemCount={feedQuery.data.postCount}
+              itemCount={posts.length}
               itemsPerPage={POSTS_PER_PAGE}
               currentPageNumber={currentPageNumber}
             />

@@ -7,6 +7,9 @@ import toast from 'react-hot-toast';
 import { PencilIcon, TrashIcon, DotsHorizontalIcon } from '@heroicons/react/outline';
 import NextLink from 'ui/components/atoms/NextLink';
 import ModalWrapper from 'ui/components/atoms/Layouts/ModalWrapper';
+import { createSSGHelpers } from '@trpc/react/ssg';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import safeJsonStringify from 'safe-json-stringify';
 import { NextSeo } from 'next-seo';
 import AuthorWithDate from '@/components/atoms/AuthorWithDate';
 import ButtonLink from '@/components/atoms/ButtonLink';
@@ -24,10 +27,12 @@ import {
   MenuItemsContent,
 } from '@/components/molecules/Menu';
 import MarkdownEditor from '@/components/orgnaisms/MarkdownEditor';
-import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc';
+import { InferQueryOutput, InferQueryPathAndInput, transformer, trpc } from '@/lib/trpc';
+import { createContext } from '@/backend/utils/context';
 
 import LikeButton from '@/components/atoms/LikeButton';
 import PostTag from '@/components/atoms/PostTag';
+import { appRouter } from '@/backend/routers';
 import updateRSS from '@/lib/rss';
 
 function getPostQueryPathAndInput(slug: string): InferQueryPathAndInput<'post.detail'> {
@@ -293,7 +298,7 @@ const Comment = ({
   return (
     <div>
       <div className="flex items-center justify-between gap-4">
-        <AuthorWithDate author={comment.author} date={comment.createdAt} />
+        <AuthorWithDate author={comment.author} date={new Date(comment.createdAt)} />
         {commentBelongsToUser && (
           <Menu>
             <MenuButton className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white">
@@ -339,12 +344,46 @@ const Comment = ({
   );
 };
 
-const PostPage = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const ssg = createSSGHelpers({
+    router: appRouter,
+    ctx: await createContext(),
+    transformer,
+  });
+
+  const { posts } = await ssg.fetchQuery('post.feed');
+
+  return {
+    paths: posts.map(post => ({ params: { slug: post.slug } })),
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const ssg = createSSGHelpers({
+    router: appRouter,
+    ctx: await createContext(),
+    transformer,
+  });
+
+  const queryRes = await ssg.fetchQuery('post.detail', {
+    slug: params?.slug as string,
+  });
+
+  const post = JSON.parse(safeJsonStringify(queryRes));
+
+  return { props: { post } };
+};
+
+type PostDetail = {
+  post: InferQueryOutput<'post.detail'>;
+};
+
+const PostPage = ({ post }: PostDetail) => {
   const { data: session } = useSession();
   const router = useRouter();
   const utils = trpc.useContext();
   const postQueryPathAndInput = getPostQueryPathAndInput(router.query.slug as string);
-  const postQuery = trpc.useQuery(postQueryPathAndInput);
   const likeMutation = trpc.useMutation(['post.like'], {
     onMutate: async likedPostId => {
       await utils.cancelQuery(postQueryPathAndInput);
@@ -396,202 +435,163 @@ const PostPage = () => {
     setIsConfirmDeleteDialogOpen(true);
   }
 
-  if (postQuery.data) {
-    const isUserAdmin = session?.user.role === 'ADMIN';
-    const postBelongsToUser = postQuery.data.author.id === session?.user.id;
-
-    return (
-      <>
-        <Head>
-          <title>{postQuery.data.title} - Beam</title>
-        </Head>
-        <NextSeo
-          title={postQuery.data.title}
-          description="This example uses more of the available config options."
-          canonical="https://www.blacc.xyz/blog"
-          openGraph={{
-            url: `https://www.blog.blacc.xyz/blog/p/${postQuery.data.slug}`,
-            title: `${postQuery.data.title}`,
-            description: 'Open Graph Description',
-            images: [
-              {
-                url: 'https://www.blacc.xyz/blog_banner.png',
-                width: 800,
-                height: 600,
-                alt: 'BLACC Blog',
-                type: 'image/png',
-              },
-            ],
-            site_name: 'The Black Coder Community',
-          }}
-          twitter={{
-            handle: '@blaccxyz_',
-            site: '@blaccxyz_',
-            cardType: 'summary_large_image',
-          }}
-        />
-        <div className="divide-primary divide-y">
-          <div className="pb-12">
-            {postQuery.data.hidden && (
-              <Banner className="mb-6">
-                This post has been hidden and is only visible to administrators.
-              </Banner>
-            )}
-
-            <div className="flex items-center justify-between gap-4">
-              <h1 className="text-3xl font-semibold tracking-tighter text-white md:text-4xl">
-                {postQuery.data.title}
-              </h1>
-              {(postBelongsToUser || isUserAdmin) && (
-                <>
-                  <div className="flex md:hidden">
-                    <Menu>
-                      <MenuButton className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white">
-                        <DotsHorizontalIcon className="h-3 w-3" />
-                      </MenuButton>
-
-                      <MenuItems className="w-28 border border-[#424242] text-white">
-                        <MenuItemsContent>
-                          {postBelongsToUser && (
-                            <>
-                              <NextLink href={`/p/${postQuery.data.slug}/edit`}>
-                                <MenuItemButton onClick={() => null}>Edit</MenuItemButton>
-                              </NextLink>
-                              <MenuItemButton className="!text-red" onClick={handleDelete}>
-                                Delete
-                              </MenuItemButton>
-                            </>
-                          )}
-                        </MenuItemsContent>
-                      </MenuItems>
-                    </Menu>
-                  </div>
-                  <div className="hidden md:flex md:gap-4">
-                    {postBelongsToUser && (
-                      <div className="flex items-center justify-start space-x-2">
-                        <NextLink
-                          href={`/p/${postQuery.data.slug}/edit`}
-                          className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
-                        >
-                          <PencilIcon className="h-3 w-3" />
-                        </NextLink>
-                        <button
-                          onClick={handleDelete}
-                          className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
-                        >
-                          <TrashIcon className="h-3 w-3" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="mt-6">
-              <AuthorWithDate author={postQuery.data.author} date={postQuery.data.createdAt} />
-              <div className="scrollbar-hide mt-4 flex items-center justify-start space-x-2 overflow-x-auto pr-2">
-                {postQuery.data.tags?.map(el => (
-                  <PostTag key={el.tag.id} tag={el.tag} isSelected />
-                ))}
-              </div>
-            </div>
-            <HtmlView html={postQuery.data.contentHtml} className="mt-8 text-white" />
-            <div className="clear-both mt-6 flex gap-4">
-              <LikeButton
-                likedBy={postQuery.data.likedBy}
-                onLike={() => {
-                  likeMutation.mutate(postQuery.data.id);
-                }}
-                onUnlike={() => {
-                  unlikeMutation.mutate(postQuery.data.id);
-                }}
-              />
-              <ButtonLink href={`/p/${postQuery.data.slug}#comments`} variant="secondary">
-                <MessageIcon className="h-4 w-4 text-[#9E9E9E]" />
-                <span className="ml-1.5 text-[#9E9E9E]">{postQuery.data.comments.length}</span>
-              </ButtonLink>
-            </div>
-          </div>
-
-          <div id="comments" className="space-y-12 pt-12">
-            {postQuery.data.comments.length > 0 && (
-              <ul className="space-y-12">
-                {postQuery.data.comments.map(comment => (
-                  <li key={comment.id}>
-                    <Comment postSlug={postQuery.data.slug} comment={comment} />
-                  </li>
-                ))}
-              </ul>
-            )}
-            <div className="flex items-start gap-2 sm:gap-4">
-              {session && (
-                <>
-                  <span className="hidden sm:inline-block">
-                    <BlogAvatar
-                      name={session!.user.name as string}
-                      src={session!.user.image as string}
-                    />
-                  </span>
-                  <span className="inline-block sm:hidden">
-                    <BlogAvatar
-                      name={session!.user.name as string}
-                      src={session!.user.image as string}
-                      size="sm"
-                    />
-                  </span>
-                </>
-              )}
-              <AddCommentForm postSlug={postQuery.data.slug} />
-            </div>
-          </div>
-        </div>
-
-        <ConfirmDeleteDialog
-          postSlug={postQuery.data.slug}
-          isOpen={isConfirmDeleteDialogOpen}
-          onClose={() => {
-            setIsConfirmDeleteDialogOpen(false);
-          }}
-        />
-      </>
-    );
-  }
-
-  if (postQuery.isError) {
-    return <div>Error: {postQuery.error.message}</div>;
-  }
+  const isUserAdmin = session?.user.role === 'ADMIN';
+  const postBelongsToUser = post.author.id === session?.user.id;
 
   return (
-    <div className="animate-pulse">
-      <div className="h-9 w-3/4 rounded bg-gray-500" />
-      <div className="mt-6 flex items-center gap-4">
-        <div className="h-12 w-12 rounded-full bg-gray-500" />
-        <div className="flex-1">
-          <div className="h-4 w-24 rounded bg-gray-500" />
-          <div className="mt-2 h-3 w-32 rounded bg-gray-500" />
+    <>
+      <Head>
+        <title>{post.title} - Beam</title>
+      </Head>
+      <NextSeo
+        title={post.title}
+        description="This example uses more of the available config options."
+        canonical="https://www.blacc.xyz/blog"
+        openGraph={{
+          url: `https://www.blog.blacc.xyz/blog/p/${post.slug}`,
+          title: `${post.title}`,
+          description: 'Open Graph Description',
+          images: [
+            {
+              url: 'https://www.blacc.xyz/blog_banner.png',
+              width: 800,
+              height: 600,
+              alt: 'BLACC Blog',
+              type: 'image/png',
+            },
+          ],
+          site_name: 'The Black Coder Community',
+        }}
+        twitter={{
+          handle: '@blaccxyz_',
+          site: '@blaccxyz_',
+          cardType: 'summary_large_image',
+        }}
+      />
+      <div className="divide-primary divide-y">
+        <div className="pb-12">
+          {post.hidden && (
+            <Banner className="mb-6">
+              This post has been hidden and is only visible to administrators.
+            </Banner>
+          )}
+
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="text-3xl font-semibold tracking-tighter text-white md:text-4xl">
+              {post.title}
+            </h1>
+            {(postBelongsToUser || isUserAdmin) && (
+              <>
+                <div className="flex md:hidden">
+                  <Menu>
+                    <MenuButton className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white">
+                      <DotsHorizontalIcon className="h-3 w-3" />
+                    </MenuButton>
+
+                    <MenuItems className="w-28 border border-[#424242] text-white">
+                      <MenuItemsContent>
+                        {postBelongsToUser && (
+                          <>
+                            <NextLink href={`/p/${post.slug}/edit`}>
+                              <MenuItemButton onClick={() => null}>Edit</MenuItemButton>
+                            </NextLink>
+                            <MenuItemButton className="!text-red" onClick={handleDelete}>
+                              Delete
+                            </MenuItemButton>
+                          </>
+                        )}
+                      </MenuItemsContent>
+                    </MenuItems>
+                  </Menu>
+                </div>
+                <div className="hidden md:flex md:gap-4">
+                  {postBelongsToUser && (
+                    <div className="flex items-center justify-start space-x-2">
+                      <NextLink
+                        href={`/p/${post.slug}/edit`}
+                        className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+                      >
+                        <PencilIcon className="h-3 w-3" />
+                      </NextLink>
+                      <button
+                        onClick={handleDelete}
+                        className="focus-ring flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border border-[#424242] bg-transparent text-[#9E9E9E] transition-all hover:border-white hover:text-white"
+                      >
+                        <TrashIcon className="h-3 w-3" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+          <div className="mt-6">
+            <AuthorWithDate author={post.author} date={post.createdAt} />
+            <div className="scrollbar-hide mt-4 flex items-center justify-start space-x-2 overflow-x-auto pr-2">
+              {post.tags?.map(el => (
+                <PostTag key={el.tag.id} tag={el.tag} isSelected />
+              ))}
+            </div>
+          </div>
+          <HtmlView html={post.contentHtml} className="mt-8 text-white" />
+          <div className="clear-both mt-6 flex gap-4">
+            <LikeButton
+              likedBy={post.likedBy}
+              onLike={() => {
+                likeMutation.mutate({ id: post.id, slug: post.slug });
+              }}
+              onUnlike={() => {
+                unlikeMutation.mutate({ id: post.id, slug: post.slug });
+              }}
+            />
+            <ButtonLink href={`/p/${post.slug}#comments`} variant="secondary">
+              <MessageIcon className="h-4 w-4 text-[#9E9E9E]" />
+              <span className="ml-1.5 text-[#9E9E9E]">{post.comments.length}</span>
+            </ButtonLink>
+          </div>
+        </div>
+
+        <div id="comments" className="space-y-12 pt-12">
+          {post.comments.length > 0 && (
+            <ul className="space-y-12">
+              {post.comments.map(comment => (
+                <li key={comment.id}>
+                  <Comment postSlug={post.slug} comment={comment} />
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="flex items-start gap-2 sm:gap-4">
+            {session && (
+              <>
+                <span className="hidden sm:inline-block">
+                  <BlogAvatar
+                    name={session!.user.name as string}
+                    src={session!.user.image as string}
+                  />
+                </span>
+                <span className="inline-block sm:hidden">
+                  <BlogAvatar
+                    name={session!.user.name as string}
+                    src={session!.user.image as string}
+                    size="sm"
+                  />
+                </span>
+              </>
+            )}
+            <AddCommentForm postSlug={post.slug} />
+          </div>
         </div>
       </div>
-      <div className="mt-7 space-y-3">
-        {[...Array(3)].map((_, idx) => (
-          <React.Fragment key={idx}>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-2 h-5 rounded bg-gray-500" />
-              <div className="col-span-1 h-5 rounded bg-gray-500" />
-            </div>
-            <div className="h-5 w-1/2 rounded bg-gray-500" />
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-1 h-5 rounded bg-gray-500" />
-              <div className="col-span-2 h-5 rounded bg-gray-500" />
-            </div>
-            <div className="h-5 w-3/5 rounded bg-gray-500" />
-          </React.Fragment>
-        ))}
-      </div>
-      <div className="mt-6 flex gap-4">
-        <div className="h-button border-secondary w-16 rounded-full border" />
-        <div className="h-button border-secondary w-16 rounded-full border" />
-      </div>
-    </div>
+
+      <ConfirmDeleteDialog
+        postSlug={post.slug}
+        isOpen={isConfirmDeleteDialogOpen}
+        onClose={() => {
+          setIsConfirmDeleteDialogOpen(false);
+        }}
+      />
+    </>
   );
 };
 

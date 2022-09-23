@@ -1,3 +1,4 @@
+import { Session } from 'next-auth';
 import { ReactNode } from 'react';
 
 export type ThisType = {
@@ -10,5 +11,6 @@ export type AnotherType = {
 
 export type LayoutProps = {
   showAuth?: boolean;
+  session?: Session | null | undefined;
   children: ReactNode;
 };

@@ -52,7 +52,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         site: '@blaccxyz_',
       }}
     />
-    <RootLayout showAuth>
+    <RootLayout showAuth session={session}>
       <Toaster />
       <Component {...pageProps} />
     </RootLayout>

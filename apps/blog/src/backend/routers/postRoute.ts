@@ -38,6 +38,8 @@ const postRouter = createRouter()
           },
         },
       });
+
+      await ctx.res?.unstable_revalidate(`/`);
       return post;
     },
   })
@@ -86,6 +88,11 @@ const postRouter = createRouter()
         },
       });
 
+      await Promise.all([
+        ctx.res?.unstable_revalidate(`/`),
+        ctx.res?.unstable_revalidate(`/p/${sluggy(data.title)}`),
+      ]);
+
       return updatedPost;
     },
   })
@@ -110,17 +117,21 @@ const postRouter = createRouter()
       }
 
       await ctx.prisma.post.delete({ where: { slug } });
+      await ctx.res?.unstable_revalidate(`/`);
       return slug;
     },
   })
   .mutation('like', {
-    input: z.number(),
-    async resolve({ input: id, ctx }) {
+    input: z.object({
+      id: z.number(),
+      slug: z.string(),
+    }),
+    async resolve({ input, ctx }) {
       await ctx.prisma.likedPosts.create({
         data: {
           post: {
             connect: {
-              id,
+              id: input.id,
             },
           },
           user: {
@@ -131,22 +142,35 @@ const postRouter = createRouter()
         },
       });
 
-      return id;
+      await Promise.all([
+        ctx.res?.unstable_revalidate(`/`),
+        ctx.res?.unstable_revalidate(`/p/${input.slug}`),
+      ]);
+
+      return input.id;
     },
   })
   .mutation('unlike', {
-    input: z.number(),
-    async resolve({ input: id, ctx }) {
+    input: z.object({
+      id: z.number(),
+      slug: z.string(),
+    }),
+    async resolve({ input, ctx }) {
       await ctx.prisma.likedPosts.delete({
         where: {
           postId_userId: {
-            postId: id,
+            postId: input.id,
             userId: ctx.session!.user.id,
           },
         },
       });
 
-      return id;
+      await Promise.all([
+        ctx.res?.unstable_revalidate(`/`),
+        ctx.res?.unstable_revalidate(`/p/${input.slug}`),
+      ]);
+
+      return input.id;
     },
   })
   .mutation('hide', {

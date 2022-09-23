@@ -9,6 +9,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "dev:blog": "turbo run dev --filter blog",
+    "dev:core": "turbo run dev --filter core",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -18,7 +20,7 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
     "prettier": "latest",
-    "turbo": "latest"
+    "turbo": "^1.5.2"
   },
   "lint-staged": {
     ".json": [

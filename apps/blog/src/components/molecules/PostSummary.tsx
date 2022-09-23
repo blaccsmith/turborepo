@@ -58,8 +58,8 @@ export const PostSummary = ({ post, hideAuthor = false }: PostSummaryProps) => {
         <div className="flex items-center">
           <p className="text-sm font-light tracking-tight text-[#bdbdbd]">
             Published{' '}
-            <time dateTime={post.createdAt.toISOString()}>
-              {formatDistanceToNow(post.createdAt)}
+            <time dateTime={new Date(post.createdAt).toISOString()}>
+              {formatDistanceToNow(new Date(post.createdAt))}
             </time>{' '}
             ago by
           </p>
