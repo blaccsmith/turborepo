@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { markdownToHtml } from '@/lib/editor';
+import { sluggy } from 'utils/helpers';
 import createProtectedRouter from '../utils/createProtectedRouter';
 
 const commentRouter = createProtectedRouter()
@@ -26,6 +27,11 @@ const commentRouter = createProtectedRouter()
           },
         },
       });
+
+      await Promise.all([
+        ctx.res?.unstable_revalidate(`/`),
+        ctx.res?.unstable_revalidate(`/p/${input.postSlug}`),
+      ]);
 
       return comment;
     },
@@ -63,7 +69,19 @@ const commentRouter = createProtectedRouter()
           content: data.content,
           contentHtml: markdownToHtml(data.content),
         },
+        select: {
+          post: {
+            select: {
+              slug: true,
+            },
+          },
+        },
       });
+
+      await Promise.all([
+        ctx.res?.unstable_revalidate(`/`),
+        ctx.res?.unstable_revalidate(`/p/${sluggy(updatedComment.post.slug)}`),
+      ]);
 
       return updatedComment;
     },
@@ -88,7 +106,15 @@ const commentRouter = createProtectedRouter()
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
-      await ctx.prisma.comment.delete({ where: { id } });
+      const deletedComment = await ctx.prisma.comment.delete({
+        where: { id },
+        select: { post: { select: { slug: true } } },
+      });
+
+      await Promise.all([
+        ctx.res?.unstable_revalidate(`/`),
+        ctx.res?.unstable_revalidate(`/p/${sluggy(deletedComment.post.slug)}`),
+      ]);
       return id;
     },
   });
