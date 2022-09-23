@@ -38,8 +38,10 @@ const postRouter = createRouter()
           },
         },
       });
-
-      await ctx.res?.unstable_revalidate(`/`);
+      await Promise.all([
+        ctx.res?.unstable_revalidate(`/`),
+        ctx.res?.unstable_revalidate(`/p/${sluggy(post.slug)}`),
+      ]);
       return post;
     },
   })
