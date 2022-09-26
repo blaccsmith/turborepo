@@ -4,16 +4,21 @@ import { markers } from '@constants';
 import React, { useEffect, useRef } from 'react';
 
 const Globe = (): JSX.Element => {
-  const globeRef = useRef<HTMLCanvasElement>({} as HTMLCanvasElement);
-  const isMobile = () => window.screen.width < 769 ? 300 : 600;
+  const globeRef = useRef<any>();
 
   useEffect(() => {
     let phi = 0;
+    let width = 0;
+
+    // eslint-disable-next-line
+    const onResize = () => globeRef.current && (width = globeRef.current.offsetWidth);
+    window.addEventListener('resize', onResize);
+    onResize();
 
     const globe = createGlobe(globeRef.current, {
-      devicePixelRatio: 2,
-      width: isMobile(),
-      height: isMobile(),
+      devicePixelRatio: 1,
+      width,
+      height: width,
       phi: 0,
       theta: 0.15,
       dark: 1,
@@ -25,24 +30,36 @@ const Globe = (): JSX.Element => {
       glowColor: [0.3568627451, 0.2666666667, 0.99],
       markers,
       onRender: state => {
-        globeRef.current.width = isMobile();
-        globeRef.current.height = isMobile();
-
         state.phi = phi;
+        state.width = width;
+        state.height = width;
         phi += 0.005;
       },
     });
+
+    // eslint-disable-next-line
+    setTimeout(() => (globeRef.current.style.opacity = '1'));
+    return () => globe.destroy();
   }, []);
 
   return (
-    <div className="flex justify-center">
+    <div
+      className="flex justify-center"
+      style={{
+        maxWidth: 600,
+        width: '100%',
+        aspectRatio: '1',
+        margin: 'auto',
+        position: 'relative',
+      }}
+    >
       <canvas
         ref={globeRef}
         style={{
-          width: globeRef.current.width,
-          height: globeRef.current.height,
-          maxWidth: '100%',
-          aspectRatio: '1',
+          width: '100%',
+          height: '100%',
+          transition: 'opacity 1s ease',
+          opacity: 0,
         }}
       />
     </div>
