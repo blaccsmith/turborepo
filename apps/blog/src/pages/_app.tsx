@@ -19,7 +19,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
   <SessionProvider session={session}>
     <DefaultSeo
       title="The BLACC Blog"
-      description="A community exemplifying black excellence and pushing the needle within tech"
+      description="Highlighting authentic insights & experiences from Black people in tech."
       additionalLinkTags={[
         {
           rel: 'icon',
@@ -27,18 +27,18 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         },
         {
           rel: 'apple-touch-icon',
-          href: `https://www.blacc.xyz/logo.png`,
+          href: `https://blog.blacc.xyz/banner.png`,
           sizes: '76x76',
         },
       ]}
       openGraph={{
         type: 'website',
-        url: 'https://www.blacc.xyz/blog',
+        url: 'https://blog.blacc.xyz',
         title: 'BLACC',
         site_name: 'The Black Coder Community Blog',
         images: [
           {
-            url: 'https://www.blacc.xyz/blog_banner.png',
+            url: 'https://blog.blacc.xyz/banner.png',
             width: 800,
             height: 450,
             alt: 'BLACC Banner',
