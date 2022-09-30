@@ -14,7 +14,7 @@ class MyDocument extends Document {
             <script
               async
               defer
-              data-website-id="f9d9ccf1-d42d-4ce5-8cf1-acb1710ad09f"
+              data-website-id="a8b6ee23-d34a-49f2-a51d-2ed005d0f43e"
               src="/script.js"
             />
           )}
