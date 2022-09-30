@@ -1,7 +1,7 @@
 name: Bug Report
 description: File a bug report
 title: "[Bug]: "
-labels: ["bug", "blog", "core"]
+labels: ["bug"]
 assignees:
   - gt-codes
   - darrylbrooks97
@@ -14,15 +14,10 @@ body:
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
-  - type: checkboxes
+  - type: input
     id: app
     attributes:
-      label: Which app does the bug occur in
-      options:
-        - label: blog
-          required: false
-        - label: core
-          required: false
+      label: Which app does the bug occur in blog or core?
   - type: input
     id: Description
     attributes:

@@ -6,14 +6,6 @@ assignees:
   - gt-codes
   - DarrylBrooks97
 body:
-  - type: checkboxes
-    id: Code-of-conduct
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://www.blacc.xyz/conduct/)
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
   - type: input
     id: Feature
     attributes:
