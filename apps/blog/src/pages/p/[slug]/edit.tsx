@@ -37,11 +37,11 @@ const EditPostPage = ({ post }: PostDetail) => {
   });
 
   const postBelongsToUser = post.author.id === session?.user.id;
-  
+
   return (
     <>
       <Head>
-        <title>Edit {post.title} - Beam</title>
+        <title>Edit {post.title}</title>
       </Head>
 
       {postBelongsToUser ? (

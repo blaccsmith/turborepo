@@ -28,11 +28,6 @@ const commentRouter = createProtectedRouter()
         },
       });
 
-      await Promise.all([
-        ctx.res?.unstable_revalidate(`/`),
-        ctx.res?.unstable_revalidate(`/p/${input.postSlug}`),
-      ]);
-
       return comment;
     },
   })
@@ -78,11 +73,6 @@ const commentRouter = createProtectedRouter()
         },
       });
 
-      await Promise.all([
-        ctx.res?.unstable_revalidate(`/`),
-        ctx.res?.unstable_revalidate(`/p/${sluggy(updatedComment.post.slug)}`),
-      ]);
-
       return updatedComment;
     },
   })
@@ -106,15 +96,11 @@ const commentRouter = createProtectedRouter()
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
-      const deletedComment = await ctx.prisma.comment.delete({
+      await ctx.prisma.comment.delete({
         where: { id },
         select: { post: { select: { slug: true } } },
       });
 
-      await Promise.all([
-        ctx.res?.unstable_revalidate(`/`),
-        ctx.res?.unstable_revalidate(`/p/${sluggy(deletedComment.post.slug)}`),
-      ]);
       return id;
     },
   });

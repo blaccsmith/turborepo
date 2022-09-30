@@ -441,19 +441,18 @@ const PostPage = ({ post }: PostDetail) => {
   return (
     <>
       <Head>
-        <title>{post.title} - Beam</title>
+        <title>{post.title}</title>
       </Head>
       <NextSeo
         title={post.title}
-        description="This example uses more of the available config options."
-        canonical="https://www.blacc.xyz/blog"
+        description={`Published by ${post.author.name}`}
         openGraph={{
-          url: `https://www.blog.blacc.xyz/blog/p/${post.slug}`,
+          url: `https://blog.blacc.xyz/p/${post.slug}`,
           title: `${post.title}`,
-          description: 'Open Graph Description',
+          description: `Published by ${post.author.name}`,
           images: [
             {
-              url: 'https://www.blacc.xyz/blog_banner.png',
+              url: 'https://blog.blacc.xyz/banner.png',
               width: 800,
               height: 600,
               alt: 'BLACC Blog',
