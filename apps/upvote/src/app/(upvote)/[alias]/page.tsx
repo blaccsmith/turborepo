@@ -25,6 +25,7 @@ export async function generateStaticParams() {
 
 export default async function EventPage({ params: { alias } }: { params: { alias: string } }) {
   const topics = await getTopics(alias);
+  
   return (
     <ul className="mx-auto flex max-w-lg flex-col gap-3">
       {topics.map(topic => (
