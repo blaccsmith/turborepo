@@ -1,10 +1,13 @@
-import './globals.css'
+import './globals.css';
+import Navigation from './ui/navigation';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+const getEvents = async () => {
+  return ['event1', 'event2'];
+};
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const events = await getEvents();
+
   return (
     <html lang="en">
       {/*
@@ -12,7 +15,10 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+      <body>
+        <Navigation events={events} />
+        {children}
+      </body>
     </html>
-  )
+  );
 }
