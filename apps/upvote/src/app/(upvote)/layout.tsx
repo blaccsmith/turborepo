@@ -6,7 +6,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const events = await getEvents();
 
   return (
-    <div className="h-full min-h-screen w-full space-y-6 bg-white p-16">
+    <div className="h-full min-h-screen w-full space-y-6 bg-white py-16 px-3 sm:p-16">
       <Navigation events={events} />
       {children}
     </div>
