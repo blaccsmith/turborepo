@@ -1,13 +1,10 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import {createSupabaseClient} from "@/lib/supabaseUtils";
 
 export const getEvents = async () => {
-  const supabaseClient = new SupabaseClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-  );
+  const supabaseClient = createSupabaseClient();
   return supabaseClient
     .from('events')
-    .select(`id, name, alias`)
+    .select(`name, alias`)
     .then(({ data, error }) => {
       if (error) throw error;
       return data;

@@ -3,7 +3,6 @@ import React from 'react';
 
 interface Props {
   events: {
-    id: string;
     name: string;
     alias: string;
   }[];
@@ -15,7 +14,7 @@ export default function Navigation({ events }: Props) {
       {events.map(event => (
         <Link
           href={`/${event.alias}`}
-          key={event.id}
+          key={event.alias}
           className=" w-fit rounded-md bg-gray-100 px-2 text-center text-gray-500"
         >
           {event.name}
