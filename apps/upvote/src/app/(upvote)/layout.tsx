@@ -1,6 +1,6 @@
 import { getEvents } from '@/lib/get-events';
 import React from 'react';
-import Navigation from '../ui/navigation';
+import Navigation from './ui/navigation';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const events = await getEvents();
