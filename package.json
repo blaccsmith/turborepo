@@ -11,6 +11,7 @@
     "dev": "turbo run dev --parallel",
     "dev:blog": "turbo run dev --filter blog",
     "dev:core": "turbo run dev --filter core",
+    "dev:upvote": "turbo run dev --filter upvote",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
